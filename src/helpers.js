@@ -28,13 +28,31 @@ export const deleteItem = ({ key, id }) => {
   return localStorage.removeItem(key);
 };
 
-// create budget
-export const createBudget = ({ name, amount }) => {
+// create event
+export const createEvent = ({ name, amount }) => {
   const newItem = {
     id: crypto.randomUUID(),
     name: name,
     createdAt: Date.now(),
     amount: +amount,
+    color: generateRandomColor(),
+  };
+  const existingEvents = fetchData("events") ?? [];
+  return localStorage.setItem(
+    "events",
+    JSON.stringify([...existingEvents, newItem])
+  );
+};
+
+// create budget
+export const createBudget = ({ name, amount, eventId }) => {
+  console.log(eventId);
+  const newItem = {
+    id: crypto.randomUUID(),
+    name: name,
+    createdAt: Date.now(),
+    amount: +amount,
+    eventId: eventId,
     color: generateRandomColor(),
   };
   const existingBudgets = fetchData("budgets") ?? [];

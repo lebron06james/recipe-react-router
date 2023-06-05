@@ -7,8 +7,7 @@ import { Form, useFetcher } from "react-router-dom"
 // library imports
 import { CurrencyDollarIcon } from "@heroicons/react/24/solid"
 
-const AddBudgetForm = ({ event }) => {
-
+const AddEventForm = () => {
   const fetcher = useFetcher();
   const isSubmitting = fetcher.state === "submitting"
 
@@ -25,52 +24,42 @@ const AddBudgetForm = ({ event }) => {
   return (
     <div className="form-wrapper">
       <h2 className="h3">
-        Create budget
+        Create event
       </h2>
-      
       <fetcher.Form
         method="post"
         className="grid-sm"
         ref={formRef}
       >
         <div className="grid-xs">
-          <label htmlFor="newBudget">Budget Name</label>
+          <label htmlFor="newEvent">Event Name</label>
           <input
             type="text"
-            name="newBudget"
-            id="newBudget"
-            placeholder="e.g., Groceries"
+            name="newEvent"
+            id="newEvent"
+            placeholder="e.g., Event One 2023"
             required
             ref={focusRef}
           />
         </div>
         <div className="grid-xs">
-          <label htmlFor="newBudgetAmount">Amount</label>
+          <label htmlFor="newEventAmount">Amount</label>
           <input
             type="number"
             step="0.01"
-            name="newBudgetAmount"
-            id="newBudgetAmount"
-            placeholder="e.g., $350"
+            name="newEventAmount"
+            id="newEventAmount"
+            placeholder="e.g., 50"
             required
             inputMode="decimal"
           />
         </div>
-        <div className="grid-xs">
-          <label htmlFor="newBudgetEvent">Event Id</label>
-          <input
-            type="text"
-            name="newBudgetEvent"
-            id="newBudgetEvent"
-            value={event.id}
-          />
-        </div>
-        <input type="hidden" name="_action" value="createBudget" />
+        <input type="hidden" name="_action" value="createEvent" />
         <button type="submit" className="btn btn--dark" disabled={isSubmitting}>
           {
             isSubmitting ? <span>Submitting…</span> : (
               <>
-                <span>Create budget</span>
+                <span>Create event</span>
                 <CurrencyDollarIcon width={20} />
               </>
             )
@@ -80,4 +69,4 @@ const AddBudgetForm = ({ event }) => {
     </div>
   )
 }
-export default AddBudgetForm
+export default AddEventForm

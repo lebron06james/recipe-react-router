@@ -38,13 +38,13 @@ const BudgetItem = ({ budget, showDelete = false }) => {
           <Form
             method="post"
             action="delete"
-            onSubmit={(event) => {
+            onSubmit={(ev) => {
               if (
                 !confirm(
                   "Are you sure you want to permanently delete this budget?"
                 )
               ) {
-                event.preventDefault();
+                ev.preventDefault();
               }
             }}
           >

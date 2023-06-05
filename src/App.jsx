@@ -10,6 +10,7 @@ import Main, { mainLoader } from "./layouts/Main";
 // Actions
 import { logoutAction } from "./actions/logout";
 import { deleteBudget } from "./actions/deleteBudget";
+import { deleteEvent } from "./actions/deleteEvent";
 
 // Routes
 import Dashboard, { dashboardAction, dashboardLoader } from "./pages/Dashboard";
@@ -19,6 +20,10 @@ import ExpensesPage, {
   expensesAction,
   expensesLoader,
 } from "./pages/ExpensesPage";
+import EventMenuPage, {
+  eventMenuAction,
+  eventMenuLoader,
+} from "./pages/EventMenuPage";
 
 const router = createBrowserRouter([
   {
@@ -33,6 +38,19 @@ const router = createBrowserRouter([
         loader: dashboardLoader,
         action: dashboardAction,
         errorElement: <Error />,
+      },
+      {
+        path: "event/:id",
+        element: <EventMenuPage />,
+        loader: eventMenuLoader,
+        action: eventMenuAction,
+        errorElement: <Error />,
+        children: [
+          {
+            path: "delete",
+            action: deleteEvent,
+          },
+        ],
       },
       {
         path: "budget/:id",
