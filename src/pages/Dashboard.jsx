@@ -45,7 +45,12 @@ export async function dashboardAction({ request }) {
     try {
       createEvent({
         name: values.newEvent,
-        amount: values.newEventAmount,
+        pax: values.newEventPax,
+        eventdate: values.newEventDate,
+        eventtime: values.newEventTime,
+        venue: values.newEventVenue,
+        holdingroom: values.newEventHoldingRoom,
+        updatedby: values.newUserName,
       });
       return toast.success("Event created!");
     } catch (e) {
@@ -69,7 +74,7 @@ const Dashboard = () => {
             {events && events.length > 0 ? (
               <div className="grid-lg">
                 <div className="flex-lg">
-                  <AddEventForm />
+                  <AddEventForm userName={userName} />
                   {/* <AddExpenseForm budgets={budgets} /> */}
                 </div>
                 <h2>Existing Events</h2>
@@ -82,9 +87,9 @@ const Dashboard = () => {
               </div>
             ) : (
               <div className="grid-sm">
-                <p>Personal budgeting is the secret to financial freedom.</p>
-                <p>Create a budget to get started!</p>
-                <AddEventForm />
+                <p>Conveniently organize events' menu + recipes in one spot.</p>
+                <p>Create an event to get started!</p>
+                <AddEventForm userName={userName} />
               </div>
             )}
           </div>

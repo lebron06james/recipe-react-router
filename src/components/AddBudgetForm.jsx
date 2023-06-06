@@ -63,6 +63,7 @@ const AddBudgetForm = ({ event }) => {
             name="newBudgetEvent"
             id="newBudgetEvent"
             value={event.id}
+            readonly
           />
         </div>
         <input type="hidden" name="_action" value="createBudget" />

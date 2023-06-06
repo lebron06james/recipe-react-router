@@ -11,10 +11,10 @@ const Intro = () => {
     <div className="intro">
       <div>
         <h1>
-          Take Control of <span className="accent">Your Money</span>
+          Events+<span className="accent">Menu</span>
         </h1>
         <p>
-          Personal budgeting is the secret to financial freedom. Start your journey today.
+          Managed in one place. Start here by signing in.
         </p>
         <Form method="post">
           <input
@@ -25,12 +25,12 @@ const Intro = () => {
           />
           <input type="hidden" name="_action" value="newUser" />
           <button type="submit" className="btn btn--dark">
-            <span>Create Account</span>
+            <span>Sign in</span>
             <UserPlusIcon width={20} />
           </button>
         </Form>
       </div>
-      <img src={illustration} alt="Person with money" width={600} />
+      <img src={illustration} alt="Kitchen" width={600} />
     </div>
   )
 }

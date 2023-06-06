@@ -7,6 +7,12 @@ const generateRandomColor = () => {
   return `${existingBudgetLength * 34} 65% 50%`;
 };
 
+// colors
+const generateRandomEventColor = () => {
+  const existingEventLength = fetchData("events")?.length ?? 0;
+  return `${existingEventLength * 34} 65% 50%`;
+};
+
 // Local storage
 export const fetchData = (key) => {
   return JSON.parse(localStorage.getItem(key));
@@ -29,13 +35,18 @@ export const deleteItem = ({ key, id }) => {
 };
 
 // create event
-export const createEvent = ({ name, amount }) => {
+export const createEvent = ({ name, pax, eventdate, eventtime, venue, holdingroom, updatedby }) => {
   const newItem = {
     id: crypto.randomUUID(),
     name: name,
     createdAt: Date.now(),
-    amount: +amount,
-    color: generateRandomColor(),
+    pax: +pax,
+    eventdate: eventdate,
+    eventtime: eventtime,
+    venue: venue,
+    holdingroom: holdingroom,
+    updatedby: updatedby,
+    color: generateRandomEventColor(),
   };
   const existingEvents = fetchData("events") ?? [];
   return localStorage.setItem(
@@ -46,7 +57,6 @@ export const createEvent = ({ name, amount }) => {
 
 // create budget
 export const createBudget = ({ name, amount, eventId }) => {
-  console.log(eventId);
   const newItem = {
     id: crypto.randomUUID(),
     name: name,

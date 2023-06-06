@@ -122,8 +122,13 @@ const EventMenuPage = () => {
       {userName ? (
         <div className="dashboard">
           <h1>
-            Menu for, <span className="accent">{event.name}</span>
+            Menu for, <span className="accent">{event.name}, {event.pax} Pax </span>
           </h1>
+          <div className="grid-sm">
+            <p>This event starts on <strong>{ event.eventdate }</strong> at <strong>{ event.eventtime }</strong>.</p>
+            <p>Holding room is <strong>{ event.holdingroom }</strong>.</p>
+            <p>And the event will be held in <strong>{ event.venue }</strong>.</p>
+          </div>
           {/* delete button */}
           <div className="flex-sm">
           <Form
