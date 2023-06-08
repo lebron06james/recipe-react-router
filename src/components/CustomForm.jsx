@@ -6,17 +6,19 @@ import styles from './CustomForm.module.css';
 // library imports
 import { PlusIcon } from '@heroicons/react/24/solid'
 
-const CustomForm = ({ addTask }) => {
-  const [task, setTask] = useState("");
+const CustomForm = ({ addComment, event, userName }) => {
+  const [comment, setComment] = useState("");
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    addTask({
-      name: task,
+    addComment({
+      name: comment,
       checked: false,
+      eventId: event.id,
+      userName: userName,
       id: Date.now()
     })
-    setTask("")
+    setComment("")
   }
 
   return (
@@ -27,23 +29,47 @@ const CustomForm = ({ addTask }) => {
       <div className={styles.wrapper}>
         <input
           type="text"
-          id="task"
+          id="comment"
           className={styles.input}
-          value={task}
-          onInput={(e) => setTask(e.target.value)}
+          value={comment}
+          onInput={(e) => setComment(e.target.value)}
           required
           autoFocus
           maxLength={60}
-          placeholder="Enter Task"
+          placeholder="Enter Comment"
         />
         <label
-          htmlFor="task"
+          htmlFor="comment"
           className={styles.label}
-        >Enter Task</label>
+        >Enter Comment</label>
+      </div>
+      <div className={styles.wrapper} hidden={true}>
+        <label htmlFor="newCommentEvent">Event Id</label>
+        <input
+          type="text"
+          name="newCommentEvent"
+          id="newCommentEvent"
+          className={styles.input}
+          value={event.id}
+          readonly
+          hidden={true}
+        />
+      </div>
+      <div className={styles.wrapper} hidden={true}>
+        <label htmlFor="newCommentUser">User Name</label>
+        <input
+          type="text"
+          name="newCommentUser"
+          id="newCommentUser"
+          className={styles.input}
+          value={userName}
+          readonly
+          hidden={true}
+        />
       </div>
       <button
         className={styles.btn}
-        aria-label="Add Task"
+        aria-label="Add Comment"
         type="submit"
         >
         <PlusIcon />

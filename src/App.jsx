@@ -16,7 +16,7 @@ import { deleteEvent } from "./actions/deleteEvent";
 import Dashboard, { dashboardAction, dashboardLoader } from "./pages/Dashboard";
 import Error from "./pages/Error";
 import BudgetPage, { budgetAction, budgetLoader } from "./pages/BudgetPage";
-import CommentPage from "./pages/CommentPage";
+import CommentPage, { commentLoader } from "./pages/CommentPage";
 import ExpensesPage, {
   expensesAction,
   expensesLoader,
@@ -54,6 +54,12 @@ const router = createBrowserRouter([
         ],
       },
       {
+        path: "comment/:id",
+        element: <CommentPage />,
+        loader: commentLoader,
+        errorElement: <Error />,
+      },
+      {
         path: "budget/:id",
         element: <BudgetPage />,
         loader: budgetLoader,
@@ -76,13 +82,6 @@ const router = createBrowserRouter([
       {
         path: "logout",
         action: logoutAction,
-      },
-      {
-        path: "comments",
-        element: <CommentPage />,
-        // loader: commentLoader,
-        // action: commentAction,
-        errorElement: <Error />,
       },
     ],
   },

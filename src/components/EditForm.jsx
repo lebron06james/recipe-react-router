@@ -6,8 +6,8 @@ import styles from './EditForm.module.css';
 // library imports
 import { CheckIcon } from '@heroicons/react/24/solid'
 
-const EditForm = ({ editedTask, updateTask, closeEditMode }) => {
-  const [updatedTaskName, setUpdatedTaskName] = useState(editedTask.name);
+const EditForm = ({ editedComment, updateComment, closeEditMode, event, userName }) => {
+  const [updatedCommentName, setUpdatedCommentName] = useState(editedComment.name);
 
   useEffect(()=> {
     const closeModalIfEscaped = (e) => {
@@ -23,7 +23,7 @@ const EditForm = ({ editedTask, updateTask, closeEditMode }) => {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    updateTask({...editedTask, name: updatedTaskName})
+    updateComment({...editedComment, name: updatedCommentName})
   }
 
   return (
@@ -39,23 +39,45 @@ const EditForm = ({ editedTask, updateTask, closeEditMode }) => {
         <div className={styles.wrapper}>
           <input
             type="text"
-            id="editTask"
+            id="editComment"
             className={styles.input}
-            value={updatedTaskName}
-            onInput={(e) => setUpdatedTaskName(e.target.value)}
+            value={updatedCommentName}
+            onInput={(e) => setUpdatedCommentName(e.target.value)}
             required
             autoFocus
             maxLength={60}
-            placeholder="Update Task"
+            placeholder="Update Comment"
           />
           <label
-            htmlFor="editTask"
+            htmlFor="editComment"
             className={styles.label}
-          >Update Task</label>
+          >Update Comment</label>
+        </div>
+        <div className={styles.wrapper} hidden={true}>
+          <label htmlFor="newCommentEvent">Event Id</label>
+          <input
+            type="text"
+            name="newCommentEvent"
+            id="newCommentEvent"
+            className={styles.input}
+            value={event.id}
+            readonly
+          />
+        </div>
+        <div className={styles.wrapper} hidden={true}>
+          <label htmlFor="newCommentUser">User Name</label>
+          <input
+            type="text"
+            name="newCommentUser"
+            id="newCommentUser"
+            className={styles.input}
+            value={userName}
+            readonly
+          />
         </div>
         <button
           className={styles.btn}
-          aria-label={`Confirm edited task to now read ${updatedTaskName}`}
+          aria-label={`Confirm edited comment to now read ${updatedCommentName}`}
           type="submit"
           >
           <CheckIcon strokeWidth={2} height={24} width={24} />

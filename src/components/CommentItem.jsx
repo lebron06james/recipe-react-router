@@ -1,19 +1,19 @@
 import { useState } from "react";
 
 // styles
-import styles from "./TaskItem.module.css";
+import styles from "./CommentItem.module.css";
 
 // Library imports
 import { CheckIcon } from "@heroicons/react/24/outline";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import { TrashIcon } from "@heroicons/react/24/outline";
 
-const TaskItem = ({ task, deleteTask, toggleTask, enterEditMode }) => {
-  const [isChecked, setIsChecked] = useState(task.checked);
+const CommentItem = ({ comment, deleteComment, toggleComment, enterEditMode, userName }) => {
+  const [isChecked, setIsChecked] = useState(comment.checked);
 
   const handleCheckboxChange = (e) => {
     setIsChecked(!isChecked);
-    toggleTask(task.id);
+    toggleComment(comment.id);
   };
 
   return (
@@ -28,28 +28,27 @@ const TaskItem = ({ task, deleteTask, toggleTask, enterEditMode }) => {
           id={task.id}
         /> */}
         <label htmlFor="userName" className={styles.label}>
-          LeBron James:
+          {comment.userName}:
         </label>
-        <label htmlFor={task.id} className={styles.label}>
-          {task.name}
+        <label htmlFor={comment.id} className={styles.label}>
+          {comment.name}
           {/* <p className={styles.checkmark}>
             <CheckIcon strokeWidth={2} width={24} height={24} />
           </p> */}
         </label>
       </div>
-      <div className={styles["task-group"]}>
+      <div className={styles["task-group"]} hidden={comment.userName !== userName}>
         <button
           className="btn"
-          aria-label={`Update ${task.name} Task`}
-          onClick={() => enterEditMode(task)}
+          aria-label={`Update ${comment.name} Task`}
+          onClick={() => enterEditMode(comment)}
         >
           <PencilSquareIcon width={24} height={24} />
         </button>
-
         <button
           className={`btn ${styles.delete}`}
-          aria-label={`Delete ${task.name} Task`}
-          onClick={() => deleteTask(task.id)}
+          aria-label={`Delete ${comment.name} Comment`}
+          onClick={() => deleteComment(comment.id)}
         >
           <TrashIcon width={24} height={24} />
         </button>
@@ -57,4 +56,4 @@ const TaskItem = ({ task, deleteTask, toggleTask, enterEditMode }) => {
     </li>
   );
 };
-export default TaskItem;
+export default CommentItem;

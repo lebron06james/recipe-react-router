@@ -3,7 +3,11 @@ import { Form, Link, useLoaderData } from "react-router-dom";
 
 // library imports
 import { toast } from "react-toastify";
-import { BanknotesIcon, TrashIcon } from "@heroicons/react/24/outline";
+import {
+  BanknotesIcon,
+  TrashIcon,
+  ChatBubbleOvalLeftEllipsisIcon,
+} from "@heroicons/react/24/outline";
 
 // components
 import Intro from "../components/Intro";
@@ -19,12 +23,11 @@ import {
   deleteItem,
   fetchData,
   waait,
-  getAllMatchingItems
+  getAllMatchingItems,
 } from "../helpers";
 
 // loader
 export async function eventMenuLoader({ params }) {
-
   const event = await getAllMatchingItems({
     category: "events",
     key: "id",
@@ -40,7 +43,6 @@ export async function eventMenuLoader({ params }) {
   let expenses = [];
 
   budgets.forEach((budget) => {
-
     const _expenses = getAllMatchingItems({
       category: "expenses",
       key: "budgetId",
@@ -48,7 +50,6 @@ export async function eventMenuLoader({ params }) {
     });
 
     expenses = [...expenses, ..._expenses];
-
   });
 
   const userName = fetchData("userName");
@@ -122,36 +123,55 @@ const EventMenuPage = () => {
       {userName ? (
         <div className="dashboard">
           <h1>
-            Menu for, <span className="accent">{event.name}, {event.pax} Pax </span>
+            Menu for,{" "}
+            <span className="accent">
+              {event.name}, {event.pax} Pax{" "}
+            </span>
           </h1>
           <div className="grid-sm">
-            <p>This event starts on <strong>{ event.eventdate }</strong> at <strong>{ event.eventtime }</strong>.</p>
-            <p>Holding room is <strong>{ event.holdingroom }</strong>.</p>
-            <p>And the event will be held in <strong>{ event.venue }</strong>.</p>
+            <p>
+              This event starts on <strong>{event.eventdate}</strong> at{" "}
+              <strong>{event.eventtime}</strong>.
+            </p>
+            <p>
+              Holding room is <strong>{event.holdingroom}</strong>.
+            </p>
+            <p>
+              And the event will be held in <strong>{event.venue}</strong>.
+            </p>
           </div>
           {/* delete button */}
           <div className="flex-sm">
-          <Form
-            method="post"
-            action="delete"
-            onSubmit={(ev) => {
-              if (
-                !confirm(
-                  "Are you sure you want to permanently delete this event?"
-                )
-              ) {
-                ev.preventDefault();
-              }
-            }}
-          >
-            <button type="submit" className="btn btn--warning">
-              <span>Delete this Event</span>
-              <TrashIcon width={20} />
-            </button>
-          </Form>
-        </div>
+            <Form
+              method="post"
+              action="delete"
+              onSubmit={(ev) => {
+                if (
+                  !confirm(
+                    "Are you sure you want to permanently delete this event?"
+                  )
+                ) {
+                  ev.preventDefault();
+                }
+              }}
+            >
+              <button type="submit" className="btn btn--warning">
+                <span>Delete this Event</span>
+                <TrashIcon width={20} />
+              </button>
+            </Form>
+          </div>
           {/* end delete button */}
-          
+
+          {/* comment button */}
+          <div className="grid-sm">
+            Recent comment: comment name here
+            <Link to={`/comment/${event.id}`} className="btn">
+              <span>Add Comment</span>
+              <ChatBubbleOvalLeftEllipsisIcon width={20} />
+            </Link>
+          </div>
+
           <div className="grid-sm">
             {budgets && budgets.length > 0 ? (
               <div className="grid-lg">
@@ -183,8 +203,8 @@ const EventMenuPage = () => {
               </div>
             ) : (
               <div className="grid-sm">
-                <p>Personal budgeting is the secret to financial freedom.</p>
-                <p>Create a budget to get started!</p>
+                <p>Your recipes, designed in one place.</p>
+                <p>Create a Recipe to get started!</p>
                 <AddBudgetForm event={event} />
               </div>
             )}

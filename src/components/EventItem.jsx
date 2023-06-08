@@ -2,7 +2,7 @@
 import { Form, Link } from "react-router-dom";
 
 // library imports
-import { BanknotesIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { BanknotesIcon, ChatBubbleOvalLeftEllipsisIcon } from "@heroicons/react/24/outline";
 
 // helper functions
 import {
@@ -72,10 +72,14 @@ const EventItem = ({ event }) => {
       </div>
 
       <div className="flex-sm">
-        Chef has not yet designed a menu for this event.
+        Recent comment: comment name here
         <Link to={`/event/${id}`} className="btn">
           <span>Create Menu</span>
           <BanknotesIcon width={20} />
+        </Link>
+        <Link to={`/comment/${id}`} className="btn">
+          <span>Add Comment</span>
+          <ChatBubbleOvalLeftEllipsisIcon width={20} />
         </Link>
       </div>
 
