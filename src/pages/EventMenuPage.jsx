@@ -1,5 +1,11 @@
 // rrd imports
-import { Form, Link, useLoaderData } from "react-router-dom";
+import {
+  Form,
+  useRouteError,
+  Link,
+  useLoaderData,
+  useNavigate,
+} from "react-router-dom";
 
 // library imports
 import { toast } from "react-toastify";
@@ -7,19 +13,21 @@ import {
   BanknotesIcon,
   TrashIcon,
   ChatBubbleOvalLeftEllipsisIcon,
+  HomeIcon,
+  ArrowUturnLeftIcon,
 } from "@heroicons/react/24/outline";
 
 // components
 import Intro from "../components/Intro";
-import AddBudgetForm from "../components/AddBudgetForm";
-import AddExpenseForm from "../components/AddExpenseForm";
-import BudgetItem from "../components/BudgetItem";
+import AddRecipeForm from "../components/AddRecipeForm";
+import AddIngredientForm from "../components/AddIngredientForm";
+import RecipeItem from "../components/RecipeItem";
 import Table from "../components/Table";
 
 //  helper functions
 import {
-  createBudget,
-  createExpense,
+  createRecipe,
+  createIngredient,
   deleteItem,
   fetchData,
   waait,
@@ -34,29 +42,29 @@ export async function eventMenuLoader({ params }) {
     value: params.id,
   })[0];
 
-  const budgets = await getAllMatchingItems({
-    category: "budgets",
+  const recipes = await getAllMatchingItems({
+    category: "recipes",
     key: "eventId",
     value: event.id,
   });
 
-  let expenses = [];
+  let ingredients = [];
 
-  budgets.forEach((budget) => {
-    const _expenses = getAllMatchingItems({
-      category: "expenses",
-      key: "budgetId",
-      value: budget.id,
+  recipes.forEach((recipe) => {
+    const _ingredients = getAllMatchingItems({
+      category: "ingredients",
+      key: "recipeId",
+      value: recipe.id,
     });
 
-    expenses = [...expenses, ..._expenses];
+    ingredients = [...ingredients, ..._ingredients];
   });
 
   const userName = fetchData("userName");
-  // const budgets = fetchData("budgets");
-  // const expenses = fetchData("expenses");
+  // const recipes = fetchData("recipes");
+  // const ingredients = fetchData("ingredients");
 
-  return { event, userName, budgets, expenses };
+  return { event, userName, recipes, ingredients };
 }
 
 // action
@@ -76,52 +84,59 @@ export async function eventMenuAction({ request }) {
   //   }
   // }
 
-  if (_action === "createBudget") {
+  if (_action === "createRecipe") {
     try {
-      createBudget({
-        name: values.newBudget,
-        amount: values.newBudgetAmount,
-        eventId: values.newBudgetEvent,
+      createRecipe({
+        name: values.newRecipe,
+        amount: values.newRecipeAmount,
+        eventId: values.newRecipeEvent,
       });
-      return toast.success("Budget created!");
+      return toast.success("Recipe created!");
     } catch (e) {
-      throw new Error("There was a problem creating your budget.");
+      throw new Error("There was a problem creating your recipe.");
     }
   }
 
-  if (_action === "createExpense") {
+  if (_action === "createIngredient") {
     try {
-      createExpense({
-        name: values.newExpense,
-        amount: values.newExpenseAmount,
-        budgetId: values.newExpenseBudget,
+      createIngredient({
+        name: values.newIngredient,
+        amount: values.newIngredientAmount,
+        recipeId: values.newIngredientRecipe,
       });
-      return toast.success(`Expense ${values.newExpense} created!`);
+      return toast.success(`Ingredient ${values.newIngredient} created!`);
     } catch (e) {
-      throw new Error("There was a problem creating your expense.");
+      throw new Error("There was a problem creating your ingredient.");
     }
   }
 
-  if (_action === "deleteExpense") {
+  if (_action === "deleteIngredient") {
     try {
       deleteItem({
-        key: "expenses",
-        id: values.expenseId,
+        key: "ingredients",
+        id: values.ingredientId,
       });
-      return toast.success("Expense deleted!");
+      return toast.success("Ingredient deleted!");
     } catch (e) {
-      throw new Error("There was a problem deleting your expense.");
+      throw new Error("There was a problem deleting your ingredient.");
     }
   }
 }
 
 const EventMenuPage = () => {
-  const { event, userName, budgets, expenses } = useLoaderData();
+  const { event, userName, recipes, ingredients } = useLoaderData();
+  const navigate = useNavigate();
 
   return (
     <>
       {userName ? (
         <div className="dashboard">
+          <div className="flex-md">
+            <button className="btn btn--dark" onClick={() => navigate(-1)}>
+              <ArrowUturnLeftIcon width={20} />
+              <span>Go Back</span>
+            </button>
+          </div>
           <h1>
             Menu for,{" "}
             <span className="accent">
@@ -171,31 +186,32 @@ const EventMenuPage = () => {
               <ChatBubbleOvalLeftEllipsisIcon width={20} />
             </Link>
           </div>
+          {/* end comment button */}
 
           <div className="grid-sm">
-            {budgets && budgets.length > 0 ? (
+            {recipes && recipes.length > 0 ? (
               <div className="grid-lg">
                 <div className="flex-lg">
-                  <AddBudgetForm event={event} />
-                  <AddExpenseForm budgets={budgets} />
+                  <AddRecipeForm event={event} />
+                  <AddIngredientForm recipes={recipes} />
                 </div>
-                <h2>Existing Budgets</h2>
-                <div className="budgets">
-                  {budgets.map((budget) => (
-                    <BudgetItem key={budget.id} budget={budget} />
+                <h2>Existing Recipes</h2>
+                <div className="recipes">
+                  {recipes.map((recipe) => (
+                    <RecipeItem key={recipe.id} recipe={recipe} />
                   ))}
                 </div>
-                {expenses && expenses.length > 0 && (
+                {ingredients && ingredients.length > 0 && (
                   <div className="grid-md">
-                    <h2>Recent Expenses</h2>
+                    <h2>Recent Ingredients</h2>
                     <Table
-                      expenses={expenses
+                      ingredients={ingredients
                         .sort((a, b) => b.createdAt - a.createdAt)
                         .slice(0, 8)}
                     />
-                    {expenses.length > 8 && (
-                      <Link to="expenses" className="btn btn--dark">
-                        View all expenses
+                    {ingredients.length > 8 && (
+                      <Link to="ingredients" className="btn btn--dark">
+                        View all ingredients
                       </Link>
                     )}
                   </div>
@@ -205,7 +221,7 @@ const EventMenuPage = () => {
               <div className="grid-sm">
                 <p>Your recipes, designed in one place.</p>
                 <p>Create a Recipe to get started!</p>
-                <AddBudgetForm event={event} />
+                <AddRecipeForm event={event} />
               </div>
             )}
           </div>

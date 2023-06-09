@@ -31,15 +31,15 @@ export async function commentLoader({ params }) {
     value: event.id,
   });
 
-  // budgets.forEach((budget) => {
+  // recipes.forEach((recipe) => {
 
-  //   const _expenses = getAllMatchingItems({
-  //     category: "expenses",
-  //     key: "budgetId",
-  //     value: budget.id,
+  //   const _ingredients = getAllMatchingItems({
+  //     category: "ingredients",
+  //     key: "recipeId",
+  //     value: recipe.id,
   //   });
 
-  //   expenses = [...expenses, ..._expenses];
+  //   ingredients = [...ingredients, ..._ingredients];
 
   // });
 

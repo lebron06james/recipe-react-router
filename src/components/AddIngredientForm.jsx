@@ -7,7 +7,7 @@ import { useFetcher } from "react-router-dom"
 // library imports
 import { PlusCircleIcon } from "@heroicons/react/24/solid"
 
-const AddExpenseForm = ({ budgets }) => {
+const AddIngredientForm = ({ recipes }) => {
   const fetcher = useFetcher()
   const isSubmitting = fetcher.state === "submitting";
 
@@ -27,62 +27,62 @@ const AddExpenseForm = ({ budgets }) => {
   return (
     <div className="form-wrapper">
       <h2 className="h3">Add New{" "}<span className="accent">
-        {budgets.length === 1 && `${budgets.map((budg) => budg.name)}`}
+        {recipes.length === 1 && `${recipes.map((budg) => budg.name)}`}
       </span>{" "}
-        Expense
+        Ingredient
       </h2>
       <fetcher.Form
         method="post"
         className="grid-sm"
         ref={formRef}
       >
-        <div className="expense-inputs">
+        <div className="ingredient-inputs">
           <div className="grid-xs">
-            <label htmlFor="newExpense">Expense Name</label>
+            <label htmlFor="newIngredient">Ingredient Name</label>
             <input
               type="text"
-              name="newExpense"
-              id="newExpense"
+              name="newIngredient"
+              id="newIngredient"
               placeholder="e.g., Coffee"
               ref={focusRef}
               required
             />
           </div>
           <div className="grid-xs">
-            <label htmlFor="newExpenseAmount">Amount</label>
+            <label htmlFor="newIngredientAmount">Amount</label>
             <input
               type="number"
               step="0.01"
               inputMode="decimal"
-              name="newExpenseAmount"
-              id="newExpenseAmount"
+              name="newIngredientAmount"
+              id="newIngredientAmount"
               placeholder="e.g., 3.50"
               required
             />
           </div>
         </div>
-        <div className="grid-xs" hidden={budgets.length === 1}>
-          <label htmlFor="newExpenseBudget">Budget Category</label>
-          <select name="newExpenseBudget" id="newExpenseBudget" required>
+        <div className="grid-xs" hidden={recipes.length === 1}>
+          <label htmlFor="newIngredientRecipe">Recipe Category</label>
+          <select name="newIngredientRecipe" id="newIngredientRecipe" required>
             {
-              budgets
+              recipes
                 .sort((a, b) => a.createdAt - b.createdAt)
-                .map((budget) => {
+                .map((recipe) => {
                   return (
-                    <option key={budget.id} value={budget.id}>
-                      {budget.name}
+                    <option key={recipe.id} value={recipe.id}>
+                      {recipe.name}
                     </option>
                   )
                 })
             }
           </select>
         </div>
-        <input type="hidden" name="_action" value="createExpense" />
+        <input type="hidden" name="_action" value="createIngredient" />
         <button type="submit" className="btn btn--dark" disabled={isSubmitting}>
           {
             isSubmitting ? <span>Submitting…</span> : (
               <>
-                <span>Add Expense</span>
+                <span>Add Ingredient</span>
                 <PlusCircleIcon width={20} />
               </>
             )
@@ -92,4 +92,4 @@ const AddExpenseForm = ({ budgets }) => {
     </div>
   )
 }
-export default AddExpenseForm
+export default AddIngredientForm

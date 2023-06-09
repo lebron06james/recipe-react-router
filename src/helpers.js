@@ -3,8 +3,8 @@ export const waait = () =>
 
 // colors
 const generateRandomColor = () => {
-  const existingBudgetLength = fetchData("budgets")?.length ?? 0;
-  return `${existingBudgetLength * 34} 65% 50%`;
+  const existingRecipeLength = fetchData("recipes")?.length ?? 0;
+  return `${existingRecipeLength * 34} 65% 50%`;
 };
 
 // colors
@@ -55,8 +55,8 @@ export const createEvent = ({ name, pax, eventdate, eventtime, venue, holdingroo
   );
 };
 
-// create budget
-export const createBudget = ({ name, amount, eventId }) => {
+// create recipe
+export const createRecipe = ({ name, amount, eventId }) => {
   const newItem = {
     id: crypto.randomUUID(),
     name: name,
@@ -65,40 +65,40 @@ export const createBudget = ({ name, amount, eventId }) => {
     eventId: eventId,
     color: generateRandomColor(),
   };
-  const existingBudgets = fetchData("budgets") ?? [];
+  const existingRecipes = fetchData("recipes") ?? [];
   return localStorage.setItem(
-    "budgets",
-    JSON.stringify([...existingBudgets, newItem])
+    "recipes",
+    JSON.stringify([...existingRecipes, newItem])
   );
 };
 
-// create expense
-export const createExpense = ({ name, amount, budgetId }) => {
+// create ingredient
+export const createIngredient = ({ name, amount, recipeId }) => {
   const newItem = {
     id: crypto.randomUUID(),
     name: name,
     createdAt: Date.now(),
     amount: +amount,
-    budgetId: budgetId,
+    recipeId: recipeId,
   };
-  const existingExpenses = fetchData("expenses") ?? [];
+  const existingIngredients = fetchData("ingredients") ?? [];
   return localStorage.setItem(
-    "expenses",
-    JSON.stringify([...existingExpenses, newItem])
+    "ingredients",
+    JSON.stringify([...existingIngredients, newItem])
   );
 };
 
-// total spent by budget
-export const calculateSpentByBudget = (budgetId) => {
-  const expenses = fetchData("expenses") ?? [];
-  const budgetSpent = expenses.reduce((acc, expense) => {
-    // check if expense.id === budgetId I passed in
-    if (expense.budgetId !== budgetId) return acc;
+// total spent by recipe
+export const calculateSpentByRecipe = (recipeId) => {
+  const ingredients = fetchData("ingredients") ?? [];
+  const recipeSpent = ingredients.reduce((acc, ingredient) => {
+    // check if ingredient.id === recipeId I passed in
+    if (ingredient.recipeId !== recipeId) return acc;
 
     // add the current amount to my total
-    return (acc += expense.amount);
+    return (acc += ingredient.amount);
   }, 0);
-  return budgetSpent;
+  return recipeSpent;
 };
 
 // FORMATTING

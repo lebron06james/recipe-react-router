@@ -75,10 +75,10 @@ const Dashboard = () => {
               <div className="grid-lg">
                 <div className="flex-lg">
                   <AddEventForm userName={userName} />
-                  {/* <AddExpenseForm budgets={budgets} /> */}
+                  {/* <AddIngredientForm recipes={recipes} /> */}
                 </div>
                 <h2>Existing Events</h2>
-                <div className="budgets">
+                <div className="recipes">
                   {events.map((event) => (
                     <EventItem key={event.id} event={event} />
                   ))}

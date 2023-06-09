@@ -1,13 +1,13 @@
 // component import
-import ExpenseItem from "./ExpenseItem";
+import IngredientItem from "./IngredientItem";
 
-const Table = ({ expenses, showBudget = true }) => {
+const Table = ({ ingredients, showRecipe = true }) => {
   return (
     <div className="table">
       <table>
         <thead>
           <tr>
-            {["Name", "Amount", "Date", showBudget ? "Budget" : "", ""].map(
+            {["Name", "Amount", "Date", showRecipe ? "Recipe" : "", ""].map(
               (i, index) => (
                 <th key={index}>{i}</th>
               )
@@ -15,9 +15,9 @@ const Table = ({ expenses, showBudget = true }) => {
           </tr>
         </thead>
         <tbody>
-          {expenses.map((expense) => (
-            <tr key={expense.id}>
-              <ExpenseItem expense={expense} showBudget={showBudget} />
+          {ingredients.map((ingredient) => (
+            <tr key={ingredient.id}>
+              <IngredientItem ingredient={ingredient} showRecipe={showRecipe} />
             </tr>
           ))}
         </tbody>

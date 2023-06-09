@@ -472,7 +472,7 @@ select {
   z-index: -1;
 }
 
-.expense-inputs {
+.ingredient-inputs {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -480,14 +480,14 @@ select {
 }
 
 @media screen and (max-width: 725px) {
-  .expense-inputs {
+  .ingredient-inputs {
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
   }
 }
 
-/* budgets */
-.budgets {
+/* recipes */
+.recipes {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -496,7 +496,7 @@ select {
   gap: var(--space-md);
 }
 
-.budget {
+.recipe {
   --backdrop: var(--accent);
   display: -ms-grid;
   display: grid;
@@ -515,7 +515,7 @@ select {
   color: hsl(var(--backdrop));
 }
 
-.budget > .flex-sm {
+.recipe > .flex-sm {
   padding-top: var(--space-sm);
   display: -webkit-box;
   display: -ms-flexbox;

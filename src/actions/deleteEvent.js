@@ -14,31 +14,46 @@ export function deleteEvent({ params }) {
       id: params.id,
     });
 
-    const associatedBudgets = getAllMatchingItems({
-      category: "budgets",
+    const associatedRecipes = getAllMatchingItems({
+      category: "recipes",
       key: "eventId",
       value: params.id,
     });
 
-    associatedBudgets.forEach((budget) => {
+    associatedRecipes.forEach((recipe) => {
 
-      const associatedExpenses = getAllMatchingItems({
-        category: "expenses",
-        key: "budgetId",
-        value: budget.id,
+      const associatedIngredients = getAllMatchingItems({
+        category: "ingredients",
+        key: "recipeId",
+        value: recipe.id,
       });
 
-      associatedExpenses.forEach((expense) => {
+      associatedIngredients.forEach((ingredient) => {
         deleteItem({
-          key: "expenses",
-          id: expense.id,
+          key: "ingredients",
+          id: ingredient.id,
         });
       });
 
       deleteItem({
-        key: "budgets",
-        id: budget.id,
+        key: "recipes",
+        id: recipe.id,
       });
+    });
+
+    const associatedComments = getAllMatchingItems({
+      category: "comments",
+      key: "eventId",
+      value: params.id,
+    });
+
+    associatedComments.forEach((comment) => {
+
+      deleteItem({
+        key: "comments",
+        id: comment.id,
+      });
+
     });
 
     toast.success("Event deleted successfully!");

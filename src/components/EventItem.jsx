@@ -6,19 +6,19 @@ import { BanknotesIcon, ChatBubbleOvalLeftEllipsisIcon } from "@heroicons/react/
 
 // helper functions
 import {
-//   calculateSpentByBudget,
+//   calculateSpentByRecipe,
   formatCurrency,
   formatPercentage,
 } from "../helpers";
 
 const EventItem = ({ event }) => {
   const { id, name, pax, eventdate, eventtime, venue, holdingroom, updatedby, color } = event;
-//   const spent = calculateSpentByBudget(id);
+//   const spent = calculateSpentByRecipe(id);
   const spent = pax;
 
   return (
     <div
-      className="budget"
+      className="recipe"
       style={{
         "--accent": color,
       }}

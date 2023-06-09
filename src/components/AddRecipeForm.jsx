@@ -7,7 +7,7 @@ import { Form, useFetcher } from "react-router-dom"
 // library imports
 import { CurrencyDollarIcon } from "@heroicons/react/24/solid"
 
-const AddBudgetForm = ({ event }) => {
+const AddRecipeForm = ({ event }) => {
 
   const fetcher = useFetcher();
   const isSubmitting = fetcher.state === "submitting"
@@ -25,7 +25,7 @@ const AddBudgetForm = ({ event }) => {
   return (
     <div className="form-wrapper">
       <h2 className="h3">
-        Create budget
+        Create recipe
       </h2>
       
       <fetcher.Form
@@ -34,44 +34,44 @@ const AddBudgetForm = ({ event }) => {
         ref={formRef}
       >
         <div className="grid-xs">
-          <label htmlFor="newBudget">Budget Name</label>
+          <label htmlFor="newRecipe">Recipe Name</label>
           <input
             type="text"
-            name="newBudget"
-            id="newBudget"
+            name="newRecipe"
+            id="newRecipe"
             placeholder="e.g., Groceries"
             required
             ref={focusRef}
           />
         </div>
         <div className="grid-xs">
-          <label htmlFor="newBudgetAmount">Amount</label>
+          <label htmlFor="newRecipeAmount">Amount</label>
           <input
             type="number"
             step="0.01"
-            name="newBudgetAmount"
-            id="newBudgetAmount"
+            name="newRecipeAmount"
+            id="newRecipeAmount"
             placeholder="e.g., $350"
             required
             inputMode="decimal"
           />
         </div>
         <div className="grid-xs">
-          <label htmlFor="newBudgetEvent">Event Id</label>
+          <label htmlFor="newRecipeEvent">Event Id</label>
           <input
             type="text"
-            name="newBudgetEvent"
-            id="newBudgetEvent"
+            name="newRecipeEvent"
+            id="newRecipeEvent"
             value={event.id}
             readonly
           />
         </div>
-        <input type="hidden" name="_action" value="createBudget" />
+        <input type="hidden" name="_action" value="createRecipe" />
         <button type="submit" className="btn btn--dark" disabled={isSubmitting}>
           {
             isSubmitting ? <span>Submitting…</span> : (
               <>
-                <span>Create budget</span>
+                <span>Create recipe</span>
                 <CurrencyDollarIcon width={20} />
               </>
             )
@@ -81,4 +81,4 @@ const AddBudgetForm = ({ event }) => {
     </div>
   )
 }
-export default AddBudgetForm
+export default AddRecipeForm

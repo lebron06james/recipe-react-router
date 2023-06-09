@@ -11,40 +11,40 @@ import {
   getAllMatchingItems,
 } from "../helpers";
 
-const ExpenseItem = ({ expense, showBudget }) => {
+const IngredientItem = ({ ingredient, showRecipe }) => {
   const fetcher = useFetcher();
 
-  const budget = getAllMatchingItems({
-    category: "budgets",
+  const recipe = getAllMatchingItems({
+    category: "recipes",
     key: "id",
-    value: expense.budgetId,
+    value: ingredient.recipeId,
   })[0];
 
   return (
     <>
-      <td>{expense.name}</td>
-      <td>{formatCurrency(expense.amount)}</td>
-      <td>{formatDateToLocaleString(expense.createdAt)}</td>
-      {showBudget && (
+      <td>{ingredient.name}</td>
+      <td>{formatCurrency(ingredient.amount)}</td>
+      <td>{formatDateToLocaleString(ingredient.createdAt)}</td>
+      {showRecipe && (
         <td>
           <Link
-            to={`/budget/${budget.id}`}
+            to={`/recipe/${recipe.id}`}
             style={{
-              "--accent": budget.color,
+              "--accent": recipe.color,
             }}
           >
-            {budget.name}
+            {recipe.name}
           </Link>
         </td>
       )}
       <td>
         <fetcher.Form method="post">
-          <input type="hidden" name="_action" value="deleteExpense" />
-          <input type="hidden" name="expenseId" value={expense.id} />
+          <input type="hidden" name="_action" value="deleteIngredient" />
+          <input type="hidden" name="ingredientId" value={ingredient.id} />
           <button
             type="submit"
             className="btn btn--warning"
-            aria-label={`Delete ${expense.name} expense`}
+            aria-label={`Delete ${ingredient.name} ingredient`}
           >
             <TrashIcon width={20} />
           </button>
@@ -53,4 +53,4 @@ const ExpenseItem = ({ expense, showBudget }) => {
     </>
   );
 };
-export default ExpenseItem;
+export default IngredientItem;

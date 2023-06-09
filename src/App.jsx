@@ -9,18 +9,18 @@ import Main, { mainLoader } from "./layouts/Main";
 
 // Actions
 import { logoutAction } from "./actions/logout";
-import { deleteBudget } from "./actions/deleteBudget";
+import { deleteRecipe } from "./actions/deleteRecipe";
 import { deleteEvent } from "./actions/deleteEvent";
 
 // Routes
 import Dashboard, { dashboardAction, dashboardLoader } from "./pages/Dashboard";
 import Error from "./pages/Error";
-import BudgetPage, { budgetAction, budgetLoader } from "./pages/BudgetPage";
+import RecipePage, { recipeAction, recipeLoader } from "./pages/RecipePage";
 import CommentPage, { commentLoader } from "./pages/CommentPage";
-import ExpensesPage, {
-  expensesAction,
-  expensesLoader,
-} from "./pages/ExpensesPage";
+import IngredientsPage, {
+  ingredientsAction,
+  ingredientsLoader,
+} from "./pages/IngredientsPage";
 import EventMenuPage, {
   eventMenuAction,
   eventMenuLoader,
@@ -60,23 +60,23 @@ const router = createBrowserRouter([
         errorElement: <Error />,
       },
       {
-        path: "budget/:id",
-        element: <BudgetPage />,
-        loader: budgetLoader,
-        action: budgetAction,
+        path: "recipe/:id",
+        element: <RecipePage />,
+        loader: recipeLoader,
+        action: recipeAction,
         errorElement: <Error />,
         children: [
           {
             path: "delete",
-            action: deleteBudget,
+            action: deleteRecipe,
           },
         ],
       },
       {
-        path: "expenses",
-        element: <ExpensesPage />,
-        loader: expensesLoader,
-        action: expensesAction,
+        path: "ingredients",
+        element: <IngredientsPage />,
+        loader: ingredientsLoader,
+        action: ingredientsAction,
         errorElement: <Error />,
       },
       {
