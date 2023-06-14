@@ -31,11 +31,37 @@ export async function dashboardAction({ request }) {
   const data = await request.formData();
   const { _action, ...values } = Object.fromEntries(data);
 
+  const email =  values.email;
+  const password = values.password;
+
+  const postvalue = {"email": email, "password": password};
+
   // new user submission
   if (_action === "newUser") {
     try {
-      localStorage.setItem("userName", JSON.stringify(values.userName));
-      return toast.success(`Welcome, ${values.userName}`);
+
+      const response = await fetch('http://localhost:4000/api/user/login', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(postvalue)
+      });
+
+      console.log(JSON.stringify(postvalue));
+
+      const json = await response.json();
+  
+      if (!response.ok) {
+        return toast.error(`Oops, that didn't go right. Error message: ${json.error}`);
+      }
+      if (response.ok) {
+
+        localStorage.setItem('user', JSON.stringify(json));
+        localStorage.setItem("userName", JSON.stringify(email));
+
+        return toast.success(`Welcome, ${email}`);
+  
+      }
+
     } catch (e) {
       throw new Error("There was a problem creating your account.");
     }

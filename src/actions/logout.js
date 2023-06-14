@@ -10,15 +10,21 @@ import { deleteItem } from "../helpers";
 export async function logoutAction() {
   // delete the user
   deleteItem({
+    key: "user"
+  })
+  deleteItem({
     key: "userName"
   })
   deleteItem({
     key: "recipes"
   })
   deleteItem({
+    key: "comments"
+  })
+  deleteItem({
     key: "ingredients"
   })
-  toast.success("You’ve deleted your account!")
+  toast.success("You've signed-out sucessfully!")
   // return redirect
   return redirect("/")
 }

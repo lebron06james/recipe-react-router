@@ -1,10 +1,10 @@
-import { Form } from "react-router-dom"
+import { Form } from "react-router-dom";
 
 // library
 import { UserPlusIcon } from "@heroicons/react/24/solid";
 
 // assets
-import illustration from "../assets/illustration.jpg"
+import illustration from "../assets/illustration.jpg";
 
 const Intro = () => {
   return (
@@ -13,15 +13,22 @@ const Intro = () => {
         <h1>
           Events+<span className="accent">Menu</span>
         </h1>
-        <p>
-          Managed in one place. Start here by signing in.
-        </p>
+        <p>Managed in one place. Start here by signing in.</p>
         <Form method="post">
           <input
-            type="text"
-            name="userName"
+            type="email"
+            name="email"
             required
-            placeholder="What is your name?" aria-label="Your Name" autoComplete="given-name"
+            placeholder="Enter your email"
+            aria-label="Email"
+            autoComplete="given-name"
+          />
+          <input
+            type="password"
+            name="password"
+            required
+            placeholder="Enter your password"
+            aria-label="Password"
           />
           <input type="hidden" name="_action" value="newUser" />
           <button type="submit" className="btn btn--dark">
@@ -32,6 +39,6 @@ const Intro = () => {
       </div>
       <img src={illustration} alt="Kitchen" width={600} />
     </div>
-  )
-}
-export default Intro
+  );
+};
+export default Intro;
