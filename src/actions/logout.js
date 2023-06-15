@@ -16,6 +16,9 @@ export async function logoutAction() {
     key: "userName"
   })
   deleteItem({
+    key: "events"
+  })
+  deleteItem({
     key: "recipes"
   })
   deleteItem({

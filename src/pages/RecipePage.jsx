@@ -16,8 +16,18 @@ import RecipeItem from "../components/RecipeItem";
 import Table from "../components/Table";
 
 // helpers
-import { createIngredient, deleteItem, getAllMatchingItems } from "../helpers";
+import {
+  fetchData,
+  waait,
+  createIngredient,
+  deleteItem,
+  getAllMatchingItems,
+} from "../helpers";
 
+// components
+import Intro from "../components/Intro";
+
+// library imports
 import { ChatBubbleOvalLeftEllipsisIcon } from "@heroicons/react/24/outline";
 
 // loader
@@ -44,7 +54,9 @@ export async function recipeLoader({ params }) {
     throw new Error("The recipe you’re trying to find doesn’t exist");
   }
 
-  return { recipe, event, ingredients };
+  const userName = await fetchData("userName");
+
+  return { userName, recipe, event, ingredients };
 }
 
 // action
@@ -79,67 +91,73 @@ export async function recipeAction({ request }) {
 }
 
 const RecipePage = () => {
-  const { recipe, ingredients, event } = useLoaderData();
+  const { userName, recipe, ingredients, event } = useLoaderData();
   const navigate = useNavigate();
 
   return (
-    <div
-      className="grid-lg"
-      style={{
-        "--accent": recipe.color,
-      }}
-    >
-      <div className="flex-md">
-        <button className="btn btn--dark" onClick={() => navigate(-1)}>
-          <ArrowUturnLeftIcon width={20} />
-          <span>Go Back</span>
-        </button>
-      </div>
-      <h1 className="h2">
-        <span className="accent">{recipe.name} Recipe</span>
-      </h1>
-      <h1>
-        for{" "}
-        <span>
-          {event.name}, {event.pax} Pax{" "}
-        </span>
-      </h1>
-      <div className="grid-sm">
-        <p>
-          Event starts on <strong>{event.eventdate}</strong> at{" "}
-          <strong>{event.eventtime}</strong>
-        </p>
-        <p>
-          Holding room - <strong>{event.holdingroom}</strong>
-        </p>
-        <p>
-          Venue - <strong>{event.venue}</strong>
-        </p>
-      </div>
+    <>
+      {userName ? (
+        <div
+          className="grid-lg"
+          style={{
+            "--accent": recipe.color,
+          }}
+        >
+          <div className="flex-md">
+            <button className="btn btn--dark" onClick={() => navigate(-1)}>
+              <ArrowUturnLeftIcon width={20} />
+              <span>Go Back</span>
+            </button>
+          </div>
+          <h1 className="h2">
+            <span className="accent">{recipe.name} Recipe</span>
+          </h1>
+          <h1>
+            for{" "}
+            <span>
+              {event.name}, {event.pax} Pax{" "}
+            </span>
+          </h1>
+          <div className="grid-sm">
+            <p>
+              Event starts on <strong>{event.eventdate}</strong> at{" "}
+              <strong>{event.eventtime}</strong>
+            </p>
+            <p>
+              Holding room - <strong>{event.holdingroom}</strong>
+            </p>
+            <p>
+              Venue - <strong>{event.venue}</strong>
+            </p>
+          </div>
 
-      {/* comment button */}
-      <div className="grid-sm">
-        Recent comment: comment name here
-        <Link to={`/comment/${event.id}`} className="btn">
-          <span>Add Comment</span>
-          <ChatBubbleOvalLeftEllipsisIcon width={20} />
-        </Link>
-      </div>
-      {/* end comment button */}
+          {/* comment button */}
+          <div className="grid-sm">
+            Recent comment: comment name here
+            <Link to={`/comment/${event.id}`} className="btn">
+              <span>Add Comment</span>
+              <ChatBubbleOvalLeftEllipsisIcon width={20} />
+            </Link>
+          </div>
+          {/* end comment button */}
 
-      <div className="flex-lg">
-        <RecipeItem recipe={recipe} showDelete={true} />
-        <AddIngredientForm recipes={[recipe]} />
-      </div>
-      {ingredients && ingredients.length > 0 && (
-        <div className="grid-md">
-          <h2>
-            <span className="accent">{recipe.name}</span> Ingredients
-          </h2>
-          <Table ingredients={ingredients} showRecipe={false} />
+          <div className="flex-lg">
+            <RecipeItem recipe={recipe} showDelete={true} />
+            <AddIngredientForm recipes={[recipe]} />
+          </div>
+          {ingredients && ingredients.length > 0 && (
+            <div className="grid-md">
+              <h2>
+                <span className="accent">{recipe.name}</span> Ingredients
+              </h2>
+              <Table ingredients={ingredients} showRecipe={false} />
+            </div>
+          )}
         </div>
+      ) : (
+        <Intro />
       )}
-    </div>
+    </>
   );
 };
 export default RecipePage;
