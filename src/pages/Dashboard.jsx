@@ -46,8 +46,6 @@ export async function dashboardAction({ request }) {
         body: JSON.stringify(postvalue)
       });
 
-      console.log(JSON.stringify(postvalue));
-
       const json = await response.json();
   
       if (!response.ok) {

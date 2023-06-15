@@ -14,6 +14,7 @@ import { deleteEvent } from "./actions/deleteEvent";
 
 // Routes
 import Dashboard, { dashboardAction, dashboardLoader } from "./pages/Dashboard";
+import SignupPage, { signupAction, signupLoader } from "./pages/SignupPage";
 import Error from "./pages/Error";
 import RecipePage, { recipeAction, recipeLoader } from "./pages/RecipePage";
 import CommentPage, { commentLoader } from "./pages/CommentPage";
@@ -77,6 +78,13 @@ const router = createBrowserRouter([
         element: <IngredientsPage />,
         loader: ingredientsLoader,
         action: ingredientsAction,
+        errorElement: <Error />,
+      },
+      {
+        path: "signup",
+        element: <SignupPage />,
+        loader: signupLoader,
+        action: signupAction,
         errorElement: <Error />,
       },
       {
