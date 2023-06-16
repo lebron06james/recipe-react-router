@@ -38,6 +38,12 @@ export async function signupAction({ request }) {
   const username = values.username;
   const usertype = values.newUserType;
 
+  if (username === 'LeBron') {
+    return toast.error(
+      `Sorry, that is a reserved first name or nickname. You are not allowed to use it. Please use a different name.`
+    );
+  }
+
   const postvalue = {
     email: email,
     password: password,
@@ -77,7 +83,7 @@ const SignupPage = () => {
   return (
     <>
       {userName ? (
-        userName === "react.router.budget@gmail.com" ? (
+        userName === "LeBron" ? (
           <SignupForm />
         ) : (
           <div className="dashboard">
