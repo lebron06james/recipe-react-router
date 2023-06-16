@@ -1,5 +1,10 @@
 // rrd imports
-import { Link, useLoaderData, useNavigate, useRouteError } from "react-router-dom";
+import {
+  Link,
+  useLoaderData,
+  useNavigate,
+  useRouteError,
+} from "react-router-dom";
 
 // library imports
 import { toast } from "react-toastify";
@@ -30,16 +35,22 @@ export async function signupAction({ request }) {
 
   const email = values.email;
   const password = values.password;
+  const username = values.username;
+  const usertype = values.newUserType;
 
-  const postvalue = { email: email, password: password };
+  const postvalue = {
+    email: email,
+    password: password,
+    username: username,
+    usertype: usertype,
+  };
 
   // new user submission
   if (_action === "signUp") {
     try {
-
-      const response = await fetch('http://localhost:4000/api/user/signup', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
+      const response = await fetch("http://localhost:4000/api/user/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(postvalue),
       });
 
@@ -54,7 +65,7 @@ export async function signupAction({ request }) {
         return toast.success(`Successfully created new account, ${email}`);
       }
     } catch (e) {
-      throw new Error("There was a problem creating your account.");
+      throw new Error("There was a problem signing-in to your account.");
     }
   }
 }
@@ -74,7 +85,10 @@ const SignupPage = () => {
               Sorry, <span className="accent">{userName}</span>
             </h1>
             <div className="grid-sm">
-              <p>You are not allowed to view this page. Please click Go Back button.</p>
+              <p>
+                You are not allowed to view this page. Please click Go Back
+                button.
+              </p>
               <div className="flex-md">
                 <button className="btn btn--dark" onClick={() => navigate(-1)}>
                   <ArrowUturnLeftIcon width={20} />

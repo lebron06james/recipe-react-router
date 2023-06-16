@@ -54,9 +54,9 @@ export async function dashboardAction({ request }) {
       if (response.ok) {
 
         localStorage.setItem('user', JSON.stringify(json));
-        localStorage.setItem("userName", JSON.stringify(email));
+        localStorage.setItem("userName", JSON.stringify(json.username));
 
-        return toast.success(`Welcome, ${email}`);
+        return toast.success(`Welcome, ${json.username}`);
   
       }
 

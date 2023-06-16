@@ -1,4 +1,7 @@
-import { Form } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+
+// rrd imports
+import { Form, useFetcher } from "react-router-dom";
 
 // library
 import { UserPlusIcon } from "@heroicons/react/24/solid";
@@ -7,6 +10,28 @@ import { UserPlusIcon } from "@heroicons/react/24/solid";
 import illustration from "../assets/illustration.jpg";
 
 const SignupForm = () => {
+  const fetcher = useFetcher();
+  const isSubmitting = fetcher.state === "submitting";
+
+  const formRef = useRef();
+  const focusRef = useRef();
+
+  useEffect(() => {
+    if (!isSubmitting) {
+      formRef.current.reset();
+      focusRef.current.focus();
+    }
+  }, [isSubmitting]);
+
+  const userTypes = [
+    { name: "SOSEC", id: 1 },
+    { name: "IHAO", id: 2 },
+    { name: "Chef", id: 3 },
+    { name: "Purchasing", id: 4 },
+    { name: "Kitchen", id: 5 },
+    { name: "Inventory", id: 6 },
+  ];
+
   return (
     <div className="intro">
       <div>
@@ -14,7 +39,7 @@ const SignupForm = () => {
           User <span className="accent">Sign Up</span>
         </h1>
         <p>Signing up. Enter account details to continue.</p>
-        <Form method="post">
+        <fetcher.Form method="post" ref={formRef}>
           <input
             type="email"
             name="email"
@@ -22,6 +47,7 @@ const SignupForm = () => {
             placeholder="Enter your email"
             aria-label="Email"
             autoComplete="given-name"
+            ref={focusRef}
           />
           <input
             type="password"
@@ -30,12 +56,44 @@ const SignupForm = () => {
             placeholder="Enter your password"
             aria-label="Password"
           />
+          <input
+            type="text"
+            name="username"
+            required
+            placeholder="Enter your first name or nickname"
+            aria-label="Name"
+            autoComplete="given-name"
+          />
+          <div className="grid-xs">
+            <label>User Type</label>
+            <select name="newUserType" id="newUserType" required>
+              {userTypes
+                .sort((a, b) => a.name - b.name)
+                .map((usertype) => {
+                  return (
+                    <option key={usertype.id} value={usertype.name}>
+                      {usertype.name}
+                    </option>
+                  );
+                })}
+            </select>
+          </div>
           <input type="hidden" name="_action" value="signUp" />
-          <button type="submit" className="btn btn--dark">
-            <span>Sign Up</span>
-            <UserPlusIcon width={20} />
+          <button
+            type="submit"
+            className="btn btn--dark"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? (
+              <span>Submitting…</span>
+            ) : (
+              <>
+                <span>Create event</span>
+                <UserPlusIcon width={20} />
+              </>
+            )}
           </button>
-        </Form>
+        </fetcher.Form>
       </div>
       <img src={illustration} alt="Kitchen" width={600} />
     </div>

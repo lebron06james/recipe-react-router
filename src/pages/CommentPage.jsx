@@ -53,11 +53,17 @@ export async function commentLoader({ params }) {
 
   const userName = await fetchData("userName");
 
-  return { event, userName, _comments };
+  const user = await fetchData("user");
+
+  const { usertype } = user;
+
+  const userprompt = '(' + usertype + ') ' + userName;
+
+  return { event, userName, userprompt, _comments };
 }
 
 function CommentPage() {
-  const { event, userName, _comments } = useLoaderData();
+  const { event, userName, userprompt, _comments } = useLoaderData();
   const navigate = useNavigate();
 
   // const [tasks, setTasks] = useLocalStorage('react-todo.tasks', []);
@@ -137,13 +143,13 @@ function CommentPage() {
               updateComment={updateComment}
               closeEditMode={closeEditMode}
               event={event}
-              userName={userName}
+              userName={userprompt}
             />
           )}
           <CustomForm
             addComment={addComment}
             event={event}
-            userName={userName}
+            userName={userprompt}
           />
           {comments && (
             <CommentList
@@ -152,7 +158,7 @@ function CommentPage() {
               toggleComment={toggleComment}
               enterEditMode={enterEditMode}
               event={event}
-              userName={userName}
+              userName={userprompt}
             />
           )}
         </div>
