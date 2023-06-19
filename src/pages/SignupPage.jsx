@@ -54,7 +54,7 @@ export async function signupAction({ request }) {
   // new user submission
   if (_action === "signUp") {
     try {
-      const response = await fetch("http://localhost:4000/api/user/signup", {
+      const response = await fetch("https://recipe-auth.cyclic.app/api/user/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(postvalue),
