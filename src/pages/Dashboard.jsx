@@ -10,18 +10,14 @@ import AddRecipeGroupForm from "../components/AddRecipeGroupForm";
 import RecipeGroupItem from "../components/RecipeGroupItem";
 
 //  helper functions
-import {
-  createRecipeGroup,
-  deleteItem,
-  fetchData,
-  waait,
-} from "../helpers";
+import { createRecipeGroup, deleteItem, fetchData, waait } from "../helpers";
 
 // loader
 export function dashboardLoader() {
   const userName = fetchData("userName");
+  const user = fetchData("user");
   const recipegroups = fetchData("recipegroups");
-  return { userName, recipegroups };
+  return { userName, user, recipegroups };
 }
 
 // action
@@ -31,35 +27,36 @@ export async function dashboardAction({ request }) {
   const data = await request.formData();
   const { _action, ...values } = Object.fromEntries(data);
 
-  const email =  values.email;
+  const email = values.email;
   const password = values.password;
 
-  const postvalue = {"email": email, "password": password};
+  const postvalue = { email: email, password: password };
 
   // new user submission
   if (_action === "newUser") {
     try {
-
-      const response = await fetch('https://recipe-auth.cyclic.app/api/user/login', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(postvalue)
-      });
+      const response = await fetch(
+        "https://recipe-auth.cyclic.app/api/user/login",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(postvalue),
+        }
+      );
 
       const json = await response.json();
-  
+
       if (!response.ok) {
-        return toast.error(`Oops, that didn't go right. Error message: ${json.error}`);
+        return toast.error(
+          `Oops, that didn't go right. Error message: ${json.error}`
+        );
       }
       if (response.ok) {
-
-        localStorage.setItem('user', JSON.stringify(json));
+        localStorage.setItem("user", JSON.stringify(json));
         localStorage.setItem("userName", JSON.stringify(json.username));
 
         return toast.success(`Welcome, ${json.username}`);
-  
       }
-
     } catch (e) {
       throw new Error("There was a problem creating your account.");
     }
@@ -76,11 +73,10 @@ export async function dashboardAction({ request }) {
       throw new Error("There was a problem creating your recipe category.");
     }
   }
-
 }
 
 const Dashboard = () => {
-  const { userName, recipegroups } = useLoaderData();
+  const { userName, user, recipegroups } = useLoaderData();
 
   return (
     <>
@@ -93,22 +89,25 @@ const Dashboard = () => {
             {recipegroups && recipegroups.length > 0 ? (
               <div className="grid-lg">
                 <div className="flex-lg">
-                  <AddRecipeGroupForm userName={userName} />
+                  <AddRecipeGroupForm userName={userName} user={user} />
                   {/* <AddIngredientForm recipes={recipes} /> */}
                 </div>
                 <h2>Existing Recipe Categories</h2>
                 <div className="recipes">
                   {recipegroups.map((recipegroup) => (
-                    <RecipeGroupItem key={recipegroup.id} recipegroup={recipegroup} />
+                    <RecipeGroupItem
+                      key={recipegroup.id}
+                      recipegroup={recipegroup}
+                      user={user}
+                    />
                   ))}
                 </div>
-
               </div>
             ) : (
               <div className="grid-sm">
                 <p>Conveniently organize recipes in one spot.</p>
                 <p>Create a recipe category to get started!</p>
-                <AddRecipeGroupForm userName={userName} />
+                <AddRecipeGroupForm userName={userName} user={user} />
               </div>
             )}
           </div>

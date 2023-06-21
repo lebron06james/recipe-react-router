@@ -2,7 +2,7 @@
 import { Form, Link } from "react-router-dom";
 
 // library imports
-import { BanknotesIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { BanknotesIcon, TrashIcon, FireIcon } from "@heroicons/react/24/outline";
 
 // helper functions
 import {
@@ -11,7 +11,7 @@ import {
   formatPercentage,
 } from "../helpers";
 
-const RecipeItem = ({ recipe, showDelete = false }) => {
+const RecipeItem = ({ recipe, usertype, showDelete = false }) => {
   const { id, name, amount, color } = recipe;
   const spent = calculateSpentByRecipe(id);
 
@@ -56,7 +56,7 @@ const RecipeItem = ({ recipe, showDelete = false }) => {
               }
             }}
           >
-            <button type="submit" className="btn">
+            <button type="submit" className="btn" hidden={usertype !== 'Chef'}>
               <span>Delete Recipe</span>
               <TrashIcon width={20} />
             </button>
@@ -66,7 +66,7 @@ const RecipeItem = ({ recipe, showDelete = false }) => {
         <div className="flex-sm">
           <Link to={`/recipe/${id}`} className="btn">
             <span>View Details</span>
-            <BanknotesIcon width={20} />
+            <FireIcon width={20} />
           </Link>
         </div>
       )}

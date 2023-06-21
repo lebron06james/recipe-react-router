@@ -11,8 +11,9 @@ import {
   formatPercentage,
 } from "../helpers";
 
-const RecipeGroupItem = ({ recipegroup }) => {
+const RecipeGroupItem = ({ recipegroup, user }) => {
   const { id, name, updatedby, color } = recipegroup;
+  const { usertype } = user;
 //   const spent = calculateSpentByRecipe(id);
 
   return (
@@ -41,10 +42,10 @@ const RecipeGroupItem = ({ recipegroup }) => {
       </div>
 
       <div className="flex-sm">
-        Click button below to add a new Recipe
+        {usertype !== 'Chef' ? 'Only the Chefs can add recipes here' : 'Tap button below to add a new Recipe'}
         <Link to={`/recipegroup/${id}`} className="btn">
-          <span>Add Recipe</span>
-          <BanknotesIcon width={20} />
+          <span>{usertype === 'Chef' ? 'Add Recipe' : `See what's on the list`}</span>
+          <FireIcon width={20} />
         </Link>
         {/* <Link to={`/comment/${id}`} className="btn">
           <span>Add Comment</span>

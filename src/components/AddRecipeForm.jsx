@@ -5,9 +5,9 @@ import { useEffect, useRef } from "react";
 import { Form, useFetcher } from "react-router-dom"
 
 // library imports
-import { CurrencyDollarIcon } from "@heroicons/react/24/solid"
+import { CurrencyDollarIcon, FireIcon } from "@heroicons/react/24/solid"
 
-const AddRecipeForm = ({ recipegroup }) => {
+const AddRecipeForm = ({ recipegroup, usertype }) => {
 
   const fetcher = useFetcher();
   const isSubmitting = fetcher.state === "submitting"
@@ -32,6 +32,7 @@ const AddRecipeForm = ({ recipegroup }) => {
         method="post"
         className="grid-sm"
         ref={formRef}
+        hidden={usertype !== 'Chef'}
       >
         <div className="grid-xs">
           <label htmlFor="newRecipe">Recipe Name</label>
@@ -67,12 +68,12 @@ const AddRecipeForm = ({ recipegroup }) => {
           />
         </div>
         <input type="hidden" name="_action" value="createRecipe" />
-        <button type="submit" className="btn btn--dark" disabled={isSubmitting}>
+        <button type="submit" className="btn btn--dark" disabled={isSubmitting} hidden={usertype !== 'Chef'}>
           {
             isSubmitting ? <span>Submitting…</span> : (
               <>
                 <span>Create recipe</span>
-                <CurrencyDollarIcon width={20} />
+                <FireIcon width={20} />
               </>
             )
           }

@@ -15,6 +15,7 @@ import {
   ChatBubbleOvalLeftEllipsisIcon,
   HomeIcon,
   ArrowUturnLeftIcon,
+  FireIcon,
 } from "@heroicons/react/24/outline";
 
 // components
@@ -60,11 +61,12 @@ export async function recipegroupMenuLoader({ params }) {
     ingredients = [...ingredients, ..._ingredients];
   });
 
+  const user = fetchData("user");
   const userName = fetchData("userName");
   // const recipes = fetchData("recipes");
   // const ingredients = fetchData("ingredients");
 
-  return { recipegroup, userName, recipes, ingredients };
+  return { recipegroup, userName, user, recipes, ingredients };
 }
 
 // action
@@ -124,7 +126,8 @@ export async function recipegroupMenuAction({ request }) {
 }
 
 const RecipeGroupMenuPage = () => {
-  const { recipegroup, userName, recipes, ingredients } = useLoaderData();
+  const { recipegroup, userName, user, recipes, ingredients } = useLoaderData();
+  const { usertype } = user;
   const navigate = useNavigate();
 
   return (
@@ -149,7 +152,7 @@ const RecipeGroupMenuPage = () => {
             </p>
           </div>
           {/* delete button */}
-          <div className="flex-sm">
+          <div className="flex-sm" hidden={usertype !== 'Chef'}>
             <Form
               method="post"
               action="delete"
@@ -163,7 +166,7 @@ const RecipeGroupMenuPage = () => {
                 }
               }}
             >
-              <button type="submit" className="btn btn--warning">
+              <button type="submit" className="btn btn--warning" hidden={usertype !== 'Chef'}>
                 <span>Delete this category</span>
                 <TrashIcon width={20} />
               </button>
@@ -185,13 +188,13 @@ const RecipeGroupMenuPage = () => {
             {recipes && recipes.length > 0 ? (
               <div className="grid-lg">
                 <div className="flex-lg">
-                  <AddRecipeForm recipegroup={recipegroup} />
-                  <AddIngredientForm recipes={recipes} />
+                  <AddRecipeForm recipegroup={recipegroup} usertype={usertype} />
+                  <AddIngredientForm recipes={recipes} usertype={usertype} />
                 </div>
                 <h2>Existing Recipes</h2>
                 <div className="recipes">
                   {recipes.map((recipe) => (
-                    <RecipeItem key={recipe.id} recipe={recipe} />
+                    <RecipeItem key={recipe.id} recipe={recipe} usertype={usertype} />
                   ))}
                 </div>
                 {ingredients && ingredients.length > 0 && (
@@ -213,8 +216,8 @@ const RecipeGroupMenuPage = () => {
             ) : (
               <div className="grid-sm">
                 <p>Your recipes, designed in one place.</p>
-                <p>Create a Recipe to get started!</p>
-                <AddRecipeForm recipegroup={recipegroup} />
+                <p hidden={usertype !== 'Chef'}>Create a Recipe to get started!</p>
+                <AddRecipeForm recipegroup={recipegroup} usertype={usertype} />
               </div>
             )}
           </div>

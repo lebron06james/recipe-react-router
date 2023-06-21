@@ -7,9 +7,11 @@ import { Form, useFetcher } from "react-router-dom"
 // library imports
 import { CurrencyDollarIcon } from "@heroicons/react/24/solid"
 
-const AddRecipeGroupForm = ({ userName }) => {
+const AddRecipeGroupForm = ({ userName, user }) => {
   const fetcher = useFetcher();
   const isSubmitting = fetcher.state === "submitting"
+
+  const { usertype } = user;
 
   const formRef = useRef();
   const focusRef = useRef();
@@ -89,7 +91,7 @@ const AddRecipeGroupForm = ({ userName }) => {
         </div>
 
         <input type="hidden" name="_action" value="createRecipeGroup" />
-        <button type="submit" className="btn btn--dark" disabled={isSubmitting}>
+        <button type="submit" className="btn btn--dark" disabled={isSubmitting} hidden={usertype !== 'Chef'}>
           {
             isSubmitting ? <span>Submitting…</span> : (
               <>

@@ -7,7 +7,7 @@ import { useFetcher } from "react-router-dom"
 // library imports
 import { PlusCircleIcon } from "@heroicons/react/24/solid"
 
-const AddIngredientForm = ({ recipes }) => {
+const AddIngredientForm = ({ recipes, usertype }) => {
   const fetcher = useFetcher()
   const isSubmitting = fetcher.state === "submitting";
 
@@ -35,6 +35,7 @@ const AddIngredientForm = ({ recipes }) => {
         method="post"
         className="grid-sm"
         ref={formRef}
+        hidden={usertype !== 'Chef'}
       >
         <div className="ingredient-inputs">
           <div className="grid-xs">
@@ -78,7 +79,7 @@ const AddIngredientForm = ({ recipes }) => {
           </select>
         </div>
         <input type="hidden" name="_action" value="createIngredient" />
-        <button type="submit" className="btn btn--dark" disabled={isSubmitting}>
+        <button type="submit" className="btn btn--dark" disabled={isSubmitting} hidden={usertype !== 'Chef'}>
           {
             isSubmitting ? <span>Submitting…</span> : (
               <>
