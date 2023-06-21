@@ -43,20 +43,20 @@ const AddIngredientForm = ({ recipes }) => {
               type="text"
               name="newIngredient"
               id="newIngredient"
-              placeholder="e.g., Coffee"
+              placeholder="e.g., Chicken"
               ref={focusRef}
               required
             />
           </div>
           <div className="grid-xs">
-            <label htmlFor="newIngredientAmount">Amount</label>
+            <label htmlFor="newIngredientAmount">Amount in ml/mg</label>
             <input
               type="number"
               step="0.01"
               inputMode="decimal"
               name="newIngredientAmount"
               id="newIngredientAmount"
-              placeholder="e.g., 3.50"
+              placeholder="e.g., 3.5"
               required
             />
           </div>

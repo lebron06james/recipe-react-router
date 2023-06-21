@@ -39,19 +39,19 @@ const AddRecipeForm = ({ event }) => {
             type="text"
             name="newRecipe"
             id="newRecipe"
-            placeholder="e.g., Groceries"
+            placeholder="e.g., Fried Chicken"
             required
             ref={focusRef}
           />
         </div>
         <div className="grid-xs">
-          <label htmlFor="newRecipeAmount">Amount</label>
+          <label htmlFor="newRecipeAmount">Amount in ml/mg</label>
           <input
             type="number"
             step="0.01"
             name="newRecipeAmount"
             id="newRecipeAmount"
-            placeholder="e.g., $350"
+            placeholder="e.g., 50"
             required
             inputMode="decimal"
           />
