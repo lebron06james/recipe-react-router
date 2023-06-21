@@ -38,10 +38,10 @@ export async function recipeLoader({ params }) {
     value: params.id,
   })[0];
 
-  const event = await getAllMatchingItems({
-    category: "events",
+  const recipegroup = await getAllMatchingItems({
+    category: "recipegroups",
     key: "id",
-    value: recipe.eventId,
+    value: recipe.recipegroupId,
   })[0];
 
   const ingredients = await getAllMatchingItems({
@@ -56,7 +56,7 @@ export async function recipeLoader({ params }) {
 
   const userName = await fetchData("userName");
 
-  return { userName, recipe, event, ingredients };
+  return { userName, recipe, recipegroup, ingredients };
 }
 
 // action
@@ -91,7 +91,7 @@ export async function recipeAction({ request }) {
 }
 
 const RecipePage = () => {
-  const { userName, recipe, ingredients, event } = useLoaderData();
+  const { userName, recipe, ingredients, recipegroup } = useLoaderData();
   const navigate = useNavigate();
 
   return (
@@ -113,32 +113,26 @@ const RecipePage = () => {
             <span className="accent">{recipe.name} Recipe</span>
           </h1>
           <h1>
-            for{" "}
+            from{" "}
             <span>
-              {event.name}, {event.pax} Pax{" "}
+              {recipegroup.name}{"."}
             </span>
           </h1>
           <div className="grid-sm">
             <p>
-              Event starts on <strong>{event.eventdate}</strong> at{" "}
-              <strong>{event.eventtime}</strong>
-            </p>
-            <p>
-              Holding room - <strong>{event.holdingroom}</strong>
-            </p>
-            <p>
-              Venue - <strong>{event.venue}</strong>
+            This page contains all of the ingredients from the recipe {" "}
+            <strong>{recipe.name}</strong> under <strong>{recipegroup.name}{"."}</strong>
             </p>
           </div>
 
           {/* comment button */}
-          <div className="grid-sm">
+          {/* <div className="grid-sm">
             Recent comment: comment name here
-            <Link to={`/comment/${event.id}`} className="btn">
+            <Link to={`/comment/${recipegroup.id}`} className="btn">
               <span>Add Comment</span>
               <ChatBubbleOvalLeftEllipsisIcon width={20} />
             </Link>
-          </div>
+          </div> */}
           {/* end comment button */}
 
           <div className="flex-lg">

@@ -15,18 +15,18 @@ export async function logoutAction() {
   deleteItem({
     key: "userName"
   })
-  deleteItem({
-    key: "events"
-  })
-  deleteItem({
-    key: "recipes"
-  })
-  deleteItem({
-    key: "comments"
-  })
-  deleteItem({
-    key: "ingredients"
-  })
+  // deleteItem({
+  //   key: "recipegroups"
+  // })
+  // deleteItem({
+  //   key: "recipes"
+  // })
+  // deleteItem({
+  //   key: "comments"
+  // })
+  // deleteItem({
+  //   key: "ingredients"
+  // })
   toast.success("You've signed-out sucessfully!")
   // return redirect
   return redirect("/")

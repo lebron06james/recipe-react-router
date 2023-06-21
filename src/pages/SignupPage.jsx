@@ -12,18 +12,18 @@ import { HomeIcon, ArrowUturnLeftIcon } from "@heroicons/react/24/solid";
 
 // components
 import Intro from "../components/Intro";
-import AddEventForm from "../components/AddEventForm";
-import EventItem from "../components/EventItem";
+import AddRecipeGroupForm from "../components/AddRecipeGroupForm";
+import RecipeGroupItem from "../components/RecipeGroupItem";
 
 //  helper functions
-import { createEvent, deleteItem, fetchData, waait } from "../helpers";
+import { createRecipeGroup, deleteItem, fetchData, waait } from "../helpers";
 import SignupForm from "../components/SignupForm";
 
 // loader
 export function signupLoader() {
   const userName = fetchData("userName");
-  const events = fetchData("events");
-  return { userName, events };
+  const recipegroups = fetchData("recipegroups");
+  return { userName, recipegroups };
 }
 
 // action
@@ -77,7 +77,7 @@ export async function signupAction({ request }) {
 }
 
 const SignupPage = () => {
-  const { userName, events } = useLoaderData();
+  const { userName, recipegroups } = useLoaderData();
   const navigate = useNavigate();
 
   return (

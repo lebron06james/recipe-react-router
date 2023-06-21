@@ -27,16 +27,19 @@ const RecipeItem = ({ recipe, showDelete = false }) => {
         {/* <p>{formatCurrency(amount)} Recipeed</p> */}
         <p>for {amount} Pax</p>
       </div>
-      <progress max={amount} value={spent}>
+      {/* <progress max={amount} value={spent}>
         {formatPercentage(spent / amount)}
+      </progress> */}
+      <progress max={10} value={10}>
+        {formatPercentage(10 / 10)}
       </progress>
       {/* <div className="progress-text">
         <small>{formatCurrency(spent)} spent</small>
         <small>{formatCurrency(amount - spent)} remaining</small>
       </div> */}
       <div className="progress-text">
-        <small>10 (original) ingredients</small>
-        <small>12 (customized) ingredients</small>
+        <small>10 ingredients</small>
+        <small>10 servings</small>
       </div>
       {showDelete ? (
         <div className="flex-sm">

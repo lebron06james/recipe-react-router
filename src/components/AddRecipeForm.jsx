@@ -7,7 +7,7 @@ import { Form, useFetcher } from "react-router-dom"
 // library imports
 import { CurrencyDollarIcon } from "@heroicons/react/24/solid"
 
-const AddRecipeForm = ({ event }) => {
+const AddRecipeForm = ({ recipegroup }) => {
 
   const fetcher = useFetcher();
   const isSubmitting = fetcher.state === "submitting"
@@ -57,12 +57,12 @@ const AddRecipeForm = ({ event }) => {
           />
         </div>
         <div className="grid-xs">
-          <label htmlFor="newRecipeEvent">Event Id</label>
+          <label htmlFor="newRecipeRecipeGroup">Category Id</label>
           <input
             type="text"
-            name="newRecipeEvent"
-            id="newRecipeEvent"
-            value={event.id}
+            name="newRecipeRecipeGroup"
+            id="newRecipeRecipeGroup"
+            value={recipegroup.id}
             readonly
           />
         </div>

@@ -6,7 +6,7 @@ import styles from './EditForm.module.css';
 // library imports
 import { CheckIcon } from '@heroicons/react/24/solid'
 
-const EditForm = ({ editedComment, updateComment, closeEditMode, event, userName }) => {
+const EditForm = ({ editedComment, updateComment, closeEditMode, recipegroup, userName }) => {
   const [updatedCommentName, setUpdatedCommentName] = useState(editedComment.name);
 
   useEffect(()=> {
@@ -14,10 +14,10 @@ const EditForm = ({ editedComment, updateComment, closeEditMode, event, userName
       e.key === "Escape" && closeEditMode();
     }
 
-    window.addEventListener('keydown', closeModalIfEscaped)
+    window.addRecipeGroupListener('keydown', closeModalIfEscaped)
 
     return () => {
-      window.removeEventListener('keydown', closeModalIfEscaped)
+      window.removeRecipeGroupListener('keydown', closeModalIfEscaped)
     }
   }, [closeEditMode])
 
@@ -54,13 +54,13 @@ const EditForm = ({ editedComment, updateComment, closeEditMode, event, userName
           >Update Comment</label>
         </div>
         <div className={styles.wrapper} hidden={true}>
-          <label htmlFor="newCommentEvent">Event Id</label>
+          <label htmlFor="newCommentRecipeGroup">RecipeGroup Id</label>
           <input
             type="text"
-            name="newCommentEvent"
-            id="newCommentEvent"
+            name="newCommentRecipeGroup"
+            id="newCommentRecipeGroup"
             className={styles.input}
-            value={event.id}
+            value={recipegroup.id}
             readonly
           />
         </div>

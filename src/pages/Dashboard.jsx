@@ -6,12 +6,12 @@ import { toast } from "react-toastify";
 
 // components
 import Intro from "../components/Intro";
-import AddEventForm from "../components/AddEventForm";
-import EventItem from "../components/EventItem";
+import AddRecipeGroupForm from "../components/AddRecipeGroupForm";
+import RecipeGroupItem from "../components/RecipeGroupItem";
 
 //  helper functions
 import {
-  createEvent,
+  createRecipeGroup,
   deleteItem,
   fetchData,
   waait,
@@ -20,8 +20,8 @@ import {
 // loader
 export function dashboardLoader() {
   const userName = fetchData("userName");
-  const events = fetchData("events");
-  return { userName, events };
+  const recipegroups = fetchData("recipegroups");
+  return { userName, recipegroups };
 }
 
 // action
@@ -65,27 +65,22 @@ export async function dashboardAction({ request }) {
     }
   }
 
-  if (_action === "createEvent") {
+  if (_action === "createRecipeGroup") {
     try {
-      createEvent({
-        name: values.newEvent,
-        pax: values.newEventPax,
-        eventdate: values.newEventDate,
-        eventtime: values.newEventTime,
-        venue: values.newEventVenue,
-        holdingroom: values.newEventHoldingRoom,
+      createRecipeGroup({
+        name: values.newRecipeGroup,
         updatedby: values.newUserName,
       });
-      return toast.success("Event created!");
+      return toast.success("Recipe Category created!");
     } catch (e) {
-      throw new Error("There was a problem creating your event.");
+      throw new Error("There was a problem creating your recipe category.");
     }
   }
 
 }
 
 const Dashboard = () => {
-  const { userName, events } = useLoaderData();
+  const { userName, recipegroups } = useLoaderData();
 
   return (
     <>
@@ -95,25 +90,25 @@ const Dashboard = () => {
             Welcome back, <span className="accent">{userName}</span>
           </h1>
           <div className="grid-sm">
-            {events && events.length > 0 ? (
+            {recipegroups && recipegroups.length > 0 ? (
               <div className="grid-lg">
                 <div className="flex-lg">
-                  <AddEventForm userName={userName} />
+                  <AddRecipeGroupForm userName={userName} />
                   {/* <AddIngredientForm recipes={recipes} /> */}
                 </div>
-                <h2>Existing Events</h2>
+                <h2>Existing Recipe Categories</h2>
                 <div className="recipes">
-                  {events.map((event) => (
-                    <EventItem key={event.id} event={event} />
+                  {recipegroups.map((recipegroup) => (
+                    <RecipeGroupItem key={recipegroup.id} recipegroup={recipegroup} />
                   ))}
                 </div>
 
               </div>
             ) : (
               <div className="grid-sm">
-                <p>Conveniently organize events' menu + recipes in one spot.</p>
-                <p>Create an event to get started!</p>
-                <AddEventForm userName={userName} />
+                <p>Conveniently organize recipes in one spot.</p>
+                <p>Create a recipe category to get started!</p>
+                <AddRecipeGroupForm userName={userName} />
               </div>
             )}
           </div>

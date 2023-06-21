@@ -11,9 +11,9 @@ const Intro = () => {
     <div className="intro">
       <div>
         <h1>
-          Events+<span className="accent">Menu</span>
+          Create+<span className="accent">Recipe</span>
         </h1>
-        <p>Managed in one place. Start here by signing in.</p>
+        <p>Design in one place. Start here by signing in.</p>
         <Form method="post">
           <input
             type="email"

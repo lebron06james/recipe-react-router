@@ -35,17 +35,17 @@ import {
 } from "../helpers";
 
 // loader
-export async function eventMenuLoader({ params }) {
-  const event = await getAllMatchingItems({
-    category: "events",
+export async function recipegroupMenuLoader({ params }) {
+  const recipegroup = await getAllMatchingItems({
+    category: "recipegroups",
     key: "id",
     value: params.id,
   })[0];
 
   const recipes = await getAllMatchingItems({
     category: "recipes",
-    key: "eventId",
-    value: event.id,
+    key: "recipegroupId",
+    value: recipegroup.id,
   });
 
   let ingredients = [];
@@ -64,11 +64,11 @@ export async function eventMenuLoader({ params }) {
   // const recipes = fetchData("recipes");
   // const ingredients = fetchData("ingredients");
 
-  return { event, userName, recipes, ingredients };
+  return { recipegroup, userName, recipes, ingredients };
 }
 
 // action
-export async function eventMenuAction({ request }) {
+export async function recipegroupMenuAction({ request }) {
   await waait();
 
   const data = await request.formData();
@@ -89,7 +89,7 @@ export async function eventMenuAction({ request }) {
       createRecipe({
         name: values.newRecipe,
         amount: values.newRecipeAmount,
-        eventId: values.newRecipeEvent,
+        recipegroupId: values.newRecipeRecipeGroup,
       });
       return toast.success("Recipe created!");
     } catch (e) {
@@ -123,8 +123,8 @@ export async function eventMenuAction({ request }) {
   }
 }
 
-const EventMenuPage = () => {
-  const { event, userName, recipes, ingredients } = useLoaderData();
+const RecipeGroupMenuPage = () => {
+  const { recipegroup, userName, recipes, ingredients } = useLoaderData();
   const navigate = useNavigate();
 
   return (
@@ -138,21 +138,14 @@ const EventMenuPage = () => {
             </button>
           </div>
           <h1>
-            Menu for,{" "}
+            List of,{" "}
             <span className="accent">
-              {event.name}, {event.pax} Pax{" "}
+              {recipegroup.name}{"."}
             </span>
           </h1>
           <div className="grid-sm">
             <p>
-              This event starts on <strong>{event.eventdate}</strong> at{" "}
-              <strong>{event.eventtime}</strong>.
-            </p>
-            <p>
-              Holding room is <strong>{event.holdingroom}</strong>.
-            </p>
-            <p>
-              And the event will be held in <strong>{event.venue}</strong>.
+            This page contains all of the recipes from the category <strong>{recipegroup.name}</strong>
             </p>
           </div>
           {/* delete button */}
@@ -163,7 +156,7 @@ const EventMenuPage = () => {
               onSubmit={(ev) => {
                 if (
                   !confirm(
-                    "Are you sure you want to permanently delete this event?"
+                    "Are you sure you want to permanently delete this recipegroup?"
                   )
                 ) {
                   ev.preventDefault();
@@ -171,7 +164,7 @@ const EventMenuPage = () => {
               }}
             >
               <button type="submit" className="btn btn--warning">
-                <span>Delete this Event</span>
+                <span>Delete this category</span>
                 <TrashIcon width={20} />
               </button>
             </Form>
@@ -179,20 +172,20 @@ const EventMenuPage = () => {
           {/* end delete button */}
 
           {/* comment button */}
-          <div className="grid-sm">
+          {/* <div className="grid-sm">
             Recent comment: comment name here
-            <Link to={`/comment/${event.id}`} className="btn">
+            <Link to={`/comment/${recipegroup.id}`} className="btn">
               <span>Add Comment</span>
               <ChatBubbleOvalLeftEllipsisIcon width={20} />
             </Link>
-          </div>
+          </div> */}
           {/* end comment button */}
 
           <div className="grid-sm">
             {recipes && recipes.length > 0 ? (
               <div className="grid-lg">
                 <div className="flex-lg">
-                  <AddRecipeForm event={event} />
+                  <AddRecipeForm recipegroup={recipegroup} />
                   <AddIngredientForm recipes={recipes} />
                 </div>
                 <h2>Existing Recipes</h2>
@@ -221,7 +214,7 @@ const EventMenuPage = () => {
               <div className="grid-sm">
                 <p>Your recipes, designed in one place.</p>
                 <p>Create a Recipe to get started!</p>
-                <AddRecipeForm event={event} />
+                <AddRecipeForm recipegroup={recipegroup} />
               </div>
             )}
           </div>
@@ -232,4 +225,4 @@ const EventMenuPage = () => {
     </>
   );
 };
-export default EventMenuPage;
+export default RecipeGroupMenuPage;

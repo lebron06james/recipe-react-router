@@ -25,9 +25,9 @@ const Nav = ({ userName }) => {
         <Form
           method="post"
           action="logout"
-          onSubmit={(event) => {
+          onSubmit={(ev) => {
             if (!confirm("Continue to sign-out?")) {
-              event.preventDefault();
+              ev.preventDefault();
             }
           }}
         >

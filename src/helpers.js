@@ -8,9 +8,9 @@ const generateRandomColor = () => {
 };
 
 // colors
-const generateRandomEventColor = () => {
-  const existingEventLength = fetchData("events")?.length ?? 0;
-  return `${existingEventLength * 34} 65% 50%`;
+const generateRandomRecipeGroupColor = () => {
+  const existingRecipeGroupLength = fetchData("recipegroups")?.length ?? 0;
+  return `${existingRecipeGroupLength * 34} 65% 50%`;
 };
 
 // Local storage
@@ -34,35 +34,35 @@ export const deleteItem = ({ key, id }) => {
   return localStorage.removeItem(key);
 };
 
-// create event
-export const createEvent = ({ name, pax, eventdate, eventtime, venue, holdingroom, updatedby }) => {
+// create recipegroup
+export const createRecipeGroup = ({ name, pax, recipegroupdate, recipegrouptime, venue, holdingroom, updatedby }) => {
   const newItem = {
     id: crypto.randomUUID(),
     name: name,
     createdAt: Date.now(),
     pax: +pax,
-    eventdate: eventdate,
-    eventtime: eventtime,
+    recipegroupdate: recipegroupdate,
+    recipegrouptime: recipegrouptime,
     venue: venue,
     holdingroom: holdingroom,
     updatedby: updatedby,
-    color: generateRandomEventColor(),
+    color: generateRandomRecipeGroupColor(),
   };
-  const existingEvents = fetchData("events") ?? [];
+  const existingRecipeGroups = fetchData("recipegroups") ?? [];
   return localStorage.setItem(
-    "events",
-    JSON.stringify([...existingEvents, newItem])
+    "recipegroups",
+    JSON.stringify([...existingRecipeGroups, newItem])
   );
 };
 
 // create recipe
-export const createRecipe = ({ name, amount, eventId }) => {
+export const createRecipe = ({ name, amount, recipegroupId }) => {
   const newItem = {
     id: crypto.randomUUID(),
     name: name,
     createdAt: Date.now(),
     amount: +amount,
-    eventId: eventId,
+    recipegroupId: recipegroupId,
     color: generateRandomColor(),
   };
   const existingRecipes = fetchData("recipes") ?? [];

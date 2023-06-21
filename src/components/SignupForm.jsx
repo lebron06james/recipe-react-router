@@ -88,7 +88,7 @@ const SignupForm = () => {
               <span>Submitting…</span>
             ) : (
               <>
-                <span>Create event</span>
+                <span>Create recipegroup</span>
                 <UserPlusIcon width={20} />
               </>
             )}

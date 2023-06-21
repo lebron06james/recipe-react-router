@@ -9,7 +9,7 @@ const CommentList = ({
   deleteComment,
   toggleComment,
   enterEditMode,
-  event,
+  recipegroup,
   userName,
 }) => {
   return (
@@ -17,7 +17,7 @@ const CommentList = ({
       {/* {comments.sort((a, b) => b.id - a.id).map(comment => ( */}
       {comments
         .filter((comment) => {
-          return comment.eventId === event.id;
+          return comment.recipegroupId === recipegroup.id;
         })
         .sort((a, b) => b.id - a.id)
         .map((comment) => (

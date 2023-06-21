@@ -7,16 +7,16 @@ import { toast } from "react-toastify";
 // helpers
 import { deleteItem, getAllMatchingItems } from "../helpers";
 
-export function deleteEvent({ params }) {
+export function deleteRecipeGroup({ params }) {
   try {
     deleteItem({
-      key: "events",
+      key: "recipegroups",
       id: params.id,
     });
 
     const associatedRecipes = getAllMatchingItems({
       category: "recipes",
-      key: "eventId",
+      key: "recipegroupId",
       value: params.id,
     });
 
@@ -43,7 +43,7 @@ export function deleteEvent({ params }) {
 
     const associatedComments = getAllMatchingItems({
       category: "comments",
-      key: "eventId",
+      key: "recipegroupId",
       value: params.id,
     });
 
@@ -56,9 +56,9 @@ export function deleteEvent({ params }) {
 
     });
 
-    toast.success("Event deleted successfully!");
+    toast.success("RecipeGroup deleted successfully!");
   } catch (e) {
-    throw new Error("There was a problem deleting your event.");
+    throw new Error("There was a problem deleting your recipegroup.");
   }
   return redirect("/");
 }

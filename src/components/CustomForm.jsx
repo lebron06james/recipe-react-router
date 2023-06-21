@@ -6,7 +6,7 @@ import styles from './CustomForm.module.css';
 // library imports
 import { PlusIcon } from '@heroicons/react/24/solid'
 
-const CustomForm = ({ addComment, event, userName }) => {
+const CustomForm = ({ addComment, recipegroup, userName }) => {
   const [comment, setComment] = useState("");
 
   const handleFormSubmit = (e) => {
@@ -14,7 +14,7 @@ const CustomForm = ({ addComment, event, userName }) => {
     addComment({
       name: comment,
       checked: false,
-      eventId: event.id,
+      recipegroupId: recipegroup.id,
       userName: userName,
       id: Date.now()
     })
@@ -44,13 +44,13 @@ const CustomForm = ({ addComment, event, userName }) => {
         >Enter Comment</label>
       </div>
       <div className={styles.wrapper} hidden={true}>
-        <label htmlFor="newCommentEvent">Event Id</label>
+        <label htmlFor="newCommentRecipeGroup">RecipeGroup Id</label>
         <input
           type="text"
-          name="newCommentEvent"
-          id="newCommentEvent"
+          name="newCommentRecipeGroup"
+          id="newCommentRecipeGroup"
           className={styles.input}
-          value={event.id}
+          value={recipegroup.id}
           readonly
           hidden={true}
         />

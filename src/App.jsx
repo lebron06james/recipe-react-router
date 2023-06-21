@@ -10,7 +10,7 @@ import Main, { mainLoader } from "./layouts/Main";
 // Actions
 import { logoutAction } from "./actions/logout";
 import { deleteRecipe } from "./actions/deleteRecipe";
-import { deleteEvent } from "./actions/deleteEvent";
+import { deleteRecipeGroup } from "./actions/deleteRecipeGroup";
 
 // Routes
 import Dashboard, { dashboardAction, dashboardLoader } from "./pages/Dashboard";
@@ -22,10 +22,10 @@ import IngredientsPage, {
   ingredientsAction,
   ingredientsLoader,
 } from "./pages/IngredientsPage";
-import EventMenuPage, {
-  eventMenuAction,
-  eventMenuLoader,
-} from "./pages/EventMenuPage";
+import RecipeGroupMenuPage, {
+  recipegroupMenuAction,
+  recipegroupMenuLoader,
+} from "./pages/RecipeGroupMenuPage";
 
 const router = createBrowserRouter([
   {
@@ -42,15 +42,15 @@ const router = createBrowserRouter([
         errorElement: <Error />,
       },
       {
-        path: "event/:id",
-        element: <EventMenuPage />,
-        loader: eventMenuLoader,
-        action: eventMenuAction,
+        path: "recipegroup/:id",
+        element: <RecipeGroupMenuPage />,
+        loader: recipegroupMenuLoader,
+        action: recipegroupMenuAction,
         errorElement: <Error />,
         children: [
           {
             path: "delete",
-            action: deleteEvent,
+            action: deleteRecipeGroup,
           },
         ],
       },
