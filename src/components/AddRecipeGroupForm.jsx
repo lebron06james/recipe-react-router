@@ -7,6 +7,9 @@ import { Form, useFetcher } from "react-router-dom"
 // library imports
 import { CurrencyDollarIcon } from "@heroicons/react/24/solid"
 
+//  helper functions
+import { categories } from "../helpers";
+
 const AddRecipeGroupForm = ({ userName, user }) => {
   const fetcher = useFetcher();
   const isSubmitting = fetcher.state === "submitting"
@@ -22,23 +25,6 @@ const AddRecipeGroupForm = ({ userName, user }) => {
       focusRef.current.focus()
     }
   }, [isSubmitting])
-
-  const categories = [
-    {name: 'Breakfast recipes', id: 1},
-    {name: 'Lunch recipes', id: 2},
-    {name: 'Dinner recipes', id: 3},
-    {name: 'Appetizer recipes', id: 4},
-    {name: 'Salad recipes', id: 5},
-    {name: 'Main-course recipes', id: 6},
-    {name: 'Side-dish recipes', id: 7},
-    {name: 'Baked-goods recipes', id: 8},
-    {name: 'Dessert recipes', id: 9},
-    {name: 'Snack recipes', id: 10},
-    {name: 'Soup recipes', id: 11},
-    {name: 'Holiday recipes', id: 12},
-    {name: 'Vegetarian Dishes', id: 13},
-    {name: 'Beverages', id: 14}
-  ]
 
   return (
     <div className="form-wrapper">

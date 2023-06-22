@@ -12,7 +12,7 @@ import {
 } from "../helpers";
 
 const RecipeItem = ({ recipe, usertype, showDelete = false }) => {
-  const { id, name, amount, color } = recipe;
+  const { id, name, amount, createdBy, color } = recipe;
   const spent = calculateSpentByRecipe(id);
 
   return (
@@ -33,13 +33,19 @@ const RecipeItem = ({ recipe, usertype, showDelete = false }) => {
       <progress max={10} value={10}>
         {formatPercentage(10 / 10)}
       </progress>
-      {/* <div className="progress-text">
-        <small>{formatCurrency(spent)} spent</small>
-        <small>{formatCurrency(amount - spent)} remaining</small>
-      </div> */}
+      <div className="progress-text">
+        <small>id: {id}</small>
+        <small>Created by: {createdBy}</small>
+        {/* <small>{formatCurrency(spent)} spent</small>
+        <small>{formatCurrency(amount - spent)} remaining</small> */}
+      </div>
       <div className="progress-text">
         <small>10 ingredients</small>
         <small>10 servings</small>
+      </div>
+      <div className="flex-sm">
+        {/* <img src="https://images.pexels.com/photos/6287293/pexels-photo-6287293.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" height="200" width="400" /> */}
+        <img src="https://images.pexels.com/photos/33242/cooking-ingredient-cuisine-kitchen.jpg" height="250" width="400" />
       </div>
       {showDelete ? (
         <div className="flex-sm">

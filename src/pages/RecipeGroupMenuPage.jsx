@@ -91,6 +91,7 @@ export async function recipegroupMenuAction({ request }) {
       createRecipe({
         name: values.newRecipe,
         amount: values.newRecipeAmount,
+        createdBy: values.newUserName,
         recipegroupId: values.newRecipeRecipeGroup,
       });
       return toast.success("Recipe created!");
@@ -104,6 +105,7 @@ export async function recipegroupMenuAction({ request }) {
       createIngredient({
         name: values.newIngredient,
         amount: values.newIngredientAmount,
+        createdBy: values.newUserName,
         recipeId: values.newIngredientRecipe,
       });
       return toast.success(`Ingredient ${values.newIngredient} created!`);
@@ -188,8 +190,8 @@ const RecipeGroupMenuPage = () => {
             {recipes && recipes.length > 0 ? (
               <div className="grid-lg">
                 <div className="flex-lg">
-                  <AddRecipeForm recipegroup={recipegroup} usertype={usertype} />
-                  <AddIngredientForm recipes={recipes} usertype={usertype} />
+                  <AddRecipeForm recipegroup={recipegroup} userName={userName} usertype={usertype} />
+                  <AddIngredientForm recipes={recipes} userName={userName} usertype={usertype} />
                 </div>
                 <h2>Existing Recipes</h2>
                 <div className="recipes">
@@ -217,7 +219,7 @@ const RecipeGroupMenuPage = () => {
               <div className="grid-sm">
                 <p>Your recipes, designed in one place.</p>
                 <p hidden={usertype !== 'Chef'}>Create a Recipe to get started!</p>
-                <AddRecipeForm recipegroup={recipegroup} usertype={usertype} />
+                <AddRecipeForm recipegroup={recipegroup} userName={userName} usertype={usertype} />
               </div>
             )}
           </div>

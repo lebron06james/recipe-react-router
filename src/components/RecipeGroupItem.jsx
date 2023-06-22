@@ -9,12 +9,19 @@ import {
 //   calculateSpentByRecipe,
   formatCurrency,
   formatPercentage,
+  categories
 } from "../helpers";
 
 const RecipeGroupItem = ({ recipegroup, user }) => {
   const { id, name, updatedby, color } = recipegroup;
   const { usertype } = user;
-//   const spent = calculateSpentByRecipe(id);
+  //   const spent = calculateSpentByRecipe(id);
+
+  const filtered = categories.filter(category => {
+    return category.name === recipegroup.name;
+  });
+
+  const image = filtered[0].image;
 
   return (
     <div
@@ -39,6 +46,10 @@ const RecipeGroupItem = ({ recipegroup, user }) => {
 
       <div className="progress-text">
         <small></small>
+      </div>
+
+      <div className="flex-sm">
+        <img src={image} height="250" width="400" />
       </div>
 
       <div className="flex-sm">

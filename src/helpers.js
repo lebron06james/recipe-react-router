@@ -13,6 +13,80 @@ const generateRandomRecipeGroupColor = () => {
   return `${existingRecipeGroupLength * 34} 65% 50%`;
 };
 
+// Recipe Categories
+export const categories = [
+  {
+    name: "Breakfast recipes",
+    image: "https://images.pexels.com/photos/2662875/pexels-photo-2662875.jpeg",
+    id: 1,
+  },
+  {
+    name: "Lunch recipes",
+    image: "https://images.pexels.com/photos/958545/pexels-photo-958545.jpeg",
+    id: 2,
+  },
+  {
+    name: "Dinner recipes",
+    image: "https://images.pexels.com/photos/769289/pexels-photo-769289.jpeg",
+    id: 3,
+  },
+  {
+    name: "Appetizer recipes",
+    image: "https://images.pexels.com/photos/39826/chunks-wreak-menu-gastronomy-39826.jpeg",
+    id: 4,
+  },
+  {
+    name: "Salad recipes",
+    image: "https://images.pexels.com/photos/406152/pexels-photo-406152.jpeg",
+    id: 5,
+  },
+  {
+    name: "Main-course recipes",
+    image: "https://images.pexels.com/photos/3763847/pexels-photo-3763847.jpeg",
+    id: 6,
+  },
+  {
+    name: "Side-dish recipes",
+    image: "https://images.pexels.com/photos/8827916/pexels-photo-8827916.jpeg",
+    id: 7,
+  },
+  {
+    name: "Baked-goods recipes",
+    image: "https://images.pexels.com/photos/257843/pexels-photo-257843.jpeg",
+    id: 8,
+  },
+  {
+    name: "Dessert recipes",
+    image: "https://images.pexels.com/photos/1126359/pexels-photo-1126359.jpeg",
+    id: 9,
+  },
+  {
+    name: "Snack recipes",
+    image: "https://images.pexels.com/photos/1893555/pexels-photo-1893555.jpeg",
+    id: 10,
+  },
+  {
+    name: "Soup recipes",
+    image: "https://images.pexels.com/photos/688802/pexels-photo-688802.jpeg",
+    id: 11,
+  },
+  {
+    name: "Holiday recipes",
+    image: "https://images.pexels.com/photos/5718104/pexels-photo-5718104.jpeg",
+    id: 12,
+  },
+  {
+    name: "Vegetarian Dishes",
+    image: "https://images.pexels.com/photos/1143754/pexels-photo-1143754.jpeg",
+    id: 13,
+  },
+  {
+    name: "Beverages",
+    image: "https://images.pexels.com/photos/1233319/pexels-photo-1233319.jpeg",
+    id: 14,
+  },
+];
+
 // Local storage
 export const fetchData = (key) => {
   return JSON.parse(localStorage.getItem(key));
@@ -35,16 +109,14 @@ export const deleteItem = ({ key, id }) => {
 };
 
 // create recipegroup
-export const createRecipeGroup = ({ name, pax, recipegroupdate, recipegrouptime, venue, holdingroom, updatedby }) => {
+export const createRecipeGroup = ({
+  name,
+  updatedby,
+}) => {
   const newItem = {
     id: crypto.randomUUID(),
     name: name,
     createdAt: Date.now(),
-    pax: +pax,
-    recipegroupdate: recipegroupdate,
-    recipegrouptime: recipegrouptime,
-    venue: venue,
-    holdingroom: holdingroom,
     updatedby: updatedby,
     color: generateRandomRecipeGroupColor(),
   };
@@ -56,12 +128,13 @@ export const createRecipeGroup = ({ name, pax, recipegroupdate, recipegrouptime,
 };
 
 // create recipe
-export const createRecipe = ({ name, amount, recipegroupId }) => {
+export const createRecipe = ({ name, amount, createdBy, recipegroupId }) => {
   const newItem = {
     id: crypto.randomUUID(),
     name: name,
     createdAt: Date.now(),
     amount: +amount,
+    createdBy: createdBy,
     recipegroupId: recipegroupId,
     color: generateRandomColor(),
   };
@@ -73,12 +146,13 @@ export const createRecipe = ({ name, amount, recipegroupId }) => {
 };
 
 // create ingredient
-export const createIngredient = ({ name, amount, recipeId }) => {
+export const createIngredient = ({ name, amount, createdBy, recipeId }) => {
   const newItem = {
     id: crypto.randomUUID(),
     name: name,
     createdAt: Date.now(),
     amount: +amount,
+    createdBy: createdBy,
     recipeId: recipeId,
   };
   const existingIngredients = fetchData("ingredients") ?? [];

@@ -7,7 +7,7 @@ import { Form, useFetcher } from "react-router-dom"
 // library imports
 import { CurrencyDollarIcon, FireIcon } from "@heroicons/react/24/solid"
 
-const AddRecipeForm = ({ recipegroup, usertype }) => {
+const AddRecipeForm = ({ recipegroup, userName, usertype }) => {
 
   const fetcher = useFetcher();
   const isSubmitting = fetcher.state === "submitting"
@@ -46,7 +46,7 @@ const AddRecipeForm = ({ recipegroup, usertype }) => {
           />
         </div>
         <div className="grid-xs">
-          <label htmlFor="newRecipeAmount">Amount in ml/mg</label>
+          <label htmlFor="newRecipeAmount">Amount in ml / grams</label>
           <input
             type="number"
             step="0.01"
@@ -64,6 +64,16 @@ const AddRecipeForm = ({ recipegroup, usertype }) => {
             name="newRecipeRecipeGroup"
             id="newRecipeRecipeGroup"
             value={recipegroup.id}
+            readonly
+          />
+        </div>
+        <div className="grid-xs">
+          <label htmlFor="newUserName">User Name</label>
+          <input
+            type="text"
+            name="newUserName"
+            id="newUserName"
+            value={userName}
             readonly
           />
         </div>

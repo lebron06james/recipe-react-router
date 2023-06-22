@@ -55,8 +55,9 @@ export async function recipeLoader({ params }) {
   }
 
   const userName = await fetchData("userName");
+  const user = await fetchData("user");
 
-  return { userName, recipe, recipegroup, ingredients };
+  return { userName, user, recipe, recipegroup, ingredients };
 }
 
 // action
@@ -69,6 +70,7 @@ export async function recipeAction({ request }) {
       createIngredient({
         name: values.newIngredient,
         amount: values.newIngredientAmount,
+        createdBy: values.newUserName,
         recipeId: values.newIngredientRecipe,
       });
       return toast.success(`Ingredient ${values.newIngredient} created!`);
@@ -91,7 +93,8 @@ export async function recipeAction({ request }) {
 }
 
 const RecipePage = () => {
-  const { userName, recipe, ingredients, recipegroup } = useLoaderData();
+  const { userName, user, recipe, ingredients, recipegroup } = useLoaderData();
+  const { usertype } = user;
   const navigate = useNavigate();
 
   return (
@@ -137,7 +140,7 @@ const RecipePage = () => {
 
           <div className="flex-lg">
             <RecipeItem recipe={recipe} showDelete={true} />
-            <AddIngredientForm recipes={[recipe]} />
+            <AddIngredientForm recipes={[recipe]} usertype={usertype} userName={userName} />
           </div>
           {ingredients && ingredients.length > 0 && (
             <div className="grid-md">

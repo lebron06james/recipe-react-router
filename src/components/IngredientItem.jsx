@@ -23,7 +23,8 @@ const IngredientItem = ({ ingredient, showRecipe }) => {
   return (
     <>
       <td>{ingredient.name}</td>
-      <td>{formatCurrency(ingredient.amount)}</td>
+      {/* <td>{formatCurrency(ingredient.amount)}</td> */}
+      <td>{ingredient.amount} ml/g</td>
       <td>{formatDateToLocaleString(ingredient.createdAt)}</td>
       {showRecipe && (
         <td>
