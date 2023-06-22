@@ -1,8 +1,9 @@
 // rrd imports
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useRouteError, Link, useNavigate, } from "react-router-dom";
 
 // library import
 import { toast } from "react-toastify";
+import { HomeIcon, ArrowUturnLeftIcon } from "@heroicons/react/24/solid";
 
 // component imports
 import Table from "../components/Table";
@@ -16,8 +17,9 @@ import Intro from "../components/Intro";
 // loader
 export async function ingredientsLoader() {
   const userName = await fetchData("userName");
+  const user = await fetchData("user");
   const ingredients = await fetchData("ingredients");
-  return { userName, ingredients };
+  return { userName, user, ingredients };
 }
 
 // action
@@ -39,19 +41,26 @@ export async function ingredientsAction({ request }) {
 }
 
 const IngredientsPage = () => {
-  const { userName, ingredients } = useLoaderData();
+  const { userName, user, ingredients } = useLoaderData();
+  const navigate = useNavigate();
 
   return (
     <>
       {userName ? (
         <div className="grid-lg">
+          <div className="flex-md">
+            <button className="btn btn--dark" onClick={() => navigate(-1)}>
+              <ArrowUturnLeftIcon width={20} />
+              <span>Go Back</span>
+            </button>
+          </div>
           <h1>All Ingredients</h1>
           {ingredients && ingredients.length > 0 ? (
             <div className="grid-md">
               <h2>
                 Recent Ingredients <small>({ingredients.length} total)</small>
               </h2>
-              <Table ingredients={ingredients} />
+              <Table ingredients={ingredients} user={user} />
             </div>
           ) : (
             <p>No Ingredients to show</p>

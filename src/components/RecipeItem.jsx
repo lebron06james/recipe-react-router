@@ -12,7 +12,7 @@ import {
 } from "../helpers";
 
 const RecipeItem = ({ recipe, usertype, showDelete = false }) => {
-  const { id, name, amount, createdBy, color } = recipe;
+  const { id, name, amount, createdBy, serving, instruction, cookingtime, color } = recipe;
   const spent = calculateSpentByRecipe(id);
 
   return (
@@ -40,12 +40,14 @@ const RecipeItem = ({ recipe, usertype, showDelete = false }) => {
         <small>{formatCurrency(amount - spent)} remaining</small> */}
       </div>
       <div className="progress-text">
-        <small>10 ingredients</small>
-        <small>10 servings</small>
+        <small>Cooking time: {cookingtime} minutes</small>
+        <small>{serving} servings</small>
       </div>
       <div className="flex-sm">
-        {/* <img src="https://images.pexels.com/photos/6287293/pexels-photo-6287293.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" height="200" width="400" /> */}
         <img src="https://images.pexels.com/photos/33242/cooking-ingredient-cuisine-kitchen.jpg" height="250" width="400" />
+      </div>
+      <div className="flex-sm">
+        <p>{instruction}</p>
       </div>
       {showDelete ? (
         <div className="flex-sm">
@@ -61,6 +63,7 @@ const RecipeItem = ({ recipe, usertype, showDelete = false }) => {
                 ev.preventDefault();
               }
             }}
+            hidden={usertype !== 'Chef'}
           >
             <button type="submit" className="btn" hidden={usertype !== 'Chef'}>
               <span>Delete Recipe</span>

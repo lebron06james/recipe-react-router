@@ -11,8 +11,10 @@ import {
   getAllMatchingItems,
 } from "../helpers";
 
-const IngredientItem = ({ ingredient, showRecipe }) => {
+const IngredientItem = ({ ingredient, user, showRecipe }) => {
   const fetcher = useFetcher();
+
+  const { usertype } = user;
 
   const recipe = getAllMatchingItems({
     category: "recipes",
@@ -26,6 +28,7 @@ const IngredientItem = ({ ingredient, showRecipe }) => {
       {/* <td>{formatCurrency(ingredient.amount)}</td> */}
       <td>{ingredient.amount} ml/g</td>
       <td>{formatDateToLocaleString(ingredient.createdAt)}</td>
+      <td>{ingredient.createdBy}</td>
       {showRecipe && (
         <td>
           <Link
@@ -39,7 +42,7 @@ const IngredientItem = ({ ingredient, showRecipe }) => {
         </td>
       )}
       <td>
-        <fetcher.Form method="post">
+        <fetcher.Form method="post" hidden={usertype !== 'Chef'}>
           <input type="hidden" name="_action" value="deleteIngredient" />
           <input type="hidden" name="ingredientId" value={ingredient.id} />
           <button

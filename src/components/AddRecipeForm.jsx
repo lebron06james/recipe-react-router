@@ -46,15 +46,49 @@ const AddRecipeForm = ({ recipegroup, userName, usertype }) => {
           />
         </div>
         <div className="grid-xs">
-          <label htmlFor="newRecipeAmount">Amount in ml / grams</label>
+          <label htmlFor="newRecipeAmount">No. of Pax</label>
           <input
             type="number"
-            step="0.01"
+            step="1"
             name="newRecipeAmount"
             id="newRecipeAmount"
             placeholder="e.g., 50"
             required
-            inputMode="decimal"
+            inputMode="numeric"
+          />
+        </div>
+        <div className="grid-xs">
+          <label htmlFor="newRecipeServing">No. of Servings</label>
+          <input
+            type="number"
+            step="1"
+            name="newRecipeServing"
+            id="newRecipeServing"
+            placeholder="e.g., 50"
+            required
+            inputMode="numeric"
+          />
+        </div>
+        <div className="grid-xs">
+          <label htmlFor="newRecipeInstruction">Instructions</label>
+          <input
+            type="text"
+            name="newRecipeInstruction"
+            id="newRecipeInstruction"
+            placeholder="e.g., Cook it."
+            required
+          />
+        </div>
+        <div className="grid-xs">
+          <label htmlFor="newRecipeCookingTime">Cooking Time (minutes)</label>
+          <input
+            type="number"
+            step="1"
+            name="newRecipeCookingTime"
+            id="newRecipeCookingTime"
+            placeholder="e.g., 120"
+            required
+            inputMode="numeric"
           />
         </div>
         <div className="grid-xs">

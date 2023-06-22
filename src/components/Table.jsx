@@ -1,13 +1,13 @@
 // component import
 import IngredientItem from "./IngredientItem";
 
-const Table = ({ ingredients, showRecipe = true }) => {
+const Table = ({ ingredients, user, showRecipe = true }) => {
   return (
     <div className="table">
       <table>
         <thead>
           <tr>
-            {["Name", "Amount", "Date", showRecipe ? "Recipe" : "", ""].map(
+            {["Name", "Amount", "Added", "By", showRecipe ? "Recipe" : "", ""].map(
               (i, index) => (
                 <th key={index}>{i}</th>
               )
@@ -17,7 +17,7 @@ const Table = ({ ingredients, showRecipe = true }) => {
         <tbody>
           {ingredients.map((ingredient) => (
             <tr key={ingredient.id}>
-              <IngredientItem ingredient={ingredient} showRecipe={showRecipe} />
+              <IngredientItem ingredient={ingredient} user={user} showRecipe={showRecipe} />
             </tr>
           ))}
         </tbody>

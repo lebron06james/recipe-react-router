@@ -128,13 +128,16 @@ export const createRecipeGroup = ({
 };
 
 // create recipe
-export const createRecipe = ({ name, amount, createdBy, recipegroupId }) => {
+export const createRecipe = ({ name, amount, createdBy, serving, instruction, cookingtime, recipegroupId }) => {
   const newItem = {
     id: crypto.randomUUID(),
     name: name,
     createdAt: Date.now(),
     amount: +amount,
     createdBy: createdBy,
+    serving: serving,
+    instruction: instruction,
+    cookingtime: +cookingtime,
     recipegroupId: recipegroupId,
     color: generateRandomColor(),
   };

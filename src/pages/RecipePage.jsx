@@ -139,7 +139,7 @@ const RecipePage = () => {
           {/* end comment button */}
 
           <div className="flex-lg">
-            <RecipeItem recipe={recipe} showDelete={true} />
+            <RecipeItem recipe={recipe} usertype={usertype} showDelete={true} />
             <AddIngredientForm recipes={[recipe]} usertype={usertype} userName={userName} />
           </div>
           {ingredients && ingredients.length > 0 && (
@@ -147,7 +147,7 @@ const RecipePage = () => {
               <h2>
                 <span className="accent">{recipe.name}</span> Ingredients
               </h2>
-              <Table ingredients={ingredients} showRecipe={false} />
+              <Table ingredients={ingredients} user={user} showRecipe={false} />
             </div>
           )}
         </div>

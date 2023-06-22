@@ -92,6 +92,9 @@ export async function recipegroupMenuAction({ request }) {
         name: values.newRecipe,
         amount: values.newRecipeAmount,
         createdBy: values.newUserName,
+        serving: values.newRecipeServing,
+        instruction: values.newRecipeInstruction,
+        cookingtime: values.newRecipeCookingTime,
         recipegroupId: values.newRecipeRecipeGroup,
       });
       return toast.success("Recipe created!");
@@ -206,9 +209,10 @@ const RecipeGroupMenuPage = () => {
                       ingredients={ingredients
                         .sort((a, b) => b.createdAt - a.createdAt)
                         .slice(0, 8)}
+                      user={user}
                     />
                     {ingredients.length > 8 && (
-                      <Link to="ingredients" className="btn btn--dark">
+                      <Link to="/ingredients" className="btn btn--dark">
                         View all ingredients
                       </Link>
                     )}
