@@ -66,7 +66,10 @@ export async function recipegroupMenuLoader({ params }) {
   // const recipes = fetchData("recipes");
   // const ingredients = fetchData("ingredients");
 
-  return { recipegroup, userName, user, recipes, ingredients };
+  const sourceIngredients = await fetch(`https://my-json-server.typicode.com/silverstory/ingredients/ingredients`)
+        .then(response => response.json())
+
+  return { recipegroup, userName, user, recipes, ingredients, sourceIngredients };
 }
 
 // action
@@ -108,6 +111,8 @@ export async function recipegroupMenuAction({ request }) {
       createIngredient({
         name: values.newIngredient,
         amount: values.newIngredientAmount,
+        unit: values.newIngredientUnit,
+        price: values.newIngredientPrice,
         createdBy: values.newUserName,
         recipeId: values.newIngredientRecipe,
       });
@@ -131,7 +136,7 @@ export async function recipegroupMenuAction({ request }) {
 }
 
 const RecipeGroupMenuPage = () => {
-  const { recipegroup, userName, user, recipes, ingredients } = useLoaderData();
+  const { recipegroup, userName, user, recipes, ingredients, sourceIngredients } = useLoaderData();
   const { usertype } = user;
   const navigate = useNavigate();
 
@@ -194,7 +199,7 @@ const RecipeGroupMenuPage = () => {
               <div className="grid-lg">
                 <div className="flex-lg">
                   <AddRecipeForm recipegroup={recipegroup} userName={userName} usertype={usertype} />
-                  <AddIngredientForm recipes={recipes} userName={userName} usertype={usertype} />
+                  <AddIngredientForm recipes={recipes} userName={userName} usertype={usertype} sourceIngredients={sourceIngredients} />
                 </div>
                 <h2>Existing Recipes</h2>
                 <div className="recipes">

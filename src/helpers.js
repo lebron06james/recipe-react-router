@@ -149,12 +149,14 @@ export const createRecipe = ({ name, amount, createdBy, serving, instruction, co
 };
 
 // create ingredient
-export const createIngredient = ({ name, amount, createdBy, recipeId }) => {
+export const createIngredient = ({ name, amount, unit, price, createdBy, recipeId }) => {
   const newItem = {
     id: crypto.randomUUID(),
     name: name,
     createdAt: Date.now(),
     amount: +amount,
+    unit: unit,
+    price: +price,
     createdBy: createdBy,
     recipeId: recipeId,
   };

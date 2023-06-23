@@ -57,7 +57,10 @@ export async function recipeLoader({ params }) {
   const userName = await fetchData("userName");
   const user = await fetchData("user");
 
-  return { userName, user, recipe, recipegroup, ingredients };
+  const sourceIngredients = await fetch(`https://my-json-server.typicode.com/silverstory/ingredients/ingredients`)
+  .then(response => response.json())
+
+  return { userName, user, recipe, recipegroup, ingredients, sourceIngredients };
 }
 
 // action
@@ -70,6 +73,8 @@ export async function recipeAction({ request }) {
       createIngredient({
         name: values.newIngredient,
         amount: values.newIngredientAmount,
+        unit: values.newIngredientUnit,
+        price: values.newIngredientPrice,
         createdBy: values.newUserName,
         recipeId: values.newIngredientRecipe,
       });
@@ -93,7 +98,7 @@ export async function recipeAction({ request }) {
 }
 
 const RecipePage = () => {
-  const { userName, user, recipe, ingredients, recipegroup } = useLoaderData();
+  const { userName, user, recipe, ingredients, recipegroup, sourceIngredients } = useLoaderData();
   const { usertype } = user;
   const navigate = useNavigate();
 
@@ -140,7 +145,7 @@ const RecipePage = () => {
 
           <div className="flex-lg">
             <RecipeItem recipe={recipe} usertype={usertype} showDelete={true} />
-            <AddIngredientForm recipes={[recipe]} usertype={usertype} userName={userName} />
+            <AddIngredientForm recipes={[recipe]} usertype={usertype} userName={userName} sourceIngredients={sourceIngredients} />
           </div>
           {ingredients && ingredients.length > 0 && (
             <div className="grid-md">
