@@ -13,7 +13,7 @@ import {
 } from "../helpers";
 
 const RecipeGroupItem = ({ recipegroup, user }) => {
-  const { id, name, updatedby, color } = recipegroup;
+  const { _id, name, updatedby, color } = recipegroup;
   const { usertype } = user;
   //   const spent = calculateSpentByRecipe(id);
 
@@ -40,7 +40,7 @@ const RecipeGroupItem = ({ recipegroup, user }) => {
       </progress>
 
       <div className="progress-text">
-        <small>id: { id }</small>
+        <small>id: { _id }</small>
         <small>Updated by: { updatedby }</small>
       </div>
 
@@ -54,7 +54,7 @@ const RecipeGroupItem = ({ recipegroup, user }) => {
 
       <div className="flex-sm">
         {usertype !== 'Chef' ? 'Only the Chefs can add recipes here' : 'Tap button below to add a new Recipe'}
-        <Link to={`/recipegroup/${id}`} className="btn">
+        <Link to={`/recipegroup/${_id}`} className="btn">
           <span>{usertype === 'Chef' ? 'Add Recipe' : `See what's on the list`}</span>
           <FireIcon width={20} />
         </Link>

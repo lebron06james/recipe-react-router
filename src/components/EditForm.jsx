@@ -60,7 +60,7 @@ const EditForm = ({ editedComment, updateComment, closeEditMode, recipegroup, us
             name="newCommentRecipeGroup"
             id="newCommentRecipeGroup"
             className={styles.input}
-            value={recipegroup.id}
+            value={recipegroup._id}
             readonly
           />
         </div>

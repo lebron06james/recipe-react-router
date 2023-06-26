@@ -14,7 +14,7 @@ const CustomForm = ({ addComment, recipegroup, userName }) => {
     addComment({
       name: comment,
       checked: false,
-      recipegroupId: recipegroup.id,
+      recipegroupId: recipegroup._id,
       userName: userName,
       id: Date.now()
     })
@@ -50,7 +50,7 @@ const CustomForm = ({ addComment, recipegroup, userName }) => {
           name="newCommentRecipeGroup"
           id="newCommentRecipeGroup"
           className={styles.input}
-          value={recipegroup.id}
+          value={recipegroup._id}
           readonly
           hidden={true}
         />

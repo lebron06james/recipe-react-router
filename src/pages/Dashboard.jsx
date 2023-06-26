@@ -10,13 +10,38 @@ import AddRecipeGroupForm from "../components/AddRecipeGroupForm";
 import RecipeGroupItem from "../components/RecipeGroupItem";
 
 //  helper functions
-import { createRecipeGroup, deleteItem, fetchData, waait } from "../helpers";
+import {
+  createRecipeGroup,
+  deleteItem,
+  fetchData,
+  waait,
+} from "../helpers";
 
 // loader
-export function dashboardLoader() {
-  const userName = fetchData("userName");
-  const user = fetchData("user");
-  const recipegroups = fetchData("recipegroups");
+export async function dashboardLoader() {
+  const userName = await fetchData("userName");
+  const user = await fetchData("user");
+
+  let recipegroups = [];
+
+  if (user) {
+    // recipegroups
+    // const recipegroups = fetchData("recipegroups");
+
+    const recipegroupsresponse = await fetch(
+      "http://localhost/api/sourcerecipegroups",
+      {
+        headers: { Authorization: `Bearer ${user.token}` },
+      }
+    );
+
+    const json = await recipegroupsresponse.json();
+
+    if (recipegroupsresponse.ok) {
+      recipegroups = json;
+    }
+  }
+
   return { userName, user, recipegroups };
 }
 
@@ -64,11 +89,68 @@ export async function dashboardAction({ request }) {
 
   if (_action === "createRecipeGroup") {
     try {
-      createRecipeGroup({
+      // createRecipeGroup({
+      //   name: values.newRecipeGroup,
+      //   updatedby: values.newUserName,
+      // });
+
+      const user = await fetchData("user");
+
+      // generate random Color
+      let recipegroups = [];
+      let existingRecipeGroupLength = 0;
+      if (user) {
+        const recipegroupsresponse = await fetch(
+          "http://localhost/api/sourcerecipegroups",
+          {
+            headers: { Authorization: `Bearer ${user.token}` },
+          }
+        );
+        const json = await recipegroupsresponse.json();
+        if (recipegroupsresponse.ok) {
+          recipegroups = json;
+          existingRecipeGroupLength = recipegroups.length;
+        }
+      }
+      const randomColor = `${existingRecipeGroupLength * 34} 65% 50%`;
+      // end generate random Color
+
+      const newItem = {
         name: values.newRecipeGroup,
         updatedby: values.newUserName,
-      });
-      return toast.success("Recipe Category created!");
+        color: randomColor,
+      };
+
+      let recipegroup = {};
+
+      const recipegroupresponse = await fetch(
+        "http://localhost/api/sourcerecipegroups/",
+        {
+          method: "POST",
+          body: JSON.stringify(newItem),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+
+      const json = await recipegroupresponse.json();
+
+      if (!recipegroupresponse.ok) {
+        return toast.error(
+          `There was a problem creating your recipe category. ${json.error}`
+        );
+      }
+      if (recipegroupresponse.ok) {
+        // setTitle('')
+        // setLoad('')
+        // setReps('')
+        // setError(null)
+        // setEmptyFields([])
+        recipegroup = json;
+        return toast.success("Recipe Category created!");
+      }
     } catch (e) {
       throw new Error("There was a problem creating your recipe category.");
     }
@@ -96,7 +178,7 @@ const Dashboard = () => {
                 <div className="recipes">
                   {recipegroups.map((recipegroup) => (
                     <RecipeGroupItem
-                      key={recipegroup.id}
+                      key={recipegroup._id}
                       recipegroup={recipegroup}
                       user={user}
                     />

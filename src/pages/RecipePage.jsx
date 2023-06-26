@@ -32,17 +32,44 @@ import { ChatBubbleOvalLeftEllipsisIcon } from "@heroicons/react/24/outline";
 
 // loader
 export async function recipeLoader({ params }) {
+
+  const userName = await fetchData("userName");
+  const user = await fetchData("user");
+
   const recipe = await getAllMatchingItems({
     category: "recipes",
     key: "id",
     value: params.id,
   })[0];
 
-  const recipegroup = await getAllMatchingItems({
-    category: "recipegroups",
-    key: "id",
-    value: recipe.recipegroupId,
-  })[0];
+
+  // get the recipegroup
+  
+  // const recipegroup = await getAllMatchingItems({
+  //   category: "recipegroups",
+  //   key: "id",
+  //   value: recipe.recipegroupId,
+  // })[0];
+
+  let recipegroup = {};
+
+  if (user) {
+    // recipegroups
+    // const recipegroups = fetchData("recipegroups");
+
+    const recipegroupresponse = await fetch(
+      `http://localhost/api/sourcerecipegroups/${recipe.recipegroupId}`,
+      {
+        headers: { Authorization: `Bearer ${user.token}` },
+      }
+    );
+
+    const json = await recipegroupresponse.json();
+
+    if (recipegroupresponse.ok) {
+      recipegroup = json;
+    }
+  }
 
   const ingredients = await getAllMatchingItems({
     category: "ingredients",
@@ -53,9 +80,6 @@ export async function recipeLoader({ params }) {
   if (!recipe) {
     throw new Error("The recipe you’re trying to find doesn’t exist");
   }
-
-  const userName = await fetchData("userName");
-  const user = await fetchData("user");
 
   const sourceIngredients = await fetch(`https://my-json-server.typicode.com/silverstory/ingredients/ingredients`)
   .then(response => response.json())
@@ -136,7 +160,7 @@ const RecipePage = () => {
           {/* comment button */}
           {/* <div className="grid-sm">
             Recent comment: comment name here
-            <Link to={`/comment/${recipegroup.id}`} className="btn">
+            <Link to={`/comment/${recipegroup._id}`} className="btn">
               <span>Add Comment</span>
               <ChatBubbleOvalLeftEllipsisIcon width={20} />
             </Link>

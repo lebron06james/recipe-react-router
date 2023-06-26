@@ -36,7 +36,7 @@ export async function commentLoader({ params }) {
   const _comments = await getAllMatchingItems({
     category: "comments",
     key: "recipegroupId",
-    value: recipegroup.id,
+    value: recipegroup._id,
   });
 
   // recipes.forEach((recipe) => {
@@ -67,8 +67,8 @@ function CommentPage() {
   const navigate = useNavigate();
 
   // const [tasks, setTasks] = useLocalStorage('react-todo.tasks', []);
-  // const [comments, setComments] = useLocalStorage('comments', recipegroup.id);
-  const [comments, setComments] = useLocalStorage("comments", [], recipegroup.id);
+  // const [comments, setComments] = useLocalStorage('comments', recipegroup._id);
+  const [comments, setComments] = useLocalStorage("comments", [], recipegroup._id);
   const [previousFocusEl, setPreviousFocusEl] = useState(null);
   const [editedComment, setEditedComment] = useState(null);
   const [isEditing, setIsEditing] = useState(false);

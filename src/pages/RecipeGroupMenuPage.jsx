@@ -37,16 +37,36 @@ import {
 
 // loader
 export async function recipegroupMenuLoader({ params }) {
-  const recipegroup = await getAllMatchingItems({
-    category: "recipegroups",
-    key: "id",
-    value: params.id,
-  })[0];
+
+  const user = fetchData("user");
+  const userName = fetchData("userName");
+
+  // get one recipegroup
+  // const recipegroup = await getAllMatchingItems({
+  //   category: "recipegroups",
+  //   key: "_id",
+  //   value: params.id,
+  // })[0];
+
+  let recipegroup = {};
+
+  const recipegroupsresponse = await fetch(
+    `http://localhost/api/sourcerecipegroups/${params.id}`,
+    {
+      headers: { Authorization: `Bearer ${user.token}` },
+    }
+  );
+
+  const json = await recipegroupsresponse.json();
+
+  if (recipegroupsresponse.ok) {
+    recipegroup = json;
+  }
 
   const recipes = await getAllMatchingItems({
     category: "recipes",
     key: "recipegroupId",
-    value: recipegroup.id,
+    value: recipegroup._id,
   });
 
   let ingredients = [];
@@ -60,11 +80,6 @@ export async function recipegroupMenuLoader({ params }) {
 
     ingredients = [...ingredients, ..._ingredients];
   });
-
-  const user = fetchData("user");
-  const userName = fetchData("userName");
-  // const recipes = fetchData("recipes");
-  // const ingredients = fetchData("ingredients");
 
   const sourceIngredients = await fetch(`https://my-json-server.typicode.com/silverstory/ingredients/ingredients`)
         .then(response => response.json())
@@ -187,7 +202,7 @@ const RecipeGroupMenuPage = () => {
           {/* comment button */}
           {/* <div className="grid-sm">
             Recent comment: comment name here
-            <Link to={`/comment/${recipegroup.id}`} className="btn">
+            <Link to={`/comment/${recipegroup._id}`} className="btn">
               <span>Add Comment</span>
               <ChatBubbleOvalLeftEllipsisIcon width={20} />
             </Link>

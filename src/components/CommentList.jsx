@@ -17,7 +17,7 @@ const CommentList = ({
       {/* {comments.sort((a, b) => b.id - a.id).map(comment => ( */}
       {comments
         .filter((comment) => {
-          return comment.recipegroupId === recipegroup.id;
+          return comment.recipegroupId === recipegroup._id;
         })
         .sort((a, b) => b.id - a.id)
         .map((comment) => (

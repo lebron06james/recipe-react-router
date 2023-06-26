@@ -113,18 +113,18 @@ export const createRecipeGroup = ({
   name,
   updatedby,
 }) => {
-  const newItem = {
-    id: crypto.randomUUID(),
-    name: name,
-    createdAt: Date.now(),
-    updatedby: updatedby,
-    color: generateRandomRecipeGroupColor(),
-  };
-  const existingRecipeGroups = fetchData("recipegroups") ?? [];
-  return localStorage.setItem(
-    "recipegroups",
-    JSON.stringify([...existingRecipeGroups, newItem])
-  );
+  // const newItem = {
+  //   id: crypto.randomUUID(),
+  //   name: name,
+  //   createdAt: Date.now(),
+  //   updatedby: updatedby,
+  //   color: generateRandomRecipeGroupColor(),
+  // };
+  // const existingRecipeGroups = fetchData("recipegroups") ?? [];
+  // return localStorage.setItem(
+  //   "recipegroups",
+  //   JSON.stringify([...existingRecipeGroups, newItem])
+  // );
 };
 
 // create recipe

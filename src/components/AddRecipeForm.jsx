@@ -97,7 +97,7 @@ const AddRecipeForm = ({ recipegroup, userName, usertype }) => {
             type="text"
             name="newRecipeRecipeGroup"
             id="newRecipeRecipeGroup"
-            value={recipegroup.id}
+            value={recipegroup._id}
             readonly
           />
         </div>
