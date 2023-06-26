@@ -58,7 +58,7 @@ export async function recipeLoader({ params }) {
     // const recipegroups = fetchData("recipegroups");
 
     const recipegroupresponse = await fetch(
-      `http://localhost/api/sourcerecipegroups/${recipe.recipegroupId}`,
+      `https://recipe-auth.cyclic.app/api/sourcerecipegroups/${recipe.recipegroupId}`,
       {
         headers: { Authorization: `Bearer ${user.token}` },
       }

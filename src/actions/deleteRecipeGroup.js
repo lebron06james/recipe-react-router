@@ -52,7 +52,7 @@ export async function deleteRecipeGroup({ params }) {
       let recipegroup = {};
 
       const recipegroupresponse = await fetch(
-        `http://localhost/api/sourcerecipegroups/${params.id}`,
+        `https://recipe-auth.cyclic.app/api/sourcerecipegroups/${params.id}`,
         {
           method: "DELETE",
           headers: { Authorization: `Bearer ${user.token}` },
