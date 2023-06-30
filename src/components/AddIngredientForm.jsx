@@ -8,6 +8,11 @@ import { useFetcher } from "react-router-dom";
 import { PlusCircleIcon } from "@heroicons/react/24/solid";
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
 
+// helper functions
+import {
+  formatCurrency,
+} from "../helpers";
+
 const AddIngredientForm = ({
   recipes,
   userName,
@@ -21,6 +26,7 @@ const AddIngredientForm = ({
   const focusRef = useRef();
 
   const [name, setName] = useState("");
+  const [sqlid, setSqlid] = useState(0);
   const [unit, setUnit] = useState(0);
   const [price, setPrice] = useState(0);
 
@@ -38,6 +44,7 @@ const AddIngredientForm = ({
   const handleOnSelect = (item) => {
     // the item selected
     setName(item.name);
+    setSqlid(item.id);
     setUnit(item.unit);
     setPrice(item.price);
   };
@@ -48,7 +55,8 @@ const AddIngredientForm = ({
 
   const handleOnClear = () => {
     // console.log("Cleared");
-    setName('');
+    setName("");
+    setSqlid(0);
     setUnit(0);
     setPrice(0);
   };
@@ -56,6 +64,30 @@ const AddIngredientForm = ({
   const formatResult = (item) => {
     return (
       <>
+        <div
+          className="recipe"
+          style={{
+            "--accent": "0 65% 50%",
+            "marginRight": "20px",
+            "overflow-x": "hidden"
+          }}
+        >
+          <div className="progress-text">
+            <h4>name: {item.name}</h4>
+            <small>id:{item.id}</small>
+          </div>
+          <div className="progress-text">
+            <h4>unit: {item.unit}</h4>
+            <small>price: {formatCurrency(item.price)}</small>
+          </div>
+          {/* <progress max={10} value={10}>
+        {formatPercentage(10 / 10)}
+      </progress> */}
+        </div>
+
+        {/* <span style={{ display: "block", textAlign: "left" }}>
+          id: <b>{item.id}</b>
+        </span>
         <span style={{ display: "block", textAlign: "left" }}>
           name: <b>{item.name}</b>
         </span>
@@ -64,7 +96,7 @@ const AddIngredientForm = ({
         </span>
         <span style={{ display: "block", textAlign: "left" }}>
           price: <b>₱ {item.price}</b>
-        </span>
+        </span> */}
       </>
     );
   };
@@ -120,10 +152,23 @@ const AddIngredientForm = ({
               value={name}
               ref={focusRef}
               readonly
-              style={{backgroundColor: "peachpuff"}}
+              style={{ backgroundColor: "peachpuff" }}
               // peachpuff
               // rosybrown
               // thistle
+            />
+          </div>
+          <div className="grid-xs">
+            <label htmlFor="newIngredientSqlId">Id</label>
+            <input
+              type="text"
+              name="newIngredientSqlId"
+              id="newIngredientSqlId"
+              placeholder="e.g., 5"
+              required
+              value={sqlid}
+              readonly
+              style={{ backgroundColor: "peachpuff" }}
             />
           </div>
         </div>
@@ -138,7 +183,7 @@ const AddIngredientForm = ({
               required
               value={unit}
               readonly
-              style={{backgroundColor: "thistle"}}
+              style={{ backgroundColor: "thistle" }}
             />
           </div>
           <div className="grid-xs">
@@ -152,7 +197,7 @@ const AddIngredientForm = ({
               required
               value={price}
               readonly
-              style={{backgroundColor: "thistle"}}
+              style={{ backgroundColor: "thistle" }}
             />
           </div>
         </div>
@@ -192,7 +237,7 @@ const AddIngredientForm = ({
             id="newUserName"
             value={userName}
             readonly
-            style={{backgroundColor: "rosybrown"}}
+            style={{ backgroundColor: "rosybrown" }}
           />
         </div>
         <input type="hidden" name="_action" value="createIngredient" />

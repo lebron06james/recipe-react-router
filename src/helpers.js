@@ -149,7 +149,7 @@ export const createRecipe = ({ name, amount, createdBy, serving, instruction, co
 };
 
 // create ingredient
-export const createIngredient = ({ name, amount, unit, price, createdBy, recipeId }) => {
+export const createIngredient = ({ name, amount, unit, price, createdBy, recipeId, ingredientSqlId }) => {
   const newItem = {
     id: crypto.randomUUID(),
     name: name,
@@ -159,6 +159,7 @@ export const createIngredient = ({ name, amount, unit, price, createdBy, recipeI
     price: +price,
     createdBy: createdBy,
     recipeId: recipeId,
+    ingredientSqlId: ingredientSqlId,
   };
   const existingIngredients = fetchData("ingredients") ?? [];
   return localStorage.setItem(

@@ -130,6 +130,7 @@ export async function recipegroupMenuAction({ request }) {
         price: values.newIngredientPrice,
         createdBy: values.newUserName,
         recipeId: values.newIngredientRecipe,
+        ingredientSqlId: values.newIngredientSqlId,
       });
       return toast.success(`Ingredient ${values.newIngredient} created!`);
     } catch (e) {
