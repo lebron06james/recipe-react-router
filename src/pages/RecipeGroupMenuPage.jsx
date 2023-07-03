@@ -37,7 +37,6 @@ import {
 
 // loader
 export async function recipegroupMenuLoader({ params }) {
-
   const user = fetchData("user");
   const userName = fetchData("userName");
 
@@ -81,10 +80,18 @@ export async function recipegroupMenuLoader({ params }) {
     ingredients = [...ingredients, ..._ingredients];
   });
 
-  const sourceIngredients = await fetch(`https://my-json-server.typicode.com/silverstory/ingredients/ingredients`)
-        .then(response => response.json())
+  const sourceIngredients = await fetch(
+    `https://my-json-server.typicode.com/silverstory/ingredients/ingredients`
+  ).then((response) => response.json());
 
-  return { recipegroup, userName, user, recipes, ingredients, sourceIngredients };
+  return {
+    recipegroup,
+    userName,
+    user,
+    recipes,
+    ingredients,
+    sourceIngredients,
+  };
 }
 
 // action
@@ -152,7 +159,14 @@ export async function recipegroupMenuAction({ request }) {
 }
 
 const RecipeGroupMenuPage = () => {
-  const { recipegroup, userName, user, recipes, ingredients, sourceIngredients } = useLoaderData();
+  const {
+    recipegroup,
+    userName,
+    user,
+    recipes,
+    ingredients,
+    sourceIngredients,
+  } = useLoaderData();
   const { usertype } = user;
   const navigate = useNavigate();
 
@@ -169,16 +183,22 @@ const RecipeGroupMenuPage = () => {
           <h1>
             List of,{" "}
             <span className="accent">
-              {recipegroup.name}{"."}
+              {recipegroup.name}
+              {"."}
             </span>
           </h1>
           <div className="grid-sm">
             <p>
-            This page contains all of the recipes from the category <strong>{recipegroup.name}</strong>
+              This page contains all of the recipes from the category{" "}
+              <strong>{recipegroup.name}</strong>
             </p>
           </div>
           {/* delete button */}
-          <div className="flex-sm" hidden={usertype !== 'Chef'}>
+          <div
+            className="flex-sm"
+            // hidden={usertype !== 'Chef'}
+            hidden
+          >
             <Form
               method="post"
               action="delete"
@@ -192,7 +212,11 @@ const RecipeGroupMenuPage = () => {
                 }
               }}
             >
-              <button type="submit" className="btn btn--warning" hidden={usertype !== 'Chef'}>
+              <button
+                type="submit"
+                className="btn btn--warning"
+                hidden={usertype !== "Chef"}
+              >
                 <span>Delete this category</span>
                 <TrashIcon width={20} />
               </button>
@@ -214,13 +238,26 @@ const RecipeGroupMenuPage = () => {
             {recipes && recipes.length > 0 ? (
               <div className="grid-lg">
                 <div className="flex-lg">
-                  <AddRecipeForm recipegroup={recipegroup} userName={userName} usertype={usertype} />
-                  <AddIngredientForm recipes={recipes} userName={userName} usertype={usertype} sourceIngredients={sourceIngredients} />
+                  <AddRecipeForm
+                    recipegroup={recipegroup}
+                    userName={userName}
+                    usertype={usertype}
+                  />
+                  <AddIngredientForm
+                    recipes={recipes}
+                    userName={userName}
+                    usertype={usertype}
+                    sourceIngredients={sourceIngredients}
+                  />
                 </div>
                 <h2>Existing Recipes</h2>
                 <div className="recipes">
                   {recipes.map((recipe) => (
-                    <RecipeItem key={recipe.id} recipe={recipe} usertype={usertype} />
+                    <RecipeItem
+                      key={recipe.id}
+                      recipe={recipe}
+                      usertype={usertype}
+                    />
                   ))}
                 </div>
                 {ingredients && ingredients.length > 0 && (
@@ -243,8 +280,14 @@ const RecipeGroupMenuPage = () => {
             ) : (
               <div className="grid-sm">
                 <p>Your recipes, designed in one place.</p>
-                <p hidden={usertype !== 'Chef'}>Create a Recipe to get started!</p>
-                <AddRecipeForm recipegroup={recipegroup} userName={userName} usertype={usertype} />
+                <p hidden={usertype !== "Chef"}>
+                  Create a Recipe to get started!
+                </p>
+                <AddRecipeForm
+                  recipegroup={recipegroup}
+                  userName={userName}
+                  usertype={usertype}
+                />
               </div>
             )}
           </div>

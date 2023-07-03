@@ -28,14 +28,15 @@ const AddRecipeGroupForm = ({ userName, user }) => {
 
   return (
     <div className="form-wrapper">
-      <h2 className="h3">
+      <h2 className="h3" hidden>
         Create Recipe Category
       </h2>
       <fetcher.Form
         method="post"
         className="grid-sm"
         ref={formRef}
-        hidden={usertype !== 'Chef'}
+        // hidden={usertype !== 'Chef'}
+        hidden
       >
         {/* <div className="grid-xs">
           <label htmlFor="newRecipeGroup">Recipe Category</label>

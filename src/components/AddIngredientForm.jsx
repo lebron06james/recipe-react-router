@@ -9,9 +9,7 @@ import { PlusCircleIcon } from "@heroicons/react/24/solid";
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
 
 // helper functions
-import {
-  formatCurrency,
-} from "../helpers";
+import { formatCurrency } from "../helpers";
 
 const AddIngredientForm = ({
   recipes,
@@ -64,7 +62,16 @@ const AddIngredientForm = ({
   const formatResult = (item) => {
     return (
       <>
-        <div
+        <div className="form-wrapper" style={{"marginRight": "10px","overflow-x": "hidden"}}>
+          <h2 className="h3">{item.name}</h2>
+          {/* <span>
+            <small>id: {item.id}</small> {". "}
+            <small>unit: {item.unit}</small> {". "}
+            <small>price: {formatCurrency(item.price)}</small>
+          </span> */}
+        </div>
+
+        {/* <div
           className="recipe"
           style={{
             "--accent": "0 65% 50%",
@@ -80,23 +87,7 @@ const AddIngredientForm = ({
             <h4>unit: {item.unit}</h4>
             <small>price: {formatCurrency(item.price)}</small>
           </div>
-          {/* <progress max={10} value={10}>
-        {formatPercentage(10 / 10)}
-      </progress> */}
-        </div>
-
-        {/* <span style={{ display: "block", textAlign: "left" }}>
-          id: <b>{item.id}</b>
-        </span>
-        <span style={{ display: "block", textAlign: "left" }}>
-          name: <b>{item.name}</b>
-        </span>
-        <span style={{ display: "block", textAlign: "left" }}>
-          unit: <b>{item.unit}</b>
-        </span>
-        <span style={{ display: "block", textAlign: "left" }}>
-          price: <b>₱ {item.price}</b>
-        </span> */}
+        </div> */}
       </>
     );
   };
