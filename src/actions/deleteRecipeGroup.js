@@ -8,6 +8,10 @@ import { toast } from "react-toastify";
 import { deleteItem, getAllMatchingItems, fetchData } from "../helpers";
 
 export async function deleteRecipeGroup({ params }) {
+
+  // get api url env
+  const apiUrl = await import.meta.env.VITE_API_URL;
+
   try {
     // check for existing recipes
     let count = 0;
@@ -52,7 +56,7 @@ export async function deleteRecipeGroup({ params }) {
       let recipegroup = {};
 
       const recipegroupresponse = await fetch(
-        `https://recipe-auth.cyclic.app/api/sourcerecipegroups/${params.id}`,
+        `${apiUrl}/api/sourcerecipegroups/${params.id}`,
         {
           method: "DELETE",
           headers: { Authorization: `Bearer ${user.token}` },

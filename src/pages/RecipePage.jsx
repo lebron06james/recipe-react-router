@@ -36,6 +36,9 @@ export async function recipeLoader({ params }) {
   const userName = await fetchData("userName");
   const user = await fetchData("user");
 
+  // get api url env
+  const apiUrl = await import.meta.env.VITE_API_URL;
+
   const recipe = await getAllMatchingItems({
     category: "recipes",
     key: "id",
@@ -58,7 +61,7 @@ export async function recipeLoader({ params }) {
     // const recipegroups = fetchData("recipegroups");
 
     const recipegroupresponse = await fetch(
-      `https://recipe-auth.cyclic.app/api/sourcerecipegroups/${recipe.recipegroupId}`,
+      `${apiUrl}/api/sourcerecipegroups/${recipe.recipegroupId}`,
       {
         headers: { Authorization: `Bearer ${user.token}` },
       }

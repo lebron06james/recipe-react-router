@@ -22,6 +22,9 @@ export async function dashboardLoader() {
   const userName = await fetchData("userName");
   const user = await fetchData("user");
 
+  // get api url env
+  const apiUrl = await import.meta.env.VITE_API_URL;
+
   let recipegroups = [];
 
   if (user) {
@@ -29,7 +32,7 @@ export async function dashboardLoader() {
     // const recipegroups = fetchData("recipegroups");
 
     const recipegroupsresponse = await fetch(
-      "https://recipe-auth.cyclic.app/api/sourcerecipegroups",
+      `${apiUrl}/api/sourcerecipegroups`,
       {
         headers: { Authorization: `Bearer ${user.token}` },
       }
@@ -49,6 +52,9 @@ export async function dashboardLoader() {
 export async function dashboardAction({ request }) {
   await waait();
 
+  // get api url env
+  const apiUrl = await import.meta.env.VITE_API_URL;
+
   const data = await request.formData();
   const { _action, ...values } = Object.fromEntries(data);
 
@@ -61,7 +67,7 @@ export async function dashboardAction({ request }) {
   if (_action === "newUser") {
     try {
       const response = await fetch(
-        "https://recipe-auth.cyclic.app/api/user/login",
+        `${apiUrl}/api/user/login`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -101,7 +107,7 @@ export async function dashboardAction({ request }) {
       let existingRecipeGroupLength = 0;
       if (user) {
         const recipegroupsresponse = await fetch(
-          "https://recipe-auth.cyclic.app/api/sourcerecipegroups",
+          `${apiUrl}/api/sourcerecipegroups`,
           {
             headers: { Authorization: `Bearer ${user.token}` },
           }
@@ -124,7 +130,7 @@ export async function dashboardAction({ request }) {
       let recipegroup = {};
 
       const recipegroupresponse = await fetch(
-        "https://recipe-auth.cyclic.app/api/sourcerecipegroups/",
+        `${apiUrl}/api/sourcerecipegroups/`,
         {
           method: "POST",
           body: JSON.stringify(newItem),
