@@ -30,11 +30,19 @@ import Intro from "../components/Intro";
 // library imports
 import { ChatBubbleOvalLeftEllipsisIcon } from "@heroicons/react/24/outline";
 
+import Cookies from 'js-cookie';
+
 // loader
 export async function recipeLoader({ params }) {
 
-  const userName = await fetchData("userName");
-  const user = await fetchData("user");
+  // cookie domain
+  const cookieDomain = await import.meta.env.VITE_COOKIE_DOMAIN;
+
+  // const userName = await fetchData("userName");
+  const userName = await Cookies.get('userName', { domain: cookieDomain });
+  // const user = await fetchData("user");
+    const userString = await Cookies.get('user', { domain: cookieDomain });
+  const user = userString ? JSON.parse(userString) : null;
 
   // get api url env
   const apiUrl = await import.meta.env.VITE_API_URL;

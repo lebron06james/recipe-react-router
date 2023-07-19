@@ -14,10 +14,19 @@ import { deleteItem, fetchData, waait } from "../helpers";
 // components
 import Intro from "../components/Intro";
 
+import Cookies from 'js-cookie';
+
 // loader
 export async function ingredientsLoader() {
-  const userName = await fetchData("userName");
-  const user = await fetchData("user");
+  // cookie domain
+  const cookieDomain = await import.meta.env.VITE_COOKIE_DOMAIN;
+
+  // const userName = await fetchData("userName");
+  const userName = await Cookies.get('userName', { domain: cookieDomain });
+  // const user = await fetchData("user");
+    const userString = await Cookies.get('user', { domain: cookieDomain });
+  const user = userString ? JSON.parse(userString) : null;
+  
   const ingredients = await fetchData("ingredients");
   return { userName, user, ingredients };
 }

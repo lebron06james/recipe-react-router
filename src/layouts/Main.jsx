@@ -10,10 +10,20 @@ import Nav from "../components/Nav";
 //  helper functions
 import { fetchData } from "../helpers"
 
+import Cookies from 'js-cookie';
+
 // loader
-export function mainLoader() {
-  const userName = fetchData("userName");
-  return { userName }
+export async function mainLoader() {
+  // cookie domain
+  const cookieDomain = await import.meta.env.VITE_COOKIE_DOMAIN;
+
+  // const userName = await fetchData("userName");
+  const userName = await Cookies.get('userName', { domain: cookieDomain });
+  // const user = await fetchData("user");
+    const userString = await Cookies.get('user', { domain: cookieDomain });
+  const user = userString ? JSON.parse(userString) : null;
+
+  return { userName, user }
 }
 
 const Main = () => {

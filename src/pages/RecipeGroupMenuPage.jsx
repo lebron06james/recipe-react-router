@@ -35,10 +35,18 @@ import {
   getAllMatchingItems,
 } from "../helpers";
 
+import Cookies from 'js-cookie';
+
 // loader
 export async function recipegroupMenuLoader({ params }) {
-  const user = fetchData("user");
-  const userName = fetchData("userName");
+  // cookie domain
+  const cookieDomain = await import.meta.env.VITE_COOKIE_DOMAIN;
+
+  // const userName = await fetchData("userName");
+  const userName = await Cookies.get('userName', { domain: cookieDomain });
+  // const user = await fetchData("user");
+    const userString = await Cookies.get('user', { domain: cookieDomain });
+  const user = userString ? JSON.parse(userString) : null;
 
   // get api url env
   const apiUrl = await import.meta.env.VITE_API_URL;

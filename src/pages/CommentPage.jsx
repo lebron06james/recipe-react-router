@@ -25,6 +25,8 @@ import { fetchData, waait, getAllMatchingItems } from "../helpers";
 // components
 import Intro from "../components/Intro";
 
+import Cookies from 'js-cookie';
+
 // loader
 export async function commentLoader({ params }) {
   const recipegroup = await getAllMatchingItems({
@@ -51,9 +53,14 @@ export async function commentLoader({ params }) {
 
   // });
 
-  const userName = await fetchData("userName");
+  // cookie domain
+  const cookieDomain = await import.meta.env.VITE_COOKIE_DOMAIN;
 
-  const user = await fetchData("user");
+  // const userName = await fetchData("userName");
+  const userName = await Cookies.get('userName', { domain: cookieDomain });
+  // const user = await fetchData("user");
+  const userString = await Cookies.get('user', { domain: cookieDomain });
+  const user = userString ? JSON.parse(userString) : null;
 
   const { usertype } = user;
 

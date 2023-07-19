@@ -17,10 +17,20 @@ import {
   waait,
 } from "../helpers";
 
+import Cookies from 'js-cookie';
+
 // loader
 export async function dashboardLoader() {
-  const userName = await fetchData("userName");
-  const user = await fetchData("user");
+
+  // cookie domain
+  const cookieDomain = await import.meta.env.VITE_COOKIE_DOMAIN;
+
+  // const userName = await fetchData("userName");
+  const userName = await Cookies.get('userName', { domain: cookieDomain });
+  // const user = await fetchData("user");
+
+  const userString = await Cookies.get('user', { domain: cookieDomain });
+  const user = userString ? JSON.parse(userString) : null;
 
   // get api url env
   const apiUrl = await import.meta.env.VITE_API_URL;
@@ -83,8 +93,20 @@ export async function dashboardAction({ request }) {
         );
       }
       if (response.ok) {
-        localStorage.setItem("user", JSON.stringify(json));
-        localStorage.setItem("userName", JSON.stringify(json.username));
+        
+        // cookie domain
+        const cookieDomain = await import.meta.env.VITE_COOKIE_DOMAIN;
+        // cookieSecure
+        const cookieSecure = await import.meta.env.VITE_COOKIE_SECURE;
+
+        const cookieSecureSite = !!+cookieSecure;
+
+        console.log('secure site: ', cookieSecureSite, cookieDomain);
+
+        // localStorage.setItem("user", JSON.stringify(json));
+        Cookies.set('user', JSON.stringify(json), { expires: 7, path: '/', domain: cookieDomain, sameSite: 'strict', secure: cookieSecureSite });
+        // localStorage.setItem("userName", JSON.stringify(json.username));
+        Cookies.set('userName', json.username, { expires: 7, path: '/', domain: cookieDomain, sameSite: 'strict', secure: cookieSecureSite });
 
         return toast.success(`Welcome, ${json.username}`);
       }
@@ -100,7 +122,12 @@ export async function dashboardAction({ request }) {
       //   updatedby: values.newUserName,
       // });
 
-      const user = await fetchData("user");
+      // cookie domain
+      const cookieDomain = await import.meta.env.VITE_COOKIE_DOMAIN;
+
+      // const user = await fetchData("user");
+        const userString = await Cookies.get('user', { domain: cookieDomain });
+  const user = userString ? JSON.parse(userString) : null;
 
       // generate random Color
       let recipegroups = [];

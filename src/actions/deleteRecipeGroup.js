@@ -51,7 +51,12 @@ export async function deleteRecipeGroup({ params }) {
 
       // no exisiting anything, you can safely delete thid category here
 
-      const user = await fetchData("user");
+      // cookie domain
+      const cookieDomain = await import.meta.env.VITE_COOKIE_DOMAIN;
+
+      // const user = await fetchData("user");
+        const userString = await Cookies.get('user', { domain: cookieDomain });
+  const user = userString ? JSON.parse(userString) : null;
 
       let recipegroup = {};
 

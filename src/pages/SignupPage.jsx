@@ -19,9 +19,16 @@ import RecipeGroupItem from "../components/RecipeGroupItem";
 import { createRecipeGroup, deleteItem, fetchData, waait } from "../helpers";
 import SignupForm from "../components/SignupForm";
 
+import Cookies from 'js-cookie';
+
 // loader
-export function signupLoader() {
-  const userName = fetchData("userName");
+export async function signupLoader() {
+  // cookie domain
+  const cookieDomain = await import.meta.env.VITE_COOKIE_DOMAIN;
+
+  // const userName = await fetchData("userName");
+  const userName = await Cookies.get('userName', { domain: cookieDomain });
+
   const recipegroups = fetchData("recipegroups");
   return { userName, recipegroups };
 }
