@@ -9,27 +9,23 @@ import Intro from "../components/Intro";
 import AddRecipeGroupForm from "../components/AddRecipeGroupForm";
 import RecipeGroupItem from "../components/RecipeGroupItem";
 
-//  helper functions
-import {
-  createRecipeGroup,
-  deleteItem,
-  fetchData,
-  waait,
-} from "../helpers";
+import axios from "axios";
 
-import Cookies from 'js-cookie';
+//  helper functions
+import { createRecipeGroup, deleteItem, fetchData, waait } from "../helpers";
+
+import Cookies from "js-cookie";
 
 // loader
 export async function dashboardLoader() {
-
   // cookie domain
   const cookieDomain = await import.meta.env.VITE_COOKIE_DOMAIN;
 
   // const userName = await fetchData("userName");
-  const userName = await Cookies.get('userName', { domain: cookieDomain });
+  const userName = await Cookies.get("userName", { domain: cookieDomain });
   // const user = await fetchData("user");
 
-  const userString = await Cookies.get('user', { domain: cookieDomain });
+  const userString = await Cookies.get("user", { domain: cookieDomain });
   const user = userString ? JSON.parse(userString) : null;
 
   // get api url env
@@ -55,6 +51,50 @@ export async function dashboardLoader() {
     }
   }
 
+  // cookie from node server testing
+
+  let axiosConfig = {
+    withCredentials: true,
+  };
+
+  // set cookie axios
+  const obj = { name: "hayup anlupet" };
+  const setcookiedata = await axios.post(
+    "http://localhost:8000/new",
+    obj,
+    axiosConfig
+  );
+
+  console.log(setcookiedata);
+
+  // get cookie axios
+  const getcookiedata = await axios.get(
+    "http://localhost:8000/name",
+    axiosConfig
+  );
+
+  console.log(getcookiedata);
+
+  // set cookie fetch
+  // const cookieresponse = await axios.post(
+  //   `http://localhost:8000/setcookie`
+  // );
+
+  // if (cookieresponse.ok) {
+  //   console.log('set cookie ', cookieresponse);
+  // }
+
+  // // get cookie
+  // const getcookieresponse = await fetch(
+  //   `http://localhost:8000/getcookie`
+  // );
+
+  // if (getcookieresponse.ok) {
+  //   console.log('get cookie ', getcookieresponse);
+  // }
+
+  // end cookie from node server testing
+
   return { userName, user, recipegroups };
 }
 
@@ -76,14 +116,11 @@ export async function dashboardAction({ request }) {
   // new user submission
   if (_action === "newUser") {
     try {
-      const response = await fetch(
-        `${apiUrl}/api/user/login`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(postvalue),
-        }
-      );
+      const response = await fetch(`${apiUrl}/api/user/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(postvalue),
+      });
 
       const json = await response.json();
 
@@ -93,7 +130,6 @@ export async function dashboardAction({ request }) {
         );
       }
       if (response.ok) {
-        
         // cookie domain
         const cookieDomain = await import.meta.env.VITE_COOKIE_DOMAIN;
         // cookieSecure
@@ -101,12 +137,24 @@ export async function dashboardAction({ request }) {
 
         const cookieSecureSite = !!+cookieSecure;
 
-        console.log('secure site: ', cookieSecureSite, cookieDomain);
+        console.log("secure site: ", cookieSecureSite, cookieDomain);
 
         // localStorage.setItem("user", JSON.stringify(json));
-        Cookies.set('user', JSON.stringify(json), { expires: 7, path: '/', domain: cookieDomain, sameSite: 'strict', secure: cookieSecureSite });
+        Cookies.set("user", JSON.stringify(json), {
+          expires: 7,
+          path: "/",
+          domain: cookieDomain,
+          sameSite: "strict",
+          secure: cookieSecureSite,
+        });
         // localStorage.setItem("userName", JSON.stringify(json.username));
-        Cookies.set('userName', json.username, { expires: 7, path: '/', domain: cookieDomain, sameSite: 'strict', secure: cookieSecureSite });
+        Cookies.set("userName", json.username, {
+          expires: 7,
+          path: "/",
+          domain: cookieDomain,
+          sameSite: "strict",
+          secure: cookieSecureSite,
+        });
 
         return toast.success(`Welcome, ${json.username}`);
       }
@@ -126,8 +174,8 @@ export async function dashboardAction({ request }) {
       const cookieDomain = await import.meta.env.VITE_COOKIE_DOMAIN;
 
       // const user = await fetchData("user");
-        const userString = await Cookies.get('user', { domain: cookieDomain });
-  const user = userString ? JSON.parse(userString) : null;
+      const userString = await Cookies.get("user", { domain: cookieDomain });
+      const user = userString ? JSON.parse(userString) : null;
 
       // generate random Color
       let recipegroups = [];
