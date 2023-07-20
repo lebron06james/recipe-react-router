@@ -16,6 +16,18 @@ import { createRecipeGroup, deleteItem, fetchData, waait } from "../helpers";
 
 import Cookies from "js-cookie";
 
+// const isObjectEmpty = (objectName) => {
+//   return (
+//     objectName &&
+//     Object.keys(objectName).length === 0 &&
+//     objectName.constructor === Object
+//   );
+// };
+
+const isObjectEmpty = (objectName) => {
+  return JSON.stringify(objectName) === "{}";
+};
+
 // loader
 export async function dashboardLoader() {
   // cookie domain
@@ -65,7 +77,7 @@ export async function dashboardLoader() {
     axiosConfig
   );
 
-  console.log(setcookiedata);
+  console.log(setcookiedata.data);
 
   // get cookie axios
   const getcookiedata = await axios.get(
@@ -73,7 +85,11 @@ export async function dashboardLoader() {
     axiosConfig
   );
 
-  console.log(getcookiedata);
+  console.log(getcookiedata.data);
+
+  if(isObjectEmpty(getcookiedata.data)) {
+    console.log('empty response data');
+  }
 
   // set cookie fetch
   // const cookieresponse = await axios.post(
