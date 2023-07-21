@@ -24,6 +24,7 @@ export async function logoutAction() {
 
   await Cookies.remove('user', { path: '/', domain: cookieDomain });
   await Cookies.remove('userName', { path: '/', domain: cookieDomain });
+  await Cookies.remove('connect.sid', { path: '/', domain: cookieDomain });
 
 
   // deleteItem({

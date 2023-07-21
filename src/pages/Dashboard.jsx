@@ -69,15 +69,15 @@ export async function dashboardLoader() {
     withCredentials: true,
   };
 
-  // set cookie axios
-  const obj = { name: "hayup anlupet" };
-  const setcookiedata = await axios.post(
-    "http://localhost:8000/new",
-    obj,
-    axiosConfig
-  );
+  // // set cookie axios
+  // const obj = { name: "hayup anlupet" };
+  // const setcookiedata = await axios.post(
+  //   "http://localhost:8000/new",
+  //   obj,
+  //   axiosConfig
+  // );
 
-  console.log(setcookiedata.data);
+  // console.log(setcookiedata.data);
 
   // get cookie axios
   const getcookiedata = await axios.get(
@@ -90,6 +90,17 @@ export async function dashboardLoader() {
   if(isObjectEmpty(getcookiedata.data)) {
     console.log('empty response data');
   }
+
+  // // logout cookies
+  // const logoutcookiedata = await axios.get(
+  //   "http://localhost:8000/logout", {
+  //     withCredentials: true,
+  //   }
+  // );
+
+  // console.log(logoutcookiedata.data);
+
+  // ----------------------------------------
 
   // set cookie fetch
   // const cookieresponse = await axios.post(
@@ -161,6 +172,7 @@ export async function dashboardAction({ request }) {
           path: "/",
           domain: cookieDomain,
           sameSite: "strict",
+          httpOnly: false,
           secure: cookieSecureSite,
         });
         // localStorage.setItem("userName", JSON.stringify(json.username));
@@ -169,6 +181,7 @@ export async function dashboardAction({ request }) {
           path: "/",
           domain: cookieDomain,
           sameSite: "strict",
+          httpOnly: false,
           secure: cookieSecureSite,
         });
 
