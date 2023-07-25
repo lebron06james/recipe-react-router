@@ -72,7 +72,7 @@ export async function dashboardLoader() {
   // // set cookie axios
   // const obj = { name: "hayup anlupet" };
   // const setcookiedata = await axios.post(
-  //   "http://localhost:8000/new",
+  //   "http://localhost/new",
   //   obj,
   //   axiosConfig
   // );
@@ -81,7 +81,7 @@ export async function dashboardLoader() {
 
   // get cookie axios
   const getcookiedata = await axios.get(
-    "http://localhost:8000/name",
+    "http://localhost/name",
     axiosConfig
   );
 
@@ -93,7 +93,7 @@ export async function dashboardLoader() {
 
   // // logout cookies
   // const logoutcookiedata = await axios.get(
-  //   "http://localhost:8000/logout", {
+  //   "http://localhost/logout", {
   //     withCredentials: true,
   //   }
   // );
