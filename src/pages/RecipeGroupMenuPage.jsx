@@ -35,21 +35,21 @@ import {
   getAllMatchingItems,
 } from "../helpers";
 
-import Cookies from 'js-cookie';
-
 // loader
 export async function recipegroupMenuLoader({ params }) {
-  // cookie domain
-  const cookieDomain = await import.meta.env.VITE_COOKIE_DOMAIN;
-
-  // const userName = await fetchData("userName");
-  const userName = await Cookies.get('userName', { domain: cookieDomain });
-  // const user = await fetchData("user");
-    const userString = await Cookies.get('user', { domain: cookieDomain });
-  const user = userString ? JSON.parse(userString) : null;
-
   // get api url env
   const apiUrl = await import.meta.env.VITE_API_URL;
+
+  const response = await fetch(`${apiUrl}/name`, {
+    credentials: "include",
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
+
+  const json = await response.json();
+  const isAuth = json.isAuth;
+  const userName = await json.userName;
+  const user = await json.user;
 
   // get one recipegroup
   // const recipegroup = await getAllMatchingItems({
@@ -63,14 +63,15 @@ export async function recipegroupMenuLoader({ params }) {
   const recipegroupsresponse = await fetch(
     `${apiUrl}/api/sourcerecipegroups/${params.id}`,
     {
+      credentials: "include",
       headers: { Authorization: `Bearer ${user.token}` },
     }
   );
 
-  const json = await recipegroupsresponse.json();
+  const rcjson = await recipegroupsresponse.json();
 
   if (recipegroupsresponse.ok) {
-    recipegroup = json;
+    recipegroup = rcjson;
   }
 
   const recipes = await getAllMatchingItems({

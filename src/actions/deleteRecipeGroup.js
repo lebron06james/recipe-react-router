@@ -8,7 +8,6 @@ import { toast } from "react-toastify";
 import { deleteItem, getAllMatchingItems, fetchData } from "../helpers";
 
 export async function deleteRecipeGroup({ params }) {
-
   // get api url env
   const apiUrl = await import.meta.env.VITE_API_URL;
 
@@ -51,27 +50,35 @@ export async function deleteRecipeGroup({ params }) {
 
       // no exisiting anything, you can safely delete thid category here
 
-      // cookie domain
-      const cookieDomain = await import.meta.env.VITE_COOKIE_DOMAIN;
+      // get api url env
+      const apiUrl = await import.meta.env.VITE_API_URL;
 
-      // const user = await fetchData("user");
-        const userString = await Cookies.get('user', { domain: cookieDomain });
-  const user = userString ? JSON.parse(userString) : null;
+      const response = await fetch(`${apiUrl}/name`, {
+        credentials: "include",
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      const json = await response.json();
+      const isAuth = json.isAuth;
+      const userName = await json.userName;
+      const user = await json.user;
 
       let recipegroup = {};
 
       const recipegroupresponse = await fetch(
         `${apiUrl}/api/sourcerecipegroups/${params.id}`,
         {
+          credentials: "include",
           method: "DELETE",
           headers: { Authorization: `Bearer ${user.token}` },
         }
       );
 
-      const json = await recipegroupresponse.json();
+      const rcjson = await recipegroupresponse.json();
 
       if (recipegroupresponse.ok) {
-        recipegroup = json;
+        recipegroup = rcjson;
       }
 
       // --------------------------------------------------------------
@@ -129,7 +136,6 @@ export async function deleteRecipeGroup({ params }) {
 
       toast.success("Recipe Category deleted successfully!");
     }
-
   } catch (e) {
     throw new Error("There was a problem deleting your recipe category.");
   }

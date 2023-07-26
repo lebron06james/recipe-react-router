@@ -1,5 +1,10 @@
 // rrd imports
-import { useLoaderData, useRouteError, Link, useNavigate, } from "react-router-dom";
+import {
+  useLoaderData,
+  useRouteError,
+  Link,
+  useNavigate,
+} from "react-router-dom";
 
 // library import
 import { toast } from "react-toastify";
@@ -14,19 +19,22 @@ import { deleteItem, fetchData, waait } from "../helpers";
 // components
 import Intro from "../components/Intro";
 
-import Cookies from 'js-cookie';
-
 // loader
 export async function ingredientsLoader() {
-  // cookie domain
-  const cookieDomain = await import.meta.env.VITE_COOKIE_DOMAIN;
+  // get api url env
+  const apiUrl = await import.meta.env.VITE_API_URL;
 
-  // const userName = await fetchData("userName");
-  const userName = await Cookies.get('userName', { domain: cookieDomain });
-  // const user = await fetchData("user");
-    const userString = await Cookies.get('user', { domain: cookieDomain });
-  const user = userString ? JSON.parse(userString) : null;
-  
+  const response = await fetch(`${apiUrl}/name`, {
+    credentials: "include",
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
+
+  const json = await response.json();
+  const isAuth = json.isAuth;
+  const userName = await json.userName;
+  const user = await json.user;
+
   const ingredients = await fetchData("ingredients");
   return { userName, user, ingredients };
 }

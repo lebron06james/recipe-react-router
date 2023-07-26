@@ -8,26 +8,29 @@ import wave from "../assets/wave.svg";
 import Nav from "../components/Nav";
 
 //  helper functions
-import { fetchData } from "../helpers"
-
-import Cookies from 'js-cookie';
+import { fetchData } from "../helpers";
 
 // loader
 export async function mainLoader() {
-  // cookie domain
-  const cookieDomain = await import.meta.env.VITE_COOKIE_DOMAIN;
+  // get api url env
+  const apiUrl = await import.meta.env.VITE_API_URL;
 
-  // const userName = await fetchData("userName");
-  const userName = await Cookies.get('userName', { domain: cookieDomain });
-  // const user = await fetchData("user");
-    const userString = await Cookies.get('user', { domain: cookieDomain });
-  const user = userString ? JSON.parse(userString) : null;
+  const response = await fetch(`${apiUrl}/name`, {
+    credentials: "include",
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
 
-  return { userName, user }
+  const json = await response.json();
+  const isAuth = json.isAuth;
+  const userName = await json.userName;
+  const user = await json.user;
+
+  return { userName, user };
 }
 
 const Main = () => {
-  const { userName } = useLoaderData()
+  const { userName } = useLoaderData();
 
   return (
     <div className="layout">
@@ -37,6 +40,6 @@ const Main = () => {
       </main>
       <img src={wave} alt="" />
     </div>
-  )
-}
-export default Main
+  );
+};
+export default Main;

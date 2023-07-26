@@ -7,10 +7,7 @@ import { toast } from "react-toastify";
 // helpers
 import { deleteItem } from "../helpers";
 
-import Cookies from 'js-cookie';
-
 export async function logoutAction() {
-
   // delete the user
   // deleteItem({
   //   key: "user"
@@ -19,13 +16,18 @@ export async function logoutAction() {
   //   key: "userName"
   // })
 
-  // cookie domain
-  const cookieDomain = await import.meta.env.VITE_COOKIE_DOMAIN;
+  // get api url env
+  const apiUrl = await import.meta.env.VITE_API_URL;
 
-  await Cookies.remove('user', { path: '/', domain: cookieDomain });
-  await Cookies.remove('userName', { path: '/', domain: cookieDomain });
-  await Cookies.remove('connect.sid', { path: '/', domain: cookieDomain });
+  const response = await fetch(`${apiUrl}/logout`, {
+    credentials: "include",
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
 
+  const json = await response.json();
+
+  console.log(json);
 
   // deleteItem({
   //   key: "recipegroups"
@@ -39,7 +41,7 @@ export async function logoutAction() {
   // deleteItem({
   //   key: "ingredients"
   // })
-  toast.success("You've signed-out sucessfully!")
+  toast.success("You've signed-out sucessfully!");
   // return redirect
-  return redirect("/")
+  return redirect("/");
 }

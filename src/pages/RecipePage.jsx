@@ -30,22 +30,21 @@ import Intro from "../components/Intro";
 // library imports
 import { ChatBubbleOvalLeftEllipsisIcon } from "@heroicons/react/24/outline";
 
-import Cookies from 'js-cookie';
-
 // loader
 export async function recipeLoader({ params }) {
-
-  // cookie domain
-  const cookieDomain = await import.meta.env.VITE_COOKIE_DOMAIN;
-
-  // const userName = await fetchData("userName");
-  const userName = await Cookies.get('userName', { domain: cookieDomain });
-  // const user = await fetchData("user");
-    const userString = await Cookies.get('user', { domain: cookieDomain });
-  const user = userString ? JSON.parse(userString) : null;
-
   // get api url env
   const apiUrl = await import.meta.env.VITE_API_URL;
+
+  const response = await fetch(`${apiUrl}/name`, {
+    credentials: "include",
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
+
+  const json = await response.json();
+  const isAuth = json.isAuth;
+  const userName = await json.userName;
+  const user = await json.user;
 
   const recipe = await getAllMatchingItems({
     category: "recipes",
@@ -53,9 +52,8 @@ export async function recipeLoader({ params }) {
     value: params.id,
   })[0];
 
-
   // get the recipegroup
-  
+
   // const recipegroup = await getAllMatchingItems({
   //   category: "recipegroups",
   //   key: "id",
@@ -71,14 +69,15 @@ export async function recipeLoader({ params }) {
     const recipegroupresponse = await fetch(
       `${apiUrl}/api/sourcerecipegroups/${recipe.recipegroupId}`,
       {
+        credentials: "include",
         headers: { Authorization: `Bearer ${user.token}` },
       }
     );
 
-    const json = await recipegroupresponse.json();
+    const rcjson = await recipegroupresponse.json();
 
     if (recipegroupresponse.ok) {
-      recipegroup = json;
+      recipegroup = rcjson;
     }
   }
 
@@ -92,10 +91,18 @@ export async function recipeLoader({ params }) {
     throw new Error("The recipe you’re trying to find doesn’t exist");
   }
 
-  const sourceIngredients = await fetch(`https://my-json-server.typicode.com/silverstory/ingredients/ingredients`)
-  .then(response => response.json())
+  const sourceIngredients = await fetch(
+    `https://my-json-server.typicode.com/silverstory/ingredients/ingredients`
+  ).then((response) => response.json());
 
-  return { userName, user, recipe, recipegroup, ingredients, sourceIngredients };
+  return {
+    userName,
+    user,
+    recipe,
+    recipegroup,
+    ingredients,
+    sourceIngredients,
+  };
 }
 
 // action
@@ -134,7 +141,14 @@ export async function recipeAction({ request }) {
 }
 
 const RecipePage = () => {
-  const { userName, user, recipe, ingredients, recipegroup, sourceIngredients } = useLoaderData();
+  const {
+    userName,
+    user,
+    recipe,
+    ingredients,
+    recipegroup,
+    sourceIngredients,
+  } = useLoaderData();
   const { usertype } = user;
   const navigate = useNavigate();
 
@@ -159,13 +173,18 @@ const RecipePage = () => {
           <h1>
             from{" "}
             <span>
-              {recipegroup.name}{"."}
+              {recipegroup.name}
+              {"."}
             </span>
           </h1>
           <div className="grid-sm">
             <p>
-            This page contains all of the ingredients from the recipe {" "}
-            <strong>{recipe.name}</strong> under <strong>{recipegroup.name}{"."}</strong>
+              This page contains all of the ingredients from the recipe{" "}
+              <strong>{recipe.name}</strong> under{" "}
+              <strong>
+                {recipegroup.name}
+                {"."}
+              </strong>
             </p>
           </div>
 
@@ -181,7 +200,12 @@ const RecipePage = () => {
 
           <div className="flex-lg">
             <RecipeItem recipe={recipe} usertype={usertype} showDelete={true} />
-            <AddIngredientForm recipes={[recipe]} usertype={usertype} userName={userName} sourceIngredients={sourceIngredients} />
+            <AddIngredientForm
+              recipes={[recipe]}
+              usertype={usertype}
+              userName={userName}
+              sourceIngredients={sourceIngredients}
+            />
           </div>
           {ingredients && ingredients.length > 0 && (
             <div className="grid-md">
