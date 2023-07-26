@@ -9,12 +9,8 @@ import Intro from "../components/Intro";
 import AddRecipeGroupForm from "../components/AddRecipeGroupForm";
 import RecipeGroupItem from "../components/RecipeGroupItem";
 
-import axios from "axios";
-
 //  helper functions
 import { createRecipeGroup, deleteItem, fetchData, waait } from "../helpers";
-
-import Cookies from "js-cookie";
 
 // const isObjectEmpty = (objectName) => {
 //   return (
@@ -30,25 +26,33 @@ const isObjectEmpty = (objectName) => {
 
 // loader
 export async function dashboardLoader() {
-  // cookie domain
-  const cookieDomain = await import.meta.env.VITE_COOKIE_DOMAIN;
-
-  // const userName = await fetchData("userName");
-  const userName = await Cookies.get("userName", { domain: cookieDomain });
-  // const user = await fetchData("user");
-
-  const userString = await Cookies.get("user", { domain: cookieDomain });
-  const user = userString ? JSON.parse(userString) : null;
-
   // get api url env
   const apiUrl = await import.meta.env.VITE_API_URL;
+
+  const response = await fetch(`${apiUrl}/name`, {
+    credentials: "include",
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
+
+  const json = await response.json();
+  const isAuth = json.isAuth;
+  const userName = await json.userName;
+  const user = await json.user;
+
+  if (!response.ok) {
+    return toast.error(
+      `Please log in. The app is unable to retrieve user information. Error message: ${json.error}`
+    );
+  }
+  if (response.ok) {
+    // // wag maglagay ng kahit ano dito. bawal.
+    // // return toast.success(`You are logged-in ${json.userName}`);
+  }
 
   let recipegroups = [];
 
   if (user) {
-    // recipegroups
-    // const recipegroups = fetchData("recipegroups");
-
     const recipegroupsresponse = await fetch(
       `${apiUrl}/api/sourcerecipegroups`,
       {
@@ -62,65 +66,6 @@ export async function dashboardLoader() {
       recipegroups = json;
     }
   }
-
-  // cookie from node server testing
-
-  let axiosConfig = {
-    withCredentials: true,
-  };
-
-  // // set cookie axios
-  // const obj = { name: "hayup anlupet" };
-  // const setcookiedata = await axios.post(
-  //   "http://localhost/new",
-  //   obj,
-  //   axiosConfig
-  // );
-
-  // console.log(setcookiedata.data);
-
-  // get cookie axios
-  const getcookiedata = await axios.get(
-    "http://localhost/name",
-    axiosConfig
-  );
-
-  console.log(getcookiedata.data);
-
-  if(isObjectEmpty(getcookiedata.data)) {
-    console.log('empty response data');
-  }
-
-  // // logout cookies
-  // const logoutcookiedata = await axios.get(
-  //   "http://localhost/logout", {
-  //     withCredentials: true,
-  //   }
-  // );
-
-  // console.log(logoutcookiedata.data);
-
-  // ----------------------------------------
-
-  // set cookie fetch
-  // const cookieresponse = await axios.post(
-  //   `http://localhost:8000/setcookie`
-  // );
-
-  // if (cookieresponse.ok) {
-  //   console.log('set cookie ', cookieresponse);
-  // }
-
-  // // get cookie
-  // const getcookieresponse = await fetch(
-  //   `http://localhost:8000/getcookie`
-  // );
-
-  // if (getcookieresponse.ok) {
-  //   console.log('get cookie ', getcookieresponse);
-  // }
-
-  // end cookie from node server testing
 
   return { userName, user, recipegroups };
 }
@@ -144,6 +89,7 @@ export async function dashboardAction({ request }) {
   if (_action === "newUser") {
     try {
       const response = await fetch(`${apiUrl}/api/user/login`, {
+        credentials: "include",
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(postvalue),
@@ -157,38 +103,11 @@ export async function dashboardAction({ request }) {
         );
       }
       if (response.ok) {
-        // cookie domain
-        const cookieDomain = await import.meta.env.VITE_COOKIE_DOMAIN;
-        // cookieSecure
-        const cookieSecure = await import.meta.env.VITE_COOKIE_SECURE;
-
-        const cookieSecureSite = !!+cookieSecure;
-
-        console.log("secure site: ", cookieSecureSite, cookieDomain);
-
-        // localStorage.setItem("user", JSON.stringify(json));
-        Cookies.set("user", JSON.stringify(json), {
-          expires: 7,
-          path: "/",
-          domain: cookieDomain,
-          sameSite: "strict",
-          httpOnly: false,
-          secure: cookieSecureSite,
-        });
-        // localStorage.setItem("userName", JSON.stringify(json.username));
-        Cookies.set("userName", json.username, {
-          expires: 7,
-          path: "/",
-          domain: cookieDomain,
-          sameSite: "strict",
-          httpOnly: false,
-          secure: cookieSecureSite,
-        });
-
         return toast.success(`Welcome, ${json.username}`);
       }
     } catch (e) {
-      throw new Error("There was a problem creating your account.");
+      // console.log(e);
+      throw new Error("There was a problem signing in to your account.");
     }
   }
 
