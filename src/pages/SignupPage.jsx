@@ -20,8 +20,21 @@ import { createRecipeGroup, deleteItem, fetchData, waait } from "../helpers";
 import SignupForm from "../components/SignupForm";
 
 // loader
-export function signupLoader() {
-  const userName = fetchData("userName");
+export async function signupLoader() {
+  // get api url env
+  const apiUrl = await import.meta.env.VITE_API_URL;
+
+  const response = await fetch(`${apiUrl}/name`, {
+    credentials: "include",
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
+
+  const json = await response.json();
+  const isAuth = json.isAuth;
+  const userName = await json.userName;
+  const user = await json.user;
+
   const recipegroups = fetchData("recipegroups");
   return { userName, recipegroups };
 }
@@ -41,7 +54,7 @@ export async function signupAction({ request }) {
   const username = values.username;
   const usertype = values.newUserType;
 
-  if (username === 'LeBron') {
+  if (username === "LeBron") {
     return toast.error(
       `Sorry, that is a reserved first name or nickname. You are not allowed to use it. Please use a different name.`
     );
@@ -58,6 +71,7 @@ export async function signupAction({ request }) {
   if (_action === "signUp") {
     try {
       const response = await fetch(`${apiUrl}/api/signup/create`, {
+        credentials: "include",
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(postvalue),

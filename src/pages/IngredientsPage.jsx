@@ -1,5 +1,10 @@
 // rrd imports
-import { useLoaderData, useRouteError, Link, useNavigate, } from "react-router-dom";
+import {
+  useLoaderData,
+  useRouteError,
+  Link,
+  useNavigate,
+} from "react-router-dom";
 
 // library import
 import { toast } from "react-toastify";
@@ -16,8 +21,20 @@ import Intro from "../components/Intro";
 
 // loader
 export async function ingredientsLoader() {
-  const userName = await fetchData("userName");
-  const user = await fetchData("user");
+  // get api url env
+  const apiUrl = await import.meta.env.VITE_API_URL;
+
+  const response = await fetch(`${apiUrl}/name`, {
+    credentials: "include",
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
+
+  const json = await response.json();
+  const isAuth = json.isAuth;
+  const userName = await json.userName;
+  const user = await json.user;
+
   const ingredients = await fetchData("ingredients");
   return { userName, user, ingredients };
 }

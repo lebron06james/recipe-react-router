@@ -37,11 +37,19 @@ import {
 
 // loader
 export async function recipegroupMenuLoader({ params }) {
-  const user = fetchData("user");
-  const userName = fetchData("userName");
-
   // get api url env
   const apiUrl = await import.meta.env.VITE_API_URL;
+
+  const response = await fetch(`${apiUrl}/name`, {
+    credentials: "include",
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
+
+  const json = await response.json();
+  const isAuth = json.isAuth;
+  const userName = await json.userName;
+  const user = await json.user;
 
   // get one recipegroup
   // const recipegroup = await getAllMatchingItems({
@@ -55,14 +63,15 @@ export async function recipegroupMenuLoader({ params }) {
   const recipegroupsresponse = await fetch(
     `${apiUrl}/api/sourcerecipegroups/${params.id}`,
     {
+      credentials: "include",
       headers: { Authorization: `Bearer ${user.token}` },
     }
   );
 
-  const json = await recipegroupsresponse.json();
+  const rcjson = await recipegroupsresponse.json();
 
   if (recipegroupsresponse.ok) {
-    recipegroup = json;
+    recipegroup = rcjson;
   }
 
   const recipes = await getAllMatchingItems({

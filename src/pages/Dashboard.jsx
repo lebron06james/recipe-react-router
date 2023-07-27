@@ -10,30 +10,53 @@ import AddRecipeGroupForm from "../components/AddRecipeGroupForm";
 import RecipeGroupItem from "../components/RecipeGroupItem";
 
 //  helper functions
-import {
-  createRecipeGroup,
-  deleteItem,
-  fetchData,
-  waait,
-} from "../helpers";
+import { createRecipeGroup, deleteItem, fetchData, waait } from "../helpers";
+
+// const isObjectEmpty = (objectName) => {
+//   return (
+//     objectName &&
+//     Object.keys(objectName).length === 0 &&
+//     objectName.constructor === Object
+//   );
+// };
+
+// const isObjectEmpty = (objectName) => {
+//   return JSON.stringify(objectName) === "{}";
+// };
 
 // loader
 export async function dashboardLoader() {
-  const userName = await fetchData("userName");
-  const user = await fetchData("user");
-
   // get api url env
   const apiUrl = await import.meta.env.VITE_API_URL;
+
+  const response = await fetch(`${apiUrl}/name`, {
+    credentials: "include",
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
+
+  const json = await response.json();
+  const isAuth = json.isAuth;
+  const userName = await json.userName;
+  const user = await json.user;
+
+  if (!response.ok) {
+    return toast.error(
+      `Please log in. The app is unable to retrieve user information. Error message: ${json.error}`
+    );
+  }
+  if (response.ok) {
+    // // wag maglagay ng kahit ano dito. bawal.
+    // // return toast.success(`You are logged-in ${json.userName}`);
+  }
 
   let recipegroups = [];
 
   if (user) {
-    // recipegroups
-    // const recipegroups = fetchData("recipegroups");
-
     const recipegroupsresponse = await fetch(
       `${apiUrl}/api/sourcerecipegroups`,
       {
+        credentials: "include",
         headers: { Authorization: `Bearer ${user.token}` },
       }
     );
@@ -66,14 +89,12 @@ export async function dashboardAction({ request }) {
   // new user submission
   if (_action === "newUser") {
     try {
-      const response = await fetch(
-        `${apiUrl}/api/user/login`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(postvalue),
-        }
-      );
+      const response = await fetch(`${apiUrl}/api/user/login`, {
+        credentials: "include",
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(postvalue),
+      });
 
       const json = await response.json();
 
@@ -83,13 +104,11 @@ export async function dashboardAction({ request }) {
         );
       }
       if (response.ok) {
-        localStorage.setItem("user", JSON.stringify(json));
-        localStorage.setItem("userName", JSON.stringify(json.username));
-
         return toast.success(`Welcome, ${json.username}`);
       }
     } catch (e) {
-      throw new Error("There was a problem creating your account.");
+      // console.log(e);
+      throw new Error("There was a problem signing in to your account.");
     }
   }
 
@@ -100,7 +119,26 @@ export async function dashboardAction({ request }) {
       //   updatedby: values.newUserName,
       // });
 
-      const user = await fetchData("user");
+      const response = await fetch(`${apiUrl}/name`, {
+        credentials: "include",
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      const json = await response.json();
+      const isAuth = json.isAuth;
+      const userName = await json.userName;
+      const user = await json.user;
+
+      if (!response.ok) {
+        return toast.error(
+          `Please log in. The app is unable to retrieve user information. Error message: ${json.error}`
+        );
+      }
+      if (response.ok) {
+        // // wag maglagay ng kahit ano dito. bawal.
+        // // return toast.success(`You are logged-in ${json.userName}`);
+      }
 
       // generate random Color
       let recipegroups = [];
@@ -109,12 +147,13 @@ export async function dashboardAction({ request }) {
         const recipegroupsresponse = await fetch(
           `${apiUrl}/api/sourcerecipegroups`,
           {
+            credentials: "include",
             headers: { Authorization: `Bearer ${user.token}` },
           }
         );
-        const json = await recipegroupsresponse.json();
+        const rcsjson = await recipegroupsresponse.json();
         if (recipegroupsresponse.ok) {
-          recipegroups = json;
+          recipegroups = rcsjson;
           existingRecipeGroupLength = recipegroups.length;
         }
       }
@@ -132,6 +171,7 @@ export async function dashboardAction({ request }) {
       const recipegroupresponse = await fetch(
         `${apiUrl}/api/sourcerecipegroups/`,
         {
+          credentials: "include",
           method: "POST",
           body: JSON.stringify(newItem),
           headers: {
@@ -141,11 +181,11 @@ export async function dashboardAction({ request }) {
         }
       );
 
-      const json = await recipegroupresponse.json();
+      const rcjson = await recipegroupresponse.json();
 
       if (!recipegroupresponse.ok) {
         return toast.error(
-          `There was a problem creating your recipe category. ${json.error}`
+          `There was a problem creating your recipe category. ${rcjson.error}`
         );
       }
       if (recipegroupresponse.ok) {
@@ -154,7 +194,7 @@ export async function dashboardAction({ request }) {
         // setReps('')
         // setError(null)
         // setEmptyFields([])
-        recipegroup = json;
+        recipegroup = rcjson;
         return toast.success("Recipe Category created!");
       }
     } catch (e) {

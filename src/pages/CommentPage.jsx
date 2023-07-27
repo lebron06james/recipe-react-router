@@ -51,13 +51,23 @@ export async function commentLoader({ params }) {
 
   // });
 
-  const userName = await fetchData("userName");
+  // get api url env
+  const apiUrl = await import.meta.env.VITE_API_URL;
 
-  const user = await fetchData("user");
+  const response = await fetch(`${apiUrl}/name`, {
+    credentials: "include",
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
+
+  const json = await response.json();
+  const isAuth = json.isAuth;
+  const userName = await json.userName;
+  const user = await json.user;
 
   const { usertype } = user;
 
-  const userprompt = '(' + usertype + ') ' + userName;
+  const userprompt = "(" + usertype + ") " + userName;
 
   return { recipegroup, userName, userprompt, _comments };
 }
@@ -68,7 +78,11 @@ function CommentPage() {
 
   // const [tasks, setTasks] = useLocalStorage('react-todo.tasks', []);
   // const [comments, setComments] = useLocalStorage('comments', recipegroup._id);
-  const [comments, setComments] = useLocalStorage("comments", [], recipegroup._id);
+  const [comments, setComments] = useLocalStorage(
+    "comments",
+    [],
+    recipegroup._id
+  );
   const [previousFocusEl, setPreviousFocusEl] = useState(null);
   const [editedComment, setEditedComment] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -127,7 +141,8 @@ function CommentPage() {
               {recipegroup.name}, {recipegroup.pax} Pax
             </h1>
             <h3>
-              RecipeGroup starts on <strong>{recipegroup.recipegroupdate}</strong> at{" "}
+              RecipeGroup starts on{" "}
+              <strong>{recipegroup.recipegroupdate}</strong> at{" "}
               <strong>{recipegroup.recipegrouptime}</strong>
             </h3>
             <h3>
