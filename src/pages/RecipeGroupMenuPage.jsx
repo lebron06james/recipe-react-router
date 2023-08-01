@@ -60,7 +60,7 @@ export async function recipegroupMenuLoader({ params }) {
 
   let recipegroup = {};
 
-  const recipegroupsresponse = await fetch(
+  const recipegroupresponse = await fetch(
     `${apiUrl}/api/sourcerecipegroups/${params.id}`,
     {
       credentials: "include",
@@ -68,17 +68,37 @@ export async function recipegroupMenuLoader({ params }) {
     }
   );
 
-  const rcjson = await recipegroupsresponse.json();
+  const rcjson = await recipegroupresponse.json();
 
-  if (recipegroupsresponse.ok) {
+  if (recipegroupresponse.ok) {
     recipegroup = rcjson;
   }
 
-  const recipes = await getAllMatchingItems({
-    category: "recipes",
-    key: "recipegroupId",
-    value: recipegroup._id,
-  });
+  // get all recipes under the current recipegroup
+
+  let recipes = [];
+  let existingRecipesLength = 0;
+  if (user) {
+    const recipesresponse = await fetch(
+      `${apiUrl}/api/sourcerecipes/filter/${params.id}`,
+      {
+        credentials: "include",
+        method: "GET",
+        headers: { Authorization: `Bearer ${user.token}` },
+      }
+    );
+    const recipesjson = await recipesresponse.json();
+    if (recipesresponse.ok) {
+      recipes = recipesjson;
+      existingRecipesLength = recipes.length;
+    }
+  }
+
+  // const recipes = await getAllMatchingItems({
+  //   category: "recipes",
+  //   key: "recipegroupId",
+  //   value: recipegroup._id,
+  // });
 
   let ingredients = [];
 
@@ -86,7 +106,7 @@ export async function recipegroupMenuLoader({ params }) {
     const _ingredients = getAllMatchingItems({
       category: "ingredients",
       key: "recipeId",
-      value: recipe.id,
+      value: recipe._id,
     });
 
     ingredients = [...ingredients, ..._ingredients];
@@ -110,8 +130,34 @@ export async function recipegroupMenuLoader({ params }) {
 export async function recipegroupMenuAction({ request }) {
   await waait();
 
+  // get api url env
+  const apiUrl = await import.meta.env.VITE_API_URL;
+
   const data = await request.formData();
   const { _action, ...values } = Object.fromEntries(data);
+
+  // get logged-in user
+  const response = await fetch(`${apiUrl}/name`, {
+    credentials: "include",
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
+
+  const json = await response.json();
+  const isAuth = json.isAuth;
+  const userName = await json.userName;
+  const user = await json.user;
+
+  if (!response.ok) {
+    return toast.error(
+      `Please log in. The app is unable to retrieve user information. Error message: ${json.error}`
+    );
+  }
+  if (response.ok) {
+    // // wag maglagay ng kahit ano dito. bawal.
+    // // return toast.success(`You are logged-in ${json.userName}`);
+  }
+  // end get logged-in user
 
   // // new user submission
   // if (_action === "newUser") {
@@ -124,8 +170,29 @@ export async function recipegroupMenuAction({ request }) {
   // }
 
   if (_action === "createRecipe") {
+    // db recipe
     try {
-      createRecipe({
+      // generate random Color
+      let recipes = [];
+      let existingRecipesLength = 0;
+      if (user) {
+        const recipesresponse = await fetch(
+          `${apiUrl}/api/sourcerecipes/filter/${values.newRecipeRecipeGroup}`,
+          {
+            credentials: "include",
+            headers: { Authorization: `Bearer ${user.token}` },
+          }
+        );
+        const recipesjson = await recipesresponse.json();
+        if (recipesresponse.ok) {
+          recipes = recipesjson;
+          existingRecipesLength = recipes.length;
+        }
+      }
+      const randomColor = `${existingRecipesLength * 34} 65% 50%`;
+      // end generate random Color
+
+      const newItem = {
         name: values.newRecipe,
         amount: values.newRecipeAmount,
         createdBy: values.newUserName,
@@ -133,11 +200,57 @@ export async function recipegroupMenuAction({ request }) {
         instruction: values.newRecipeInstruction,
         cookingtime: values.newRecipeCookingTime,
         recipegroupId: values.newRecipeRecipeGroup,
+        recipegroupName: values.newRecipeRecipeGroupName,
+        color: randomColor,
+      };
+
+      let recipe = {};
+
+      const reciperesponse = await fetch(`${apiUrl}/api/sourcerecipes/`, {
+        credentials: "include",
+        method: "POST",
+        body: JSON.stringify(newItem),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
       });
-      return toast.success("Recipe created!");
+
+      const recipejson = await reciperesponse.json();
+
+      if (!reciperesponse.ok) {
+        return toast.error(
+          `There was a problem creating your recipe category. ${recipejson.error}`
+        );
+      }
+      if (reciperesponse.ok) {
+        // setTitle('')
+        // setLoad('')
+        // setReps('')
+        // setError(null)
+        // setEmptyFields([])
+        recipe = recipejson;
+        return toast.success("Recipe created!");
+      }
     } catch (e) {
       throw new Error("There was a problem creating your recipe.");
     }
+    // end db recipe
+
+    // try {
+    //   createRecipe({
+    //     name: values.newRecipe,
+    //     amount: values.newRecipeAmount,
+    //     createdBy: values.newUserName,
+    //     serving: values.newRecipeServing,
+    //     instruction: values.newRecipeInstruction,
+    //     cookingtime: values.newRecipeCookingTime,
+    //     recipegroupId: values.newRecipeRecipeGroup,
+    //   });
+    //   return toast.success("Recipe created!");
+    // } catch (e) {
+    //   throw new Error("There was a problem creating your recipe.");
+    // }
   }
 
   if (_action === "createIngredient") {
@@ -149,6 +262,9 @@ export async function recipegroupMenuAction({ request }) {
         price: values.newIngredientPrice,
         createdBy: values.newUserName,
         recipeId: values.newIngredientRecipe,
+        recipeName: values.newIngredientRecipeName,
+        recipegroupId: values.newIngredientRecipeGroup,
+        recipegroupName: values.newIngredientRecipeGroupName,
         ingredientSqlId: values.newIngredientSqlId,
       });
       return toast.success(`Ingredient ${values.newIngredient} created!`);
@@ -257,6 +373,8 @@ const RecipeGroupMenuPage = () => {
                   />
                   <AddIngredientForm
                     recipes={recipes}
+                    recipegroupId={recipegroup._id}
+                    recipegroupName={recipegroup.name}
                     userName={userName}
                     usertype={usertype}
                     sourceIngredients={sourceIngredients}
@@ -279,6 +397,7 @@ const RecipeGroupMenuPage = () => {
                       ingredients={ingredients
                         .sort((a, b) => b.createdAt - a.createdAt)
                         .slice(0, 8)}
+                      recipe={recipes}
                       user={user}
                     />
                     {ingredients.length > 8 && (

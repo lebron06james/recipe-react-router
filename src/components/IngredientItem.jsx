@@ -11,16 +11,46 @@ import {
   getAllMatchingItems,
 } from "../helpers";
 
-const IngredientItem = ({ ingredient, user, showRecipe }) => {
+const IngredientItem = async ({ ingredient, user, showRecipe }) => {
   const fetcher = useFetcher();
 
-  const { usertype } = user;
+  const { usertype, token } = user;
 
-  const recipe = getAllMatchingItems({
-    category: "recipes",
-    key: "id",
-    value: ingredient.recipeId,
-  })[0];
+  // const recipe = getAllMatchingItems({
+  //   category: "recipes",
+  //   key: "id",
+  //   value: ingredient.recipeId,
+  // })[0];
+
+  // get api url env
+  const apiUrl = await import.meta.env.VITE_API_URL;
+
+  // const response = await fetch(`${apiUrl}/name`, {
+  //   credentials: "include",
+  //   method: "GET",
+  //   headers: { "Content-Type": "application/json" },
+  // });
+
+  // const json = await response.json();
+  // const isAuth = json.isAuth;
+  // const userName = await json.userName;
+  // const user = await json.user;
+
+  let recipe = {};
+
+  const reciperesponse = await fetch(
+    `${apiUrl}/api/sourcerecipes/${ingredient.recipeId}`,
+    {
+      credentials: "include",
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  );
+
+  const recipejson = await reciperesponse.json();
+
+  if (reciperesponse.ok) {
+    recipe = recipejson;
+  }
 
   return (
     <>
@@ -33,7 +63,7 @@ const IngredientItem = ({ ingredient, user, showRecipe }) => {
       {showRecipe && (
         <td>
           <Link
-            to={`/recipe/${recipe.id}`}
+            to={`/recipe/${recipe._id}`}
             style={{
               "--accent": recipe.color,
             }}
@@ -45,7 +75,7 @@ const IngredientItem = ({ ingredient, user, showRecipe }) => {
       <td>
         <fetcher.Form method="post" hidden={usertype !== 'Chef'}>
           <input type="hidden" name="_action" value="deleteIngredient" />
-          <input type="hidden" name="ingredientId" value={ingredient.id} />
+          <input type="hidden" name="ingredientId" value={ingredient._id} />
           <button
             type="submit"
             className="btn btn--warning"

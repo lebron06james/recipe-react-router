@@ -12,8 +12,8 @@ import {
 } from "../helpers";
 
 const RecipeItem = ({ recipe, usertype, showDelete = false }) => {
-  const { id, name, amount, createdBy, serving, instruction, cookingtime, color } = recipe;
-  const spent = calculateSpentByRecipe(id);
+  const { _id, name, amount, createdBy, serving, instruction, cookingtime, color } = recipe;
+  const spent = calculateSpentByRecipe(_id);
 
   return (
     <div
@@ -34,7 +34,7 @@ const RecipeItem = ({ recipe, usertype, showDelete = false }) => {
         {formatPercentage(10 / 10)}
       </progress>
       <div className="progress-text">
-        <small>id: {id}</small>
+        <small>id: {_id}</small>
         <small>Created by: {createdBy}</small>
         {/* <small>{formatCurrency(spent)} spent</small>
         <small>{formatCurrency(amount - spent)} remaining</small> */}
@@ -73,7 +73,7 @@ const RecipeItem = ({ recipe, usertype, showDelete = false }) => {
         </div>
       ) : (
         <div className="flex-sm">
-          <Link to={`/recipe/${id}`} className="btn">
+          <Link to={`/recipe/${_id}`} className="btn">
             <span>View Details</span>
             <FireIcon width={20} />
           </Link>
