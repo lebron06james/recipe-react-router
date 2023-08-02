@@ -225,7 +225,7 @@ const AddIngredientForm = ({
           <div className="grid-xs">
             <label htmlFor="newIngredientSqlId">Id</label>
             <input
-              type="text"
+              type="number"
               name="newIngredientSqlId"
               id="newIngredientSqlId"
               placeholder="e.g., 5"
@@ -273,9 +273,8 @@ const AddIngredientForm = ({
             id="newIngredientRecipe"
             required
           >
-            <option value="⬇️ Select a recipe ⬇️">
-              {" "}
-              -- Select a recipe --{" "}
+            <option value={recipes.length === 1 ? `${recipes.map((budg) => budg._id) }` : "⬇️ Select a recipe ⬇️"}>
+            {recipes.length === 1 ? `${recipes.map((budg) => budg.name) }` : " -- Select a recipe -- "}
             </option>
             {recipes
               .sort((a, b) => a.createdAt - b.createdAt)
@@ -294,7 +293,7 @@ const AddIngredientForm = ({
             type="text"
             name="newIngredientRecipeName"
             id="newIngredientRecipeName"
-            value={srecipe}
+            value={recipes.length === 1 ? `${recipes.map((budg) => budg.name) }` : srecipe}
             required
             readonly
             style={{ backgroundColor: "thistle" }}

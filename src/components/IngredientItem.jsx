@@ -11,7 +11,8 @@ import {
   getAllMatchingItems,
 } from "../helpers";
 
-const IngredientItem = async ({ ingredient, user, showRecipe }) => {
+const IngredientItem = ({ ingredient, user, showRecipe }) => {
+
   const fetcher = useFetcher();
 
   const { usertype, token } = user;
@@ -21,36 +22,6 @@ const IngredientItem = async ({ ingredient, user, showRecipe }) => {
   //   key: "id",
   //   value: ingredient.recipeId,
   // })[0];
-
-  // get api url env
-  const apiUrl = await import.meta.env.VITE_API_URL;
-
-  // const response = await fetch(`${apiUrl}/name`, {
-  //   credentials: "include",
-  //   method: "GET",
-  //   headers: { "Content-Type": "application/json" },
-  // });
-
-  // const json = await response.json();
-  // const isAuth = json.isAuth;
-  // const userName = await json.userName;
-  // const user = await json.user;
-
-  let recipe = {};
-
-  const reciperesponse = await fetch(
-    `${apiUrl}/api/sourcerecipes/${ingredient.recipeId}`,
-    {
-      credentials: "include",
-      headers: { Authorization: `Bearer ${token}` },
-    }
-  );
-
-  const recipejson = await reciperesponse.json();
-
-  if (reciperesponse.ok) {
-    recipe = recipejson;
-  }
 
   return (
     <>
@@ -63,12 +34,12 @@ const IngredientItem = async ({ ingredient, user, showRecipe }) => {
       {showRecipe && (
         <td>
           <Link
-            to={`/recipe/${recipe._id}`}
+            to={`/recipe/${ingredient.recipeId}`}
             style={{
-              "--accent": recipe.color,
+              "--accent": ingredient.recipeColor,
             }}
           >
-            {recipe.name}
+            {ingredient.recipeName}
           </Link>
         </td>
       )}
