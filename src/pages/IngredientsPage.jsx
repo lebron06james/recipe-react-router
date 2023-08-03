@@ -35,7 +35,10 @@ export async function ingredientsLoader() {
   const userName = await json.userName;
   const user = await json.user;
 
+  // change to get ingredients from db
   const ingredients = await fetchData("ingredients");
+
+
   return { userName, user, ingredients };
 }
 

@@ -63,7 +63,7 @@ export async function recipeLoader({ params }) {
   let recipegroup = {};
 
   if (user) {
-    // recipegroups
+    // recipegroup
     // const recipegroups = fetchData("recipegroups");
 
     const recipegroupresponse = await fetch(
@@ -189,13 +189,13 @@ const RecipePage = () => {
           </div>
 
           {/* comment button */}
-          {/* <div className="grid-sm">
-            Recent comment: comment name here
+          <div className="grid-sm">
+            <span>Tap <b><small>"Add Comment"</small></b> button to add comments</span>
             <Link to={`/comment/${recipegroup._id}`} className="btn">
               <span>Add Comment</span>
               <ChatBubbleOvalLeftEllipsisIcon width={20} />
             </Link>
-          </div> */}
+          </div>
           {/* end comment button */}
 
           <div className="flex-lg">

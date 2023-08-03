@@ -58,10 +58,10 @@ const RecipeGroupItem = ({ recipegroup, user }) => {
           <span>{usertype === 'Chef' ? 'Add Recipe' : `See what's on the list`}</span>
           <FireIcon width={20} />
         </Link>
-        {/* <Link to={`/comment/${id}`} className="btn">
+        <Link to={`/comment/${_id}`} className="btn">
           <span>Add Comment</span>
           <ChatBubbleOvalLeftEllipsisIcon width={20} />
-        </Link> */}
+        </Link>
       </div>
 
     </div>

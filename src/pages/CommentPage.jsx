@@ -27,11 +27,47 @@ import Intro from "../components/Intro";
 
 // loader
 export async function commentLoader({ params }) {
-  const recipegroup = await getAllMatchingItems({
-    category: "recipegroups",
-    key: "id",
-    value: params.id,
-  })[0];
+
+  // get api url env
+  const apiUrl = await import.meta.env.VITE_API_URL;
+
+  const response = await fetch(`${apiUrl}/name`, {
+    credentials: "include",
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
+
+  const json = await response.json();
+  const isAuth = json.isAuth;
+  const userName = await json.userName;
+  const user = await json.user;
+
+  // get the recipegroup
+  // const recipegroup = await getAllMatchingItems({
+  //   category: "recipegroups",
+  //   key: "id",
+  //   value: params.id,
+  // })[0];
+
+  let recipegroup = {};
+
+  if (user) {
+    // recipegroup
+
+    const recipegroupresponse = await fetch(
+      `${apiUrl}/api/sourcerecipegroups/${params.id}`,
+      {
+        credentials: "include",
+        headers: { Authorization: `Bearer ${user.token}` },
+      }
+    );
+
+    const rcjson = await recipegroupresponse.json();
+
+    if (recipegroupresponse.ok) {
+      recipegroup = rcjson;
+    }
+  }
 
   const _comments = await getAllMatchingItems({
     category: "comments",
@@ -50,20 +86,6 @@ export async function commentLoader({ params }) {
   //   ingredients = [...ingredients, ..._ingredients];
 
   // });
-
-  // get api url env
-  const apiUrl = await import.meta.env.VITE_API_URL;
-
-  const response = await fetch(`${apiUrl}/name`, {
-    credentials: "include",
-    method: "GET",
-    headers: { "Content-Type": "application/json" },
-  });
-
-  const json = await response.json();
-  const isAuth = json.isAuth;
-  const userName = await json.userName;
-  const user = await json.user;
 
   const { usertype } = user;
 
@@ -136,11 +158,17 @@ function CommentPage() {
         </Link> */}
           </div>
           <header>
-            <h3>Comments for RecipeGroup</h3>
+            {/* uncomment for events */}
+            {/* <h3>Comments for Event</h3> */}
+            <h3>Comments for recipe group</h3>
             <h1>
-              {recipegroup.name}, {recipegroup.pax} Pax
+              {/* uncomment for events */}
+              {/* {recipegroup.name}, {recipegroup.pax} Pax */}
+              {recipegroup.name}
             </h1>
-            <h3>
+            
+            {/* uncomment for events */}
+            {/* <h3>
               RecipeGroup starts on{" "}
               <strong>{recipegroup.recipegroupdate}</strong> at{" "}
               <strong>{recipegroup.recipegrouptime}</strong>
@@ -150,7 +178,7 @@ function CommentPage() {
             </h3>
             <h4>
               Venue - <strong>{recipegroup.venue}</strong>
-            </h4>
+            </h4> */}
           </header>
           {isEditing && (
             <EditForm

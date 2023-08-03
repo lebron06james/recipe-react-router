@@ -14,10 +14,10 @@ const EditForm = ({ editedComment, updateComment, closeEditMode, recipegroup, us
       e.key === "Escape" && closeEditMode();
     }
 
-    window.addRecipeGroupListener('keydown', closeModalIfEscaped)
+    window.addEventListener('keydown', closeModalIfEscaped)
 
     return () => {
-      window.removeRecipeGroupListener('keydown', closeModalIfEscaped)
+      window.removeEventListener('keydown', closeModalIfEscaped)
     }
   }, [closeEditMode])
 
