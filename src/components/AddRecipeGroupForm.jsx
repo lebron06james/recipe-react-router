@@ -35,8 +35,8 @@ const AddRecipeGroupForm = ({ userName, user }) => {
         method="post"
         className="grid-sm"
         ref={formRef}
-        // hidden={usertype !== 'Chef'}
-        hidden
+        hidden={usertype !== 'Chef'}
+        // hidden
       >
         {/* <div className="grid-xs">
           <label htmlFor="newRecipeGroup">Recipe Category</label>

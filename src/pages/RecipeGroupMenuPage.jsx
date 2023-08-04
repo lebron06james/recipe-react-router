@@ -5,6 +5,8 @@ import {
   Link,
   useLoaderData,
   useNavigate,
+  useFetcher,
+  redirect,
 } from "react-router-dom";
 
 // library imports
@@ -25,13 +27,14 @@ import AddIngredientForm from "../components/AddIngredientForm";
 import RecipeItem from "../components/RecipeItem";
 import Table from "../components/Table";
 
-//  helper functions
+//  helpers
 import {
-  createRecipe,
-  createIngredient,
+  // createRecipe,
+  // createIngredient,
   deleteItem,
   fetchData,
   waait,
+  isObjectEmpty,
   getAllMatchingItems,
 } from "../helpers";
 
@@ -74,6 +77,11 @@ export async function recipegroupMenuLoader({ params }) {
   if (recipegroupresponse.ok) {
     recipegroup = rcjson;
   }
+
+  if (!recipegroup || isObjectEmpty(recipegroup)) {
+    throw new Error("The recipe category you’re trying to find doesn’t exist");
+  }
+
 
   // end get one recipegroup
 
@@ -123,7 +131,7 @@ export async function recipegroupMenuLoader({ params }) {
   // get all ingredients under the current recipe
 
   let ingredients = [];
-  
+
   await recipes.reduce(async (a, recipe) => {
     // Wait for the previous item to finish processing
     await a;
@@ -157,7 +165,7 @@ export async function recipegroupMenuLoader({ params }) {
       // 1. Instead of using a for...of loop and finding the index of each _ingredient to update its recipeColor, we can use map to create a new array of _ingredients, where we add the recipeColor property to each _ingredient.
       // 2. We use Promise.all to wait for all the async operations inside the map function to complete, ensuring that the recipe.color is fetched for all _ingredients concurrently.
       // 3. We use push to add all the new _ingredients to the ingredients array, which is more efficient than using the spread operator multiple times.
-      
+
       // old code
       // const ingredientsjson = await ingredientsresponse.json();
       // if (ingredientsresponse.ok) {
@@ -313,7 +321,6 @@ export async function recipegroupMenuAction({ request }) {
     } catch (e) {
       throw new Error("There was a problem creating your recipe. " + e);
     }
-    // end db recipe
 
     // try {
     //   createRecipe({
@@ -332,6 +339,77 @@ export async function recipegroupMenuAction({ request }) {
   }
 
   // end create recipe
+
+  // delete recipe category
+
+  if (_action === "deleteRecipeGroup") {
+    try {
+      // check recipe category if it contains any recipes
+
+      // count the recipes under the current recipe category
+      let recipes = [];
+
+      if (user) {
+        const recipesresponse = await fetch(
+          `${apiUrl}/api/sourcerecipes/filter/${values.deleteRecipeGroupId}`,
+          {
+            credentials: "include",
+            method: "GET",
+            headers: { Authorization: `Bearer ${user.token}` },
+          }
+        );
+
+        if (recipesresponse.ok) {
+          const recipesjson = await recipesresponse.json();
+          recipes.push(...recipesjson);
+        }
+      }
+
+      let existingRecipesLength = recipes.length;
+      // end count the recipes under the current recipe category
+
+      if (existingRecipesLength > 0) {
+        return toast.error(
+          "I'm sorry, I have found existing recipes for this Recipe Category. You are not allowed to delete it."
+        );
+      }
+      // end check recipe category if it contains any recipes
+      else {
+        let recipegroup = {};
+
+        const recipegroupresponse = await fetch(
+          `${apiUrl}/api/sourcerecipegroups/${values.deleteRecipeGroupId}`,
+          {
+            credentials: "include",
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        );
+
+        const recipegroupjson = await recipegroupresponse.json();
+
+        if (!recipegroupresponse.ok) {
+          return toast.error(
+            `There was a problem deleting your recipe category. ${recipegroupjson.error}`
+          );
+        }
+        if (recipegroupresponse.ok) {
+          recipegroup = recipegroupjson;
+          // return toast.success(`Recipe Category ${recipegroup.name} deleted!`);
+          toast.success(`Recipe Category ${recipegroup.name} deleted!`);
+          return redirect(`/`);
+        }
+      }
+    } catch (e) {
+      throw new Error(
+        "There was a problem deleting your recipe category. " + e
+      );
+    }
+  }
+
+  // end delete recipe category
 
   // create ingredient
 
@@ -404,9 +482,7 @@ export async function recipegroupMenuAction({ request }) {
   // delete ingredient
 
   if (_action === "deleteIngredient") {
-
     try {
-
       let ingredient = {};
 
       const ingredientresponse = await fetch(
@@ -450,6 +526,7 @@ export async function recipegroupMenuAction({ request }) {
 }
 
 const RecipeGroupMenuPage = () => {
+  const fetcher = useFetcher();
   const {
     recipegroup,
     userName,
@@ -487,37 +564,45 @@ const RecipeGroupMenuPage = () => {
           {/* delete button */}
           <div
             className="flex-sm"
-            // hidden={usertype !== 'Chef'}
-            hidden
+            hidden={usertype !== "Chef"}
+            // hidden
           >
-            <Form
+            <fetcher.Form
               method="post"
-              action="delete"
               onSubmit={(ev) => {
                 if (
                   !confirm(
-                    "Are you sure you want to permanently delete this recipegroup?"
+                    `Are you sure you want to permanently delete the ${recipegroup.name} recipe category?`
                   )
                 ) {
                   ev.preventDefault();
                 }
               }}
+              hidden={usertype !== "Chef"}
             >
+              <input type="hidden" name="_action" value="deleteRecipeGroup" />
+              <input type="hidden" name="deleteRecipeGroupId" value={recipegroup._id} />
               <button
                 type="submit"
                 className="btn btn--warning"
                 hidden={usertype !== "Chef"}
               >
-                <span>Delete this category</span>
+                <span>Delete this Recipe Category</span>
                 <TrashIcon width={20} />
               </button>
-            </Form>
+            </fetcher.Form>
           </div>
           {/* end delete button */}
 
           {/* comment button */}
           <div className="grid-sm">
-            <span>Tap <b><small>"Add Comment"</small></b> button to add comments</span>
+            <span>
+              Tap{" "}
+              <b>
+                <small>"Add Comment"</small>
+              </b>{" "}
+              button to add comments
+            </span>
             <Link to={`/comment/${recipegroup._id}`} className="btn">
               <span>Add Comment</span>
               <ChatBubbleOvalLeftEllipsisIcon width={20} />
@@ -559,14 +644,14 @@ const RecipeGroupMenuPage = () => {
                     <Table
                       ingredients={ingredients
                         .sort((a, b) => b.createdAt - a.createdAt)
-                        .slice(0, 7)}
+                        .slice(0, 24)}
                       user={user}
                     />
-                    {ingredients.length > 7 && (
+                    {/* {ingredients.length > 24 && (
                       <Link to="/ingredients" className="btn btn--dark">
                         View all ingredients
                       </Link>
-                    )}
+                    )} */}
                   </div>
                 )}
               </div>

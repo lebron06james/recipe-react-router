@@ -18,12 +18,12 @@ import Table from "../components/Table";
 
 // helpers
 import {
-  // fetchData,
+  fetchData,
   waait,
   isObjectEmpty,
   // createIngredient,
-  // deleteItem,
-  // getAllMatchingItems,
+  deleteItem,
+  getAllMatchingItems,
 } from "../helpers";
 
 // components
@@ -252,7 +252,7 @@ export async function recipeAction({ request }) {
 
         if (!reciperesponse.ok) {
           return toast.error(
-            `There was a problem deleting your ingredient. ${recipejson.error}`
+            `There was a problem deleting your recipe. ${recipejson.error}`
           );
         }
         if (reciperesponse.ok) {
