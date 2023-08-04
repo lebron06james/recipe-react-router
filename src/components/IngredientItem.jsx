@@ -12,7 +12,6 @@ import {
 } from "../helpers";
 
 const IngredientItem = ({ ingredient, user, showRecipe }) => {
-
   const fetcher = useFetcher();
 
   const { usertype, token } = user;
@@ -44,13 +43,26 @@ const IngredientItem = ({ ingredient, user, showRecipe }) => {
         </td>
       )}
       <td>
-        <fetcher.Form method="post" hidden={usertype !== 'Chef'}>
+        <fetcher.Form
+          method="post"
+          onSubmit={(ev) => {
+            if (
+              !confirm(
+                `Are you sure you want to permanently delete the ${ingredient.name} ingredient?`
+              )
+            ) {
+              ev.preventDefault();
+            }
+          }}
+          hidden={usertype !== "Chef"}
+        >
           <input type="hidden" name="_action" value="deleteIngredient" />
           <input type="hidden" name="ingredientId" value={ingredient._id} />
           <button
             type="submit"
             className="btn btn--warning"
             aria-label={`Delete ${ingredient.name} ingredient`}
+            hidden={usertype !== "Chef"}
           >
             <TrashIcon width={20} />
           </button>

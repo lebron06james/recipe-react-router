@@ -105,8 +105,6 @@ export async function recipegroupMenuLoader({ params }) {
 
   // end get all recipes under the current recipegroup
 
-  let ingredients = [];
-
   // do not use for loop with async / await
   // use one if this instead
 
@@ -123,6 +121,9 @@ export async function recipegroupMenuLoader({ params }) {
   // }, Promise.resolve());
 
   // get all ingredients under the current recipe
+
+  let ingredients = [];
+  
   await recipes.reduce(async (a, recipe) => {
     // Wait for the previous item to finish processing
     await a;

@@ -1,6 +1,10 @@
 export const waait = () =>
   new Promise((res) => setTimeout(res, Math.random() * 800));
 
+export const isObjectEmpty = (objectName) => {
+  return JSON.stringify(objectName) === "{}";
+};
+
 // colors
 const generateRandomColor = () => {
   const existingRecipeLength = fetchData("recipes")?.length ?? 0;
