@@ -9,20 +9,15 @@ const CommentList = ({
   deleteComment,
   toggleComment,
   enterEditMode,
-  recipegroup,
   userName,
 }) => {
   return (
     <ul className={styles.tasks}>
-      {/* {comments.sort((a, b) => b.id - a.id).map(comment => ( */}
       {comments
-        .filter((comment) => {
-          return comment.recipegroupId === recipegroup._id;
-        })
-        .sort((a, b) => b.id - a.id)
+        .sort((a, b) => b.createdAt - a.createdAt)
         .map((comment) => (
           <CommentItem
-            key={comment.id}
+            key={comment._id}
             comment={comment}
             deleteComment={deleteComment}
             toggleComment={toggleComment}

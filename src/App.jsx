@@ -17,7 +17,7 @@ import Dashboard, { dashboardAction, dashboardLoader } from "./pages/Dashboard";
 import SignupPage, { signupAction, signupLoader } from "./pages/SignupPage";
 import Error from "./pages/Error";
 import RecipePage, { recipeAction, recipeLoader } from "./pages/RecipePage";
-import CommentPage, { commentLoader } from "./pages/CommentPage";
+import CommentPage, { commentPageLoader, commentPageAction } from "./pages/CommentPage";
 import IngredientsPage, {
   ingredientsAction,
   ingredientsLoader,
@@ -57,7 +57,8 @@ const router = createBrowserRouter([
       {
         path: "comment/:id",
         element: <CommentPage />,
-        loader: commentLoader,
+        loader: commentPageLoader,
+        action: commentPageAction,
         errorElement: <Error />,
       },
       {

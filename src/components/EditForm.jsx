@@ -1,70 +1,104 @@
-import { useState, useEffect } from 'react';
+// reacts
+import React, { useState, useEffect, useRef } from "react";
+
+// rrd imports
+import { Form, useFetcher } from "react-router-dom";
 
 // styles
-import styles from './EditForm.module.css';
+import styles from "./EditForm.module.css";
 
 // library imports
-import { CheckIcon } from '@heroicons/react/24/solid'
+import { CheckIcon } from "@heroicons/react/24/solid";
 
-const EditForm = ({ editedComment, updateComment, closeEditMode, recipegroup, userName }) => {
-  const [updatedCommentName, setUpdatedCommentName] = useState(editedComment.name);
+// library imports
+import { PlusIcon, ArrowPathIcon } from "@heroicons/react/24/solid";
 
-  useEffect(()=> {
+const EditForm = ({
+  editedComment,
+  updateComment,
+  closeEditMode,
+  recipegroup,
+  userName,
+  commentId,
+}) => {
+  const fetcher = useFetcher();
+  const isSubmitting = fetcher.state === "submitting";
+  const [comment, setComment] = useState("");
+
+  const formRef = useRef();
+  const focusRef = useRef();
+
+  useEffect(() => {
+    if (!isSubmitting) {
+      formRef.current.reset();
+      focusRef.current.focus();
+    }
+  }, [isSubmitting]);
+
+  const [updatedCommentName, setUpdatedCommentName] = useState(
+    editedComment.name
+  );
+
+  useEffect(() => {
     const closeModalIfEscaped = (e) => {
       e.key === "Escape" && closeEditMode();
-    }
+    };
 
-    window.addEventListener('keydown', closeModalIfEscaped)
+    window.addEventListener("keydown", closeModalIfEscaped);
 
     return () => {
-      window.removeEventListener('keydown', closeModalIfEscaped)
-    }
-  }, [closeEditMode])
+      window.removeEventListener("keydown", closeModalIfEscaped);
+    };
+  }, [closeEditMode]);
 
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    updateComment({...editedComment, name: updatedCommentName})
-  }
+  // const handleFormSubmit = (e) => {
+  //   e.preventDefault();
+  //   updateComment({...editedComment, name: updatedCommentName})
+  // }
 
   return (
     <div
       role="dialog"
       aria-labelledby="editTask"
-      onClick={(e) => {e.target === e.currentTarget && closeEditMode()}}
-      >
-      <form
+      onClick={(e) => {
+        e.target === e.currentTarget && closeEditMode();
+      }}
+    >
+      <fetcher.Form
+        method="post"
         className={styles.todo}
-        onSubmit={handleFormSubmit}
-        >
+        ref={formRef}
+        // onSubmit={handleFormSubmit}
+      >
         <div className={styles.wrapper}>
           <input
             type="text"
+            name="editComment"
             id="editComment"
             className={styles.input}
             value={updatedCommentName}
             onInput={(e) => setUpdatedCommentName(e.target.value)}
             required
-            autoFocus
+            ref={focusRef}
             maxLength={60}
             placeholder="Update Comment"
           />
-          <label
-            htmlFor="editComment"
-            className={styles.label}
-          >Update Comment</label>
+          <label htmlFor="editComment" className={styles.label}>
+            Update Comment
+          </label>
         </div>
         <div className={styles.wrapper} hidden={true}>
-          <label htmlFor="newCommentRecipeGroup">RecipeGroup Id</label>
+          <label htmlFor="editCommentRecipeGroup">RecipeGroup Id</label>
           <input
             type="text"
-            name="newCommentRecipeGroup"
-            id="newCommentRecipeGroup"
+            name="editCommentRecipeGroup"
+            id="editCommentRecipeGroup"
             className={styles.input}
             value={recipegroup._id}
             readonly
           />
         </div>
-        <div className={styles.wrapper} hidden={true}>
+        {/* <div className={styles.wrapper} hidden={true}>
           <label htmlFor="newCommentUser">User Name</label>
           <input
             type="text"
@@ -74,16 +108,35 @@ const EditForm = ({ editedComment, updateComment, closeEditMode, recipegroup, us
             value={userName}
             readonly
           />
-        </div>
-        <button
+        </div> */}
+        {/* <button
           className={styles.btn}
-          aria-label={`Confirm edited comment to now read ${updatedCommentName}`}
+          aria-label={`Confirm edited comment`}
           type="submit"
-          >
+        >
           <CheckIcon strokeWidth={2} height={24} width={24} />
+        </button> */}
+
+        <input type="hidden" name="_action" value="updateComment" />
+        <input type="hidden" name="editCommentId" value={editedComment._id} />
+        <button
+          type="submit"
+          className={styles.btn}
+          aria-label="Add Comment"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? (
+            <>
+              <ArrowPathIcon />
+            </>
+          ) : (
+            <>
+              <CheckIcon strokeWidth={2} height={24} width={24} />
+            </>
+          )}
         </button>
-      </form>
+      </fetcher.Form>
     </div>
-  )
-}
-export default EditForm
+  );
+};
+export default EditForm;
