@@ -2,6 +2,7 @@
 import { Form, Link, useFetcher } from "react-router-dom";
 
 // library imports
+import ReactTimeAgo from "react-time-ago";
 import {
   BanknotesIcon,
   TrashIcon,
@@ -26,6 +27,7 @@ const RecipeItem = ({ recipe, usertype, showDelete = false }) => {
     instruction,
     cookingtime,
     color,
+    createdAt,
   } = recipe;
   const spent = calculateSpentByRecipe(_id);
 
@@ -48,7 +50,14 @@ const RecipeItem = ({ recipe, usertype, showDelete = false }) => {
         {formatPercentage(10 / 10)}
       </progress>
       <div className="progress-text">
-        <small>id: {_id}</small>
+        {/* <small>id: {_id}</small> */}
+        <small>
+          <ReactTimeAgo
+            date={createdAt}
+            locale="en-US"
+            timeStyle="round-minute"
+          />
+        </small>
         <small>Created by: {createdBy}</small>
         {/* <small>{formatCurrency(spent)} spent</small>
         <small>{formatCurrency(amount - spent)} remaining</small> */}

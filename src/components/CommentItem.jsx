@@ -8,6 +8,7 @@ import { Form, useFetcher } from "react-router-dom";
 import styles from "./CommentItem.module.css";
 
 // Library imports
+import ReactTimeAgo from "react-time-ago";
 import { CheckIcon } from "@heroicons/react/24/outline";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import { TrashIcon } from "@heroicons/react/24/outline";
@@ -63,19 +64,27 @@ const CommentItem = ({
           </p> */}
         </label>
       </div>
-      <div
-        className={styles["task-group"]}
-        hidden={comment.updatedby !== userName}
-      >
-        <button
-          className="btn"
-          ref={focusRef}
-          aria-label={`Update ${comment.name} Task`}
-          onClick={() => enterEditMode(comment)}
+      <div className={styles["task-group"]}>
+        <small>
+          <ReactTimeAgo
+            date={comment.createdAt}
+            locale="en-US"
+            timeStyle="twitter"
+          />
+        </small>
+        <div
+          className={styles["task-group"]}
+          hidden={comment.updatedby !== userName}
         >
-          <PencilSquareIcon width={24} height={24} />
-        </button>
-        {/* <button
+          <button
+            className="btn"
+            ref={focusRef}
+            aria-label={`Update ${comment.name} Task`}
+            onClick={() => enterEditMode(comment)}
+          >
+            <PencilSquareIcon width={24} height={24} />
+          </button>
+          {/* <button
             className={`btn ${styles.delete}`}
             aria-label={`Delete ${comment.name} Comment`}
             onClick={() => deleteComment(comment._id)}
@@ -83,26 +92,27 @@ const CommentItem = ({
             <TrashIcon width={24} height={24} />
           </button> */}
 
-        <fetcher.Form method="post" ref={formRef}>
-          <input type="hidden" name="_action" value="deleteComment" />
-          <input type="hidden" name="deleteCommentId" value={comment._id} />
-          <button
-            type="submit"
-            className={`btn ${styles.delete}`}
-            aria-label={`Delete ${comment.name} Comment`}
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? (
-              <>
-                <ArrowPathIcon />
-              </>
-            ) : (
-              <>
-                <TrashIcon width={24} height={24} />
-              </>
-            )}
-          </button>
-        </fetcher.Form>
+          <fetcher.Form method="post" ref={formRef}>
+            <input type="hidden" name="_action" value="deleteComment" />
+            <input type="hidden" name="deleteCommentId" value={comment._id} />
+            <button
+              type="submit"
+              className={`btn ${styles.delete}`}
+              aria-label={`Delete ${comment.name} Comment`}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? (
+                <>
+                  <ArrowPathIcon />
+                </>
+              ) : (
+                <>
+                  <TrashIcon width={24} height={24} />
+                </>
+              )}
+            </button>
+          </fetcher.Form>
+        </div>
       </div>
     </li>
   );

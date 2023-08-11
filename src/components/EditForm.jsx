@@ -2,16 +2,15 @@
 import React, { useState, useEffect, useRef } from "react";
 
 // rrd imports
-import { Form, useFetcher } from "react-router-dom";
+import { Form, useFetcher, redirect, json, useActionData } from "react-router-dom";
 
 // styles
 import styles from "./EditForm.module.css";
 
 // library imports
 import { CheckIcon } from "@heroicons/react/24/solid";
-
-// library imports
 import { PlusIcon, ArrowPathIcon } from "@heroicons/react/24/solid";
+import { assert, object, string, nonempty, StructError } from "superstruct";
 
 const EditForm = ({
   editedComment,
@@ -28,12 +27,32 @@ const EditForm = ({
   const formRef = useRef();
   const focusRef = useRef();
 
+  const prevSdataRef = useRef();
+
   useEffect(() => {
     if (!isSubmitting) {
       formRef.current.reset();
       focusRef.current.focus();
     }
   }, [isSubmitting]);
+
+  // close editmode if fetcher data changes
+  useEffect(() => {
+    // if (fetcher.data !== prevSdata) {
+    //   closeEditMode();
+    // }
+    // prevSdataRef.current = fetcher.data;
+    // if (fetcher.state === "loading") {
+    //   // run alert from here
+    //   updateComment({});
+    // }
+    // if (fetcher.data) {
+    //   // run alert from here
+    //   closeEditMode();
+    // }
+  }, [fetcher.data]);
+
+  const prevSdata = prevSdataRef.current;
 
   const [updatedCommentName, setUpdatedCommentName] = useState(
     editedComment.name
@@ -56,6 +75,8 @@ const EditForm = ({
   //   updateComment({...editedComment, name: updatedCommentName})
   // }
 
+  const actionData = useActionData();
+
   return (
     <div
       role="dialog"
@@ -70,6 +91,9 @@ const EditForm = ({
         ref={formRef}
         // onSubmit={handleFormSubmit}
       >
+        {/* {actionData} */}
+        {/* fetcher.submit() */}
+        {/* {fetcher.data} */}
         <div className={styles.wrapper}>
           <input
             type="text"

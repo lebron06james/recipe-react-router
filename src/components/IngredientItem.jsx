@@ -2,6 +2,7 @@
 import { Link, useFetcher } from "react-router-dom";
 
 // library import
+import ReactTimeAgo from "react-time-ago";
 import { TrashIcon } from "@heroicons/react/24/solid";
 
 // helper imports
@@ -29,7 +30,15 @@ const IngredientItem = ({ ingredient, user, showRecipe }) => {
       <td>{ingredient.unit}</td>
       <td>{formatCurrency(ingredient.price)}</td>
       <td>{formatDateToLocaleString(ingredient.createdAt)}</td>
-      <td>{ingredient.createdBy}</td>
+      <td>{`..` + ingredient.createdBy.substr(ingredient.createdBy.length - 5)}</td>
+      <td>
+        <small>
+          <ReactTimeAgo
+            date={ingredient.createdAt}
+            locale="en-US"
+            timeStyle="round-minute"
+          />
+        </small></td>
       {showRecipe && (
         <td>
           <Link

@@ -1,5 +1,5 @@
 // reacts
-import { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 // rrd imports
 import {
@@ -11,8 +11,7 @@ import {
 
 // library imports
 import { toast } from "react-toastify";
-
-// library imports
+import { assert, object, string, nonempty, StructError } from "superstruct";
 import { HomeIcon, ArrowUturnLeftIcon } from "@heroicons/react/24/solid";
 
 // custom hooks
@@ -136,7 +135,11 @@ export async function commentPageLoader({ params }) {
 
   const userprompt = "(" + user.usertype + ") " + userName;
 
-  return { recipegroup, user, userName, userprompt, comments };
+  // localStorage.setItem("isEditComment", false);
+
+  const sEditComment = Math.floor((Math.random() * 100) + 1);
+
+  return { recipegroup, user, userName, userprompt, comments, sEditComment };
 }
 
 // action
@@ -256,15 +259,18 @@ export async function commentPageAction({ request }) {
 
       let comment = {};
 
-      const commentresponse = await fetch(`${apiUrl}/api/sourcecomments/${values.editCommentId}`, {
-        credentials: "include",
-        method: "PATCH",
-        body: JSON.stringify(newItem),
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${user.token}`,
-        },
-      });
+      const commentresponse = await fetch(
+        `${apiUrl}/api/sourcecomments/${values.editCommentId}`,
+        {
+          credentials: "include",
+          method: "PATCH",
+          body: JSON.stringify(newItem),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
 
       const cjson = await commentresponse.json();
 
@@ -286,7 +292,8 @@ export async function commentPageAction({ request }) {
 }
 
 function CommentPage() {
-  const { recipegroup, user, userName, userprompt, comments } = useLoaderData();
+  const { recipegroup, user, userName, userprompt, comments, sEditComment } =
+    useLoaderData();
   const navigate = useNavigate();
 
   // const [comments, setComments] = useLocalStorage(
@@ -297,6 +304,32 @@ function CommentPage() {
   const [previousFocusEl, setPreviousFocusEl] = useState(null);
   const [editedComment, setEditedComment] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+
+  // // This will run one time after the component mounts
+  // useEffect(() => {
+  //   const onPageLoad = () => {
+  //     // setPlayAnimation(true);
+  //     try {
+  //       closeEditMode();
+  //     } catch (error) { 
+  //     }
+  //   };
+
+  //   // Check if the page has already loaded
+  //   if (document.readyState === "complete") {
+  //     onPageLoad();
+  //   } else {
+  //     window.addEventListener("load", onPageLoad);
+  //     // Remove the event listener when component unmounts
+  //     return () => window.removeEventListener("load", onPageLoad);
+  //   }
+  // }, []);
+
+  useEffect(() => {
+    try {
+      closeEditMode();
+    } catch (error) { }
+  }, [sEditComment]);
 
   const addComment = async (c) => {};
 
