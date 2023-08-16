@@ -10,7 +10,7 @@ import styles from "./CustomForm.module.css";
 // library imports
 import { PlusIcon, ArrowPathIcon } from "@heroicons/react/24/solid";
 
-const CustomForm = ({ recipegroup }) => {
+const CustomForm = ({ recipegroup, userprompt }) => {
   const fetcher = useFetcher();
   const isSubmitting = fetcher.state === "submitting";
   // const [comment, setComment] = useState("");
@@ -90,6 +90,7 @@ const CustomForm = ({ recipegroup }) => {
         <PlusIcon />
       </button> */}
 
+      <input type="hidden" name="newCommentPrompt" value={userprompt} />
       <input type="hidden" name="_action" value="createComment" />
       <button
         type="submit"

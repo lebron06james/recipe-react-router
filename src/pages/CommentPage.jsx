@@ -96,40 +96,42 @@ export async function commentPageLoader({ params }) {
     const commentsjson = await commentsresponse.json();
 
     if (commentsresponse.ok) {
-      // comments = commentsjson;
+      comments = commentsjson;
 
-      const _comments = await Promise.all(
-        commentsjson.map(async (_comment) => {
-          let u = {};
+      // const _comments = await Promise.all(
+      //   commentsjson.map(async (_comment) => {
+      //     let u = {};
 
-          const uresponse = await fetch(
-            `${apiUrl}/api/user/${_comment.updatedby}`,
-            {
-              credentials: "include",
-              headers: { Authorization: `Bearer ${user.token}` },
-            }
-          );
+      //     const uresponse = await fetch(
+      //       `${apiUrl}/api/user/${_comment.updatedby}`,
+      //       {
+      //         credentials: "include",
+      //         headers: { Authorization: `Bearer ${user.token}` },
+      //       }
+      //     );
 
-          const ujson = await uresponse.json();
+      //     const ujson = await uresponse.json();
 
-          if (uresponse.ok) {
-            u = ujson;
+      //     if (uresponse.ok) {
+      //       u = ujson;
 
-            _comment.updatedby = (await "(") + u.usertype + ") " + u.username;
-          }
+      //       // _comment.prompt = (await "(") + u.usertype + ") " + u.username;
+      //       _comment.updatedByName = u.username;
+      //     }
 
-          if (!u || isObjectEmpty(u)) {
-            // throw new Error("The user you’re trying to find doesn’t exist");
-            console.log(
-              "The user you’re trying to find doesn’t exist. [commentpage: loader]"
-            );
-          }
+      //     if (!u || isObjectEmpty(u)) {
+      //       // throw new Error("The user you’re trying to find doesn’t exist");
+      //       console.log(
+      //         "The user you’re trying to find doesn’t exist. [commentpage: loader]"
+      //       );
+      //     }
 
-          return _comment;
-        })
-      );
+      //     return _comment;
+      //   })
+      // );
 
-      comments.push(..._comments);
+      // comments.push(..._comments);
+
     }
   }
 
@@ -180,6 +182,7 @@ export async function commentPageAction({ request }) {
       const newItem = {
         name: values.newComment,
         recipegroupId: values.newCommentRecipeGroup,
+        prompt: values.newCommentPrompt,
       };
 
       let comment = {};
@@ -409,14 +412,14 @@ function CommentPage() {
               userName={userprompt}
             />
           )}
-          <CustomForm recipegroup={recipegroup} />
+          <CustomForm recipegroup={recipegroup} userprompt={userprompt} />
           {comments && (
             <CommentList
               comments={comments}
               deleteComment={deleteComment}
               toggleComment={toggleComment}
               enterEditMode={enterEditMode}
-              userName={userprompt}
+              userprompt={userprompt}
             />
           )}
         </div>

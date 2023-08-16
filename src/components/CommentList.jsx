@@ -9,7 +9,7 @@ const CommentList = ({
   deleteComment,
   toggleComment,
   enterEditMode,
-  userName,
+  userprompt,
 }) => {
   return (
     <ul className={styles.tasks}>
@@ -22,7 +22,7 @@ const CommentList = ({
             deleteComment={deleteComment}
             toggleComment={toggleComment}
             enterEditMode={enterEditMode}
-            userName={userName}
+            userprompt={userprompt}
           />
         ))}
     </ul>

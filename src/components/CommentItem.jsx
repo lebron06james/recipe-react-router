@@ -19,7 +19,7 @@ const CommentItem = ({
   deleteComment,
   toggleComment,
   enterEditMode,
-  userName,
+  userprompt,
 }) => {
   const fetcher = useFetcher();
   const isSubmitting = fetcher.state === "submitting";
@@ -55,7 +55,7 @@ const CommentItem = ({
         /> */}
         <label htmlFor="userName" className={styles.label}>
           {/* {comment.userName}: */}
-          {comment.updatedby}:
+          {comment.prompt}:
         </label>
         <label htmlFor={comment._id} className={styles.label}>
           {comment.name}
@@ -74,7 +74,8 @@ const CommentItem = ({
         </small>
         <div
           className={styles["task-group"]}
-          hidden={comment.updatedby !== userName}
+          // hidden={comment.updatedByName !== userName}
+          hidden={comment.prompt !== userprompt}
         >
           <button
             className="btn"
