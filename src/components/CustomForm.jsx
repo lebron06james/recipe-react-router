@@ -1,47 +1,66 @@
-import { useState } from 'react';
+// reacts
+import React, { useState, useEffect, useRef } from "react";
+
+// rrd imports
+import { Form, useFetcher } from "react-router-dom";
 
 // styles
-import styles from './CustomForm.module.css';
+import styles from "./CustomForm.module.css";
 
 // library imports
-import { PlusIcon } from '@heroicons/react/24/solid'
+import { PlusIcon, ArrowPathIcon } from "@heroicons/react/24/solid";
 
-const CustomForm = ({ addComment, recipegroup, userName }) => {
-  const [comment, setComment] = useState("");
+const CustomForm = ({ recipegroup, userprompt }) => {
+  const fetcher = useFetcher();
+  const isSubmitting = fetcher.state === "submitting";
+  // const [comment, setComment] = useState("");
 
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    addComment({
-      name: comment,
-      checked: false,
-      recipegroupId: recipegroup._id,
-      userName: userName,
-      id: Date.now()
-    })
-    setComment("")
-  }
+  const formRef = useRef();
+  const focusRef = useRef();
+
+  useEffect(() => {
+    if (!isSubmitting) {
+      formRef.current.reset();
+      focusRef.current.focus();
+    }
+  }, [isSubmitting]);
+
+  // const handleFormSubmit = (e) => {
+  //   e.preventDefault();
+  //   addComment({
+  //     name: comment,
+  //     checked: false,
+  //     recipegroupId: recipegroup._id,
+  //     userName: userName,
+  //     id: Date.now()
+  //   })
+  //   addComment(comment);
+  //   setComment("");
+  // };
 
   return (
-    <form
+    <fetcher.Form
+      method="post"
       className={styles.todo}
-      onSubmit={handleFormSubmit}
-      >
+      ref={formRef}
+      // onSubmit={handleFormSubmit}
+    >
       <div className={styles.wrapper}>
         <input
           type="text"
-          id="comment"
+          name="newComment"
+          id="newComment"
           className={styles.input}
-          value={comment}
-          onInput={(e) => setComment(e.target.value)}
+          // value={comment}
+          // onInput={(e) => setComment(e.target.value)}
           required
-          autoFocus
+          ref={focusRef}
           maxLength={60}
           placeholder="Enter Comment"
         />
-        <label
-          htmlFor="comment"
-          className={styles.label}
-        >Enter Comment</label>
+        <label htmlFor="newComment" className={styles.label}>
+          Enter Comment
+        </label>
       </div>
       <div className={styles.wrapper} hidden={true}>
         <label htmlFor="newCommentRecipeGroup">RecipeGroup Id</label>
@@ -55,7 +74,7 @@ const CustomForm = ({ addComment, recipegroup, userName }) => {
           hidden={true}
         />
       </div>
-      <div className={styles.wrapper} hidden={true}>
+      {/* <div className={styles.wrapper} hidden={true}>
         <label htmlFor="newCommentUser">User Name</label>
         <input
           type="text"
@@ -66,15 +85,30 @@ const CustomForm = ({ addComment, recipegroup, userName }) => {
           readonly
           hidden={true}
         />
-      </div>
+      </div> */}
+      {/* <button className={styles.btn} aria-label="Add Comment" type="submit">
+        <PlusIcon />
+      </button> */}
+
+      <input type="hidden" name="newCommentPrompt" value={userprompt} />
+      <input type="hidden" name="_action" value="createComment" />
       <button
+        type="submit"
         className={styles.btn}
         aria-label="Add Comment"
-        type="submit"
-        >
-        <PlusIcon />
+        disabled={isSubmitting}
+      >
+        {isSubmitting ? (
+          <>
+            <ArrowPathIcon />
+          </>
+        ) : (
+          <>
+            <PlusIcon />
+          </>
+        )}
       </button>
-    </form>
-  )
-}
-export default CustomForm
+    </fetcher.Form>
+  );
+};
+export default CustomForm;

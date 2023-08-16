@@ -102,7 +102,17 @@ const AddRecipeForm = ({ recipegroup, userName, usertype }) => {
           />
         </div>
         <div className="grid-xs">
-          <label htmlFor="newUserName">User Name</label>
+          <label htmlFor="newRecipeRecipeGroupName">Category Name</label>
+          <input
+            type="text"
+            name="newRecipeRecipeGroupName"
+            id="newRecipeRecipeGroupName"
+            value={recipegroup.name}
+            readonly
+          />
+        </div>
+        <div className="grid-xs">
+          <label htmlFor="newUserName">Logged-in User</label>
           <input
             type="text"
             name="newUserName"

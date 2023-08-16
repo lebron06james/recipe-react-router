@@ -1,8 +1,13 @@
 // rrd imports
-import { Form, Link } from "react-router-dom";
+import { Form, Link, useFetcher } from "react-router-dom";
 
 // library imports
-import { BanknotesIcon, TrashIcon, FireIcon } from "@heroicons/react/24/outline";
+import ReactTimeAgo from "react-time-ago";
+import {
+  BanknotesIcon,
+  TrashIcon,
+  FireIcon,
+} from "@heroicons/react/24/outline";
 
 // helper functions
 import {
@@ -12,8 +17,19 @@ import {
 } from "../helpers";
 
 const RecipeItem = ({ recipe, usertype, showDelete = false }) => {
-  const { id, name, amount, createdBy, serving, instruction, cookingtime, color } = recipe;
-  const spent = calculateSpentByRecipe(id);
+  const fetcher = useFetcher();
+  const {
+    _id,
+    name,
+    amount,
+    createdBy,
+    serving,
+    instruction,
+    cookingtime,
+    color,
+    createdAt,
+  } = recipe;
+  const spent = calculateSpentByRecipe(_id);
 
   return (
     <div
@@ -34,7 +50,14 @@ const RecipeItem = ({ recipe, usertype, showDelete = false }) => {
         {formatPercentage(10 / 10)}
       </progress>
       <div className="progress-text">
-        <small>id: {id}</small>
+        {/* <small>id: {_id}</small> */}
+        <small>
+          <ReactTimeAgo
+            date={createdAt}
+            locale="en-US"
+            timeStyle="round-minute"
+          />
+        </small>
         <small>Created by: {createdBy}</small>
         {/* <small>{formatCurrency(spent)} spent</small>
         <small>{formatCurrency(amount - spent)} remaining</small> */}
@@ -44,36 +67,41 @@ const RecipeItem = ({ recipe, usertype, showDelete = false }) => {
         <small>{serving} servings</small>
       </div>
       <div className="flex-sm">
-        <img src="https://images.pexels.com/photos/33242/cooking-ingredient-cuisine-kitchen.jpg" height="250" width="400" />
+        <img
+          src="https://images.pexels.com/photos/33242/cooking-ingredient-cuisine-kitchen.jpg"
+          height="250"
+          width="400"
+        />
       </div>
       <div className="flex-sm">
         <p>{instruction}</p>
       </div>
       {showDelete ? (
         <div className="flex-sm">
-          <Form
+          <fetcher.Form
             method="post"
-            action="delete"
             onSubmit={(ev) => {
               if (
                 !confirm(
-                  "Are you sure you want to permanently delete this recipe?"
+                  `Are you sure you want to permanently delete the ${name} recipe?`
                 )
               ) {
                 ev.preventDefault();
               }
             }}
-            hidden={usertype !== 'Chef'}
+            hidden={usertype !== "Chef"}
           >
-            <button type="submit" className="btn" hidden={usertype !== 'Chef'}>
+            <input type="hidden" name="_action" value="deleteRecipe" />
+            <input type="hidden" name="deleteRecipeId" value={_id} />
+            <button type="submit" className="btn" hidden={usertype !== "Chef"}>
               <span>Delete Recipe</span>
               <TrashIcon width={20} />
             </button>
-          </Form>
+          </fetcher.Form>
         </div>
       ) : (
         <div className="flex-sm">
-          <Link to={`/recipe/${id}`} className="btn">
+          <Link to={`/recipe/${_id}`} className="btn">
             <span>View Details</span>
             <FireIcon width={20} />
           </Link>

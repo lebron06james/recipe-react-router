@@ -7,7 +7,7 @@ const Table = ({ ingredients, user, showRecipe = true }) => {
       <table>
         <thead>
           <tr>
-            {["Name", "Amount", "Unit", "Price", "Added", "By", showRecipe ? "Recipe" : "", ""].map(
+            {["Name", "Amount", "Unit", "Price", "Added", "By", "Created", showRecipe ? "Recipe" : "", ""].map(
               (i, index) => (
                 <th key={index}>{i}</th>
               )
@@ -16,7 +16,7 @@ const Table = ({ ingredients, user, showRecipe = true }) => {
         </thead>
         <tbody>
           {ingredients.map((ingredient) => (
-            <tr key={ingredient.id}>
+            <tr key={ingredient._id}>
               <IngredientItem ingredient={ingredient} user={user} showRecipe={showRecipe} />
             </tr>
           ))}

@@ -108,7 +108,7 @@ export async function dashboardAction({ request }) {
       }
     } catch (e) {
       // console.log(e);
-      throw new Error("There was a problem signing in to your account.");
+      throw new Error("There was a problem signing in to your account. " + e);
     }
   }
 
@@ -198,7 +198,7 @@ export async function dashboardAction({ request }) {
         return toast.success("Recipe Category created!");
       }
     } catch (e) {
-      throw new Error("There was a problem creating your recipe category.");
+      throw new Error("There was a problem creating your recipe category. " + e);
     }
   }
 }

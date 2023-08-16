@@ -2,6 +2,7 @@
 import { Form, Link } from "react-router-dom";
 
 // library imports
+import ReactTimeAgo from "react-time-ago";
 import { BanknotesIcon, ChatBubbleOvalLeftEllipsisIcon, FireIcon } from "@heroicons/react/24/outline";
 
 // helper functions
@@ -13,7 +14,7 @@ import {
 } from "../helpers";
 
 const RecipeGroupItem = ({ recipegroup, user }) => {
-  const { _id, name, updatedby, color } = recipegroup;
+  const { _id, name, updatedby, createdAt, color } = recipegroup;
   const { usertype } = user;
   //   const spent = calculateSpentByRecipe(id);
 
@@ -32,7 +33,14 @@ const RecipeGroupItem = ({ recipegroup, user }) => {
     >
       <div className="progress-text">
         <h3>{name}</h3>
-        <FireIcon width={20} />
+        {/* <FireIcon width={20} /> */}
+        <small>
+          <ReactTimeAgo
+            date={createdAt}
+            locale="en-US"
+            timeStyle="round-minute"
+          />
+        </small>
       </div>
 
       <progress max={10} value={10}>
@@ -58,10 +66,10 @@ const RecipeGroupItem = ({ recipegroup, user }) => {
           <span>{usertype === 'Chef' ? 'Add Recipe' : `See what's on the list`}</span>
           <FireIcon width={20} />
         </Link>
-        {/* <Link to={`/comment/${id}`} className="btn">
+        <Link to={`/comment/${_id}`} className="btn">
           <span>Add Comment</span>
           <ChatBubbleOvalLeftEllipsisIcon width={20} />
-        </Link> */}
+        </Link>
       </div>
 
     </div>

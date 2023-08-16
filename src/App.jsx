@@ -9,15 +9,15 @@ import Main, { mainLoader } from "./layouts/Main";
 
 // Actions
 import { logoutAction } from "./actions/logout";
-import { deleteRecipe } from "./actions/deleteRecipe";
-import { deleteRecipeGroup } from "./actions/deleteRecipeGroup";
+// import { deleteRecipe } from "./actions/deleteRecipe";
+// import { deleteRecipeGroup } from "./actions/deleteRecipeGroup";
 
 // Routes
 import Dashboard, { dashboardAction, dashboardLoader } from "./pages/Dashboard";
 import SignupPage, { signupAction, signupLoader } from "./pages/SignupPage";
 import Error from "./pages/Error";
 import RecipePage, { recipeAction, recipeLoader } from "./pages/RecipePage";
-import CommentPage, { commentLoader } from "./pages/CommentPage";
+import CommentPage, { commentPageLoader, commentPageAction } from "./pages/CommentPage";
 import IngredientsPage, {
   ingredientsAction,
   ingredientsLoader,
@@ -47,17 +47,18 @@ const router = createBrowserRouter([
         loader: recipegroupMenuLoader,
         action: recipegroupMenuAction,
         errorElement: <Error />,
-        children: [
-          {
-            path: "delete",
-            action: deleteRecipeGroup,
-          },
-        ],
+        // children: [
+        //   {
+        //     path: "delete",
+        //     action: deleteRecipeGroup,
+        //   },
+        // ],
       },
       {
         path: "comment/:id",
         element: <CommentPage />,
-        loader: commentLoader,
+        loader: commentPageLoader,
+        action: commentPageAction,
         errorElement: <Error />,
       },
       {
@@ -66,12 +67,12 @@ const router = createBrowserRouter([
         loader: recipeLoader,
         action: recipeAction,
         errorElement: <Error />,
-        children: [
-          {
-            path: "delete",
-            action: deleteRecipe,
-          },
-        ],
+        // children: [
+        //   {
+        //     path: "delete",
+        //     action: deleteRecipe,
+        //   },
+        // ],
       },
       {
         path: "ingredients",
