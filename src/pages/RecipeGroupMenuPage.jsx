@@ -42,6 +42,7 @@ import {
 export async function recipegroupMenuLoader({ params }) {
   // get api url env
   const apiUrl = await import.meta.env.VITE_API_URL;
+  const ingredUrl = await import.meta.env.VITE_INGRED_URL;
 
   const response = await fetch(`${apiUrl}/name`, {
     credentials: "include",
@@ -198,7 +199,7 @@ export async function recipegroupMenuLoader({ params }) {
   // });
 
   const sourceIngredients = await fetch(
-    `https://my-json-server.typicode.com/silverstory/ingredients/ingredients`
+    ingredUrl
   ).then((response) => response.json());
 
   return {
