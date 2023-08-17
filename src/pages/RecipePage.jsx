@@ -36,6 +36,7 @@ import { ChatBubbleOvalLeftEllipsisIcon } from "@heroicons/react/24/outline";
 export async function recipeLoader({ params }) {
   // get api url env
   const apiUrl = await import.meta.env.VITE_API_URL;
+  const ingredUrl = await import.meta.env.VITE_INGRED_URL;
 
   const response = await fetch(`${apiUrl}/name`, {
     credentials: "include",
@@ -156,7 +157,7 @@ export async function recipeLoader({ params }) {
   // end get the ingredients
 
   const sourceIngredients = await fetch(
-    `https://my-json-server.typicode.com/silverstory/ingredients/ingredients`
+    ingredUrl
   ).then((response) => response.json());
 
   return {
